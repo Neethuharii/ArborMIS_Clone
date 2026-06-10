@@ -12,7 +12,7 @@ final class Version20260610062002 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create staff table with id, email, and password columns for login';
     }
 
     public function up(Schema $schema): void
