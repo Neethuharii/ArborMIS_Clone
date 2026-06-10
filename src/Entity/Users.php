@@ -17,7 +17,7 @@ class Users
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Email = null;
+    private ?string $email = null;
 
     #[ORM\Column(length: 150)]
     private ?string $password = null;
@@ -29,12 +29,12 @@ class Users
 
     public function getEmail(): ?string
     {
-        return $this->Email;
+        return $this->email;
     }
 
-    public function setEmail(string $Email): static
+    public function setEmail(string $email): static
     {
-        $this->Email = $Email;
+        $this->email = $email;
 
         return $this;
     }
