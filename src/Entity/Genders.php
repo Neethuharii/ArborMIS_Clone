@@ -8,7 +8,7 @@ use App\Repository\GendersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GendersRepository::class)]
-class Genders
+final class Genders
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
