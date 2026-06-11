@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\InterventionRepository;
@@ -10,10 +12,10 @@ class Intervention
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name:'physical_id')]
+    #[ORM\Column(name: 'physical_id', type: 'integer')]
     private ?int $physicalId = null;
 
-    
+
 
     #[ORM\Column(length: 255)]
     private ?string $interventionMethod = null;
