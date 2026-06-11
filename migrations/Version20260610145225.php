@@ -28,5 +28,4 @@ final class Version20260610145225 extends AbstractMigration
     {
         $this->addSql('DROP TABLE interventions');
     }
-    
 }
