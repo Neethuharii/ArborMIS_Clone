@@ -8,21 +8,21 @@ use App\Repository\InterventionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InterventionRepository::class)]
-class Intervention
+class Interventions
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: 'physical_id', type: 'integer')]
-    private ?int $physicalId = null;
+    #[ORM\Column(name: 'intervention_id', type: 'integer')]
+    private ?int $interventionId = null;
 
 
 
     #[ORM\Column(length: 255)]
     private ?string $interventionMethod = null;
 
-    public function getPhysicalId(): ?int
+    public function getInterventionId(): ?int
     {
-        return $this->physicalId;
+        return $this->interventionId;
     }
 
     public function getInterventionMethod(): ?string
