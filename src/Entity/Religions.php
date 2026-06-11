@@ -31,7 +31,6 @@ final class Religions
     public function setReligionName(string $religionName): static
     {
         $this->religionName = $religionName;
-
         return $this;
     }
 }
