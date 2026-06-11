@@ -14,14 +14,14 @@ class Gender
     #[ORM\GeneratedValue]
     #[ORM\Column]
 
-    private ?int $id = null;
+    private ?int $genderId = null;
 
     #[ORM\Column(length: 150)]
     private ?string $genderType = null;
 
-    public function getId(): ?int
+    public function getGenderId(): ?int
     {
-        return $this->id;
+        return $this->genderId;
     }
 
     public function getGenderType(): ?string
