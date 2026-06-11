@@ -14,9 +14,7 @@ class Interventions
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'intervention_id', type: 'integer')]
     private ?int $interventionId = null;
-
-
-
+    
     #[ORM\Column(length: 255)]
     private ?string $interventionMethod = null;
 
