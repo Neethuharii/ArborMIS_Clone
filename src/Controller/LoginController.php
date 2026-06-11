@@ -9,17 +9,14 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class LoginController extends AbstractController
 {
+
      #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('home_page');
+            return $this->redirectToRoute('home_page'); //it will redirect to home page after successfull login
         }
 
-        $error = $authenticationUtils->getLastAuthenticationError();
-    
-        return $this->render('login/index.html.twig', [
-            'error' => $error
-        ]);
+        return $this->render('login/index.html.twig');
     }
 }
