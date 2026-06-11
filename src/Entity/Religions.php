@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ReligionsRepository;
@@ -11,14 +13,14 @@ class Religions
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $religionId = null;
 
     #[ORM\Column(length: 255)]
     private ?string $religionName = null;
 
-    public function getId(): ?int
+    public function getReligionId(): ?int
     {
-        return $this->id;
+        return $this->religionId;
     }
 
     public function getReligionName(): ?string
