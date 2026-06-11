@@ -18,7 +18,12 @@ final class Version20260611065104 extends AbstractMigration
     public function up(Schema $schema): void
     {
 
-        $this->addSql('CREATE TABLE IF NOT EXISTS gender (id INT AUTO_INCREMENT NOT NULL, gender_type VARCHAR(150) NOT NULL, PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('
+            CREATE TABLE IF NOT EXISTS gender
+                (id INT AUTO_INCREMENT NOT NULL,
+                gender_type VARCHAR(150) NOT NULL, 
+                PRIMARY KEY (id))
+                DEFAULT CHARACTER SET utf8mb4');
     }
 
     public function down(Schema $schema): void
