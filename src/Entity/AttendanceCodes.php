@@ -1,9 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Repository\AttendanceCodesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,9 +15,6 @@ class AttendanceCodes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\Column]
     private ?int $attendance_code_id = null;
 
@@ -33,21 +33,20 @@ class AttendanceCodes
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $effective_to = null;
 
-    public function getId(): ?int
+    /**
+     * @var Collection<int, Attendances>
+     */
+    #[ORM\OneToMany(targetEntity: Attendances::class, mappedBy: 'attendanceCode')]
+    private Collection $attendances;
+
+    public function __construct()
     {
-        return $this->id;
+        $this->attendances = new ArrayCollection();
     }
 
     public function getAttendanceCodeId(): ?int
     {
         return $this->attendance_code_id;
-    }
-
-    public function setAttendanceCodeId(int $attendance_code_id): static
-    {
-        $this->attendance_code_id = $attendance_code_id;
-
-        return $this;
     }
 
     public function getCode(): ?string
@@ -109,4 +108,32 @@ class AttendanceCodes
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Attendances>
+     */
+    public function getAttendances(): Collection
+    {
+        return $this->attendances;
+    }
+
+    public function addAttendance(Attendances $attendance): static
+    {
+        if (!$this->attendances->contains($attendance)) {
+            $this->attendances->add($attendance);
+            $attendance->setAttendanceCode($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttendance(Attendances $attendance): static
+    {
+        if ($this->attendances->removeElement($attendance)) {
+            
+        }
+
+        return $this;
+    }
 }
+

@@ -18,15 +18,14 @@ final class Version20260610121036 extends AbstractMigration
     {
         $this->addSql('
             CREATE TABLE IF NOT EXISTS attendance_codes (
-                id INT AUTO_INCREMENT NOT NULL,
-                attendance_code_id INT NOT NULL,
+                attendance_code_id INT AUTO_INCREMENT NOT NULL,
                 code VARCHAR(20) NOT NULL,
                 description VARCHAR(255) NOT NULL,
                 category VARCHAR(50) NOT NULL,
                 effective_from DATE NOT NULL,
                 effective_to DATE DEFAULT NULL,
-                PRIMARY KEY (id),
-                UNIQUE INDEX UNIQ_ATTENDANCE_CODE_ID (attendance_code_id)
+                PRIMARY KEY (attendance_code_id),
+                UNIQUE INDEX UNIQ_CODE (code)
             ) DEFAULT CHARACTER SET utf8mb4
         ');
     }
@@ -36,3 +35,4 @@ final class Version20260610121036 extends AbstractMigration
         $this->addSql('DROP TABLE IF EXISTS attendance_codes');
     }
 }
+
