@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ReligionRepository;
+use App\Repository\ReligionsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReligionRepository::class)]
-class Religion
+#[ORM\Entity(repositoryClass: ReligionsRepository::class)]
+class Religions
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

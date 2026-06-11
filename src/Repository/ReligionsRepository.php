@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Religion;
+use App\Entity\Religions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Religion>
+ * @extends ServiceEntityRepository<Religions>
  */
-class ReligionRepository extends ServiceEntityRepository
+class ReligionsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Religion::class);
+        parent::__construct($registry, Religions::class);
     }
 
     //    /**
-    //     * @return Religion[] Returns an array of Religion objects
+    //     * @return Religions[] Returns an array of Religions objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ReligionRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Religion
+    //    public function findOneBySomeField($value): ?Religions
     //    {
     //        return $this->createQueryBuilder('r')
     //            ->andWhere('r.exampleField = :val')
