@@ -3,18 +3,18 @@
 namespace App\Repository;
 
 
-use App\Entity\Gender;
+use App\Entity\Genders;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Gender>
+ * @extends ServiceEntityRepository<Genders>
  */
-class GenderRepository extends ServiceEntityRepository
+class GendersRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Gender::class);
+        parent::__construct($registry, Genders::class);
     }
 
     //    /**

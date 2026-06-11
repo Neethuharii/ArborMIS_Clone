@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\GenderRepository;
+use App\Repository\GendersRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GenderRepository::class)]
-class Gender
+#[ORM\Entity(repositoryClass: GendersRepository::class)]
+class Genders
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
