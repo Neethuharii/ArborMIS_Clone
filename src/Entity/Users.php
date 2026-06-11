@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 
@@ -15,7 +17,7 @@ class Users
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $StaffEmail = null;
+    private ?string $email = null;
 
     #[ORM\Column(length: 150)]
     private ?string $password = null;
@@ -25,14 +27,14 @@ class Users
         return $this->id;
     }
 
-    public function getStaffEmail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->StaffEmail;
+        return $this->email;
     }
 
-    public function setStaffEmail(string $StaffEmail): static
+    public function setEmail(string $email): static
     {
-        $this->StaffEmail = $StaffEmail;
+        $this->email = $email;
 
         return $this;
     }
