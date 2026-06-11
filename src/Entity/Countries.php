@@ -11,14 +11,14 @@ class Countries
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id_country = null;
+    private ?int $country_id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $country_name = null;
 
-    public function getIdCountry(): ?int
+    public function getCountryId(): ?int
     {
-        return $this->id_country;
+        return $this->country_id;
     }
 
     public function getCountryName(): ?string
