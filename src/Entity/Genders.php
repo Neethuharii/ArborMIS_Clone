@@ -32,7 +32,6 @@ final class Genders
     public function setGenderType(string $genderType): static
     {
         $this->genderType = $genderType;
-
         return $this;
     }
 }
