@@ -11,15 +11,15 @@ final class Version20260611112016 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create countries table with id_country and country_name columns';
+        return 'Create countries table with country_id and country_name columns';
     }
 
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE IF NOT EXISTS countries (
-                id_country INT AUTO_INCREMENT NOT NULL, 
+                country_id INT AUTO_INCREMENT NOT NULL, 
                 country_name VARCHAR(255) NOT NULL, 
-                PRIMARY KEY (id_country)
+                PRIMARY KEY (country_id)
             ) DEFAULT CHARACTER SET utf8mb4
         ');
     }
