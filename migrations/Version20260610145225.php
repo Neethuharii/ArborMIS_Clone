@@ -13,6 +13,7 @@ final class Version20260610145225 extends AbstractMigration
     {
         return 'created a table for physical interventions which will store various intervention methods';
     }
+
     public function up(Schema $schema): void
     {
         $this->addSql(
@@ -23,6 +24,7 @@ final class Version20260610145225 extends AbstractMigration
             DEFAULT CHARACTER SET utf8mb4'
         );
     }
+    
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE interventions');
