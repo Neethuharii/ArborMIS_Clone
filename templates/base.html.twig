@@ -1,103 +1,52 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-    
     <meta charset="UTF-8">
-    
     <title>{% block title %}{% endblock %} | Arbor MIS</title>
-
     {% block stylesheets %}
-
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
     {% endblock %}
-
     {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-
     {% if frankenphpHotReload %}
-
         <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-
         <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        
     {% endif %}
-    
 </head>
-
 <body>
-
 <nav>
-
     <ul>    
-
         <li>My Items</li>
-
         <li class="students">
-
             Students ▼
-
             <ul class="menu">
-
                 <li>
-
                     All Students ▶
-
                     <ul class="submenu">
-
                         <li>Browse Students</li>
-
                         <li>Add New Student</li>
-
                     </ul>
-
                 </li>
-
                 <li>Behaviour</li>
-
                 <li>Attendance</li>
-
             </ul>
-
         </li>
-
         <li class="school">
-
             School ▼
-
             <ul class="menu">
-
                 <li>
-
                     All Staff ▶
-
                     <ul class="submenu">
-
                         <li>Browse Staff</li>
-
                         <li>Add New Staff</li>
-
-                    </ul>
-
+                  </ul>
                 </li>
-
             </ul>
-
         </li>
-
         <li>Reporting</li>
-
         <li>System</li>
-
     </ul>
-
 </nav>
-
 {% block body %}{% endblock %}
-
 </body>
-
 </html>
