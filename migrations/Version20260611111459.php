@@ -16,7 +16,11 @@ final class Version20260611111459 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE IF NOT EXISTS religions (religion_id INT AUTO_INCREMENT NOT NULL,  religion_name VARCHAR(255) NOT NULL,PRIMARY KEY (religion_id)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE IF NOT EXISTS religions (
+                 religion_id INT AUTO_INCREMENT NOT NULL,
+                 religion_name VARCHAR(255) NOT NULL,
+                 PRIMARY KEY (religion_id)) 
+                 DEFAULT CHARACTER SET utf8mb4');
     }
 
     public function down(Schema $schema): void
