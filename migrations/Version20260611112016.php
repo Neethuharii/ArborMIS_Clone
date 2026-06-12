@@ -28,5 +28,4 @@ final class Version20260611112016 extends AbstractMigration
     {
         $this->addSql('DROP TABLE IF EXISTS countries');
     }
-    
 }
