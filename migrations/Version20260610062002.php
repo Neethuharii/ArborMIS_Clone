@@ -17,7 +17,8 @@ final class Version20260610062002 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE IF NOT EXISTS users (
+        $this->addSql('
+            CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT NOT NULL,
                 email VARCHAR(255) NOT NULL,
                 password VARCHAR(150) NOT NULL,
