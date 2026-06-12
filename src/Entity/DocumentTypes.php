@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\DocumentTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DocumentTypesRepository::class)]
-class DocumentTypes
+final class DocumentTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
