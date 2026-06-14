@@ -18,7 +18,7 @@ final class Version20260614103952 extends AbstractMigration
     {
         $this->addSql('CREATE TABLE IF NOT EXISTS cards (
                   card_id INT AUTO_INCREMENT NOT NULL,
-                  card_number VARCHAR(150) NOT NULL, 
+                  card_number VARCHAR(150) NOT NULL UNIQUE, 
                   status VARCHAR(100) NOT NULL,
                   issued_at DATETIME NOT NULL, 
                   modified_at DATETIME NOT NULL, 

@@ -15,7 +15,7 @@ class Cards
     #[ORM\Column]
     private ?int $cardId = null;
 
-    #[ORM\Column(length: 150)]
+    #[ORM\Column(length: 150,unique: true)]
     private ?string $cardNumber = null;
 
     #[ORM\Column(length: 100)]
