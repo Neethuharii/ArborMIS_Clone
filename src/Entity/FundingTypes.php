@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\FundingTypeRepository;
+use App\Repository\FundingTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: FundingTypeRepository::class)]
-final class FundingType
+#[ORM\Entity(repositoryClass: FundingTypesRepository::class)]
+class FundingTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

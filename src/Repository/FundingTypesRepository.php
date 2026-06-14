@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\FundingType;
+use App\Entity\FundingTypes;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<FundingType>
+ * @extends ServiceEntityRepository<FundingTypes>
  */
-class FundingTypeRepository extends ServiceEntityRepository
+class FundingTypesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, FundingType::class);
+        parent::__construct($registry, FundingTypes::class);
     }
 
     //    /**
-    //     * @return FundingType[] Returns an array of FundingType objects
+    //     * @return FundingTypes[] Returns an array of FundingTypes objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class FundingTypeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?FundingType
+    //    public function findOneBySomeField($value): ?FundingTypes
     //    {
     //        return $this->createQueryBuilder('f')
     //            ->andWhere('f.exampleField = :val')
