@@ -12,30 +12,28 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'login', methods: ['GET', 'POST'])]
-    public function login(
-        Request $request,
-        LoginService $loginService
-    ): Response {
+   
+    #[Route('/login', name: 'login')]
+    public function login(Request $request,LoginService $loginService): Response {
         if ($request->isMethod('POST')) {
 
             $email = (string) $request->request->get('email');
             $password = (string) $request->request->get('password');
 
-            $isValidUser = $loginService->authenticate(
-                $email,
-                $password
-            );
+            $result = $loginService->authenticate($email, $password);
 
-            if ($isValidUser) {
+            if ($result['success']) {
                 return $this->redirectToRoute('homepage');
             }
 
             return $this->render('login/index.html.twig', [
-                'error' => 'Invalid email or password.',
+                'emailError' => $result['emailError'],
+                'passwordError' => $result['passwordError'],
+                'emailValue' => $email
             ]);
         }
 
         return $this->render('login/index.html.twig');
     }
+
 }

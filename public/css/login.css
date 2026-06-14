@@ -117,4 +117,11 @@
         color:#5e9420;
     }
 
+  span.field-error {
+    display: block;
+    margin-top: 5px;
+    color: #dc3545;
+    font-size: 12px;
+    font-weight: 500;
+}
 
