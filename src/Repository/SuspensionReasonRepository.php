@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\SuspensionReason;
+
+use App\Entity\SuspensionReasons;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<SuspensionReason>
+ * @extends ServiceEntityRepository<SuspensionReasons>
  */
 class SuspensionReasonRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SuspensionReason::class);
+        parent::__construct($registry, SuspensionReasons::class);
     }
 
 //    /**
