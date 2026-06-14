@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\RelationshipTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RelationshipTypesRepository::class)]
-class RelationshipTypes
+final class RelationshipTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
