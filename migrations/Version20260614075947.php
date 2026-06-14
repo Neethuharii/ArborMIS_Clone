@@ -11,12 +11,12 @@ final class Version20260614075947 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Created a funding type master table for managing various funding type ';
+        return 'Created a funding types master table for managing various funding type ';
     }
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE IF NOT EXISTS funding_type (
+        $this->addSql('CREATE TABLE IF NOT EXISTS funding_types (
                   funding_type_id INT AUTO_INCREMENT NOT NULL, 
                   funding_type_name VARCHAR(150) NOT NULL, 
                   PRIMARY KEY (funding_type_id)) 
@@ -25,6 +25,6 @@ final class Version20260614075947 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE IF EXISTS funding_type');
+        $this->addSql('DROP TABLE IF EXISTS funding_types');
     }
 }
