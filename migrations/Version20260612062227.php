@@ -16,7 +16,7 @@ final class Version20260612062227 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE classrooms (
+        $this->addSql('CREATE TABLE IF NOT EXISTS classrooms (
             classroom_id INT AUTO_INCREMENT NOT NULL,
             class_name VARCHAR(50) NOT NULL,
             staff_id INT NOT NULL,
@@ -26,6 +26,6 @@ final class Version20260612062227 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE classrooms');
+        $this->addSql('DROP TABLE IF EXISTS classrooms');
     }
 }
