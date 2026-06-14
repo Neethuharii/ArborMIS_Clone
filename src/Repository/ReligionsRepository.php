@@ -4,43 +4,42 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\AttendanceCodes;
+use App\Entity\Religions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<AttendanceCodes>
+ * @extends ServiceEntityRepository<Religions>
  */
-class AttendanceCodesRepository extends ServiceEntityRepository
+class ReligionsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, AttendanceCodes::class);
+        parent::__construct($registry, Religions::class);
     }
 
     //    /**
-    //     * @return AttendanceCodes[] Returns an array of AttendanceCodes objects
+    //     * @return Religions[] Returns an array of Religions objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
+    //            ->orderBy('r.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?AttendanceCodes
+    //    public function findOneBySomeField($value): ?Religions
     //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
+    //        return $this->createQueryBuilder('r')
+    //            ->andWhere('r.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()
     //        ;
     //    }
 }
-
