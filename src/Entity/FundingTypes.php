@@ -8,7 +8,7 @@ use App\Repository\FundingTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FundingTypesRepository::class)]
-class FundingTypes
+final class FundingTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
