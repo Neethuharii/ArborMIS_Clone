@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -6,7 +7,7 @@ use App\Repository\BusinessRoleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BusinessRoleRepository::class)]
-class BusinessRole
+class BusinessRoles
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
