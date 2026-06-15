@@ -15,10 +15,9 @@ final class LoginService
     ) {
     }
 
-    public function authenticate(string $email, string $password): array
+    public function authenticate(string $email, string $password)
     {
         $user = $this->usersRepository->findOneBy(['email' => $email]);
-
         if (!$user) {
             return [
                 'success' => false,
@@ -26,7 +25,6 @@ final class LoginService
                 'passwordError' => null,
             ];
         }
-
         if (!$this->passwordHasher->isPasswordValid($user, $password)) {
             return [
                 'success' => false,
@@ -34,11 +32,11 @@ final class LoginService
                 'passwordError' => 'Password is incorrect.',
             ];
         }
-
         return [
             'success' => true,
             'emailError' => null,
             'passwordError' => null,
         ];
     }
+
 }
