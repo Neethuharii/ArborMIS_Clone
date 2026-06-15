@@ -29,7 +29,7 @@ final class LoginController extends AbstractController
             return $this->render('login/index.html.twig', [
                 'emailError' => $result['emailError'],
                 'passwordError' => $result['passwordError'],
-                'emailValue' => $email
+                
             ]);
         }
 
