@@ -29,8 +29,8 @@ class Students
     #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'gender_id', nullable: false)]
     private ?Genders $gender= null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $dob = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $dob = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'ethnicity_id', referencedColumnName: 'ethnicity_id', nullable: false)]
@@ -125,12 +125,12 @@ class Students
         return $this;
     }
 
-    public function getDob(): ?\DateTime
+    public function getDob(): ?\DateTimeImmutable
     {
         return $this->dob;
     }
 
-    public function setDob(\DateTime $dob): static
+    public function setDob(\DateTimeImmutable $dob): static
     {
         $this->dob = $dob;
 
