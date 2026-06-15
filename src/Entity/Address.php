@@ -27,17 +27,17 @@ class Address
     #[ORM\Column(length: 255)]
     private ?string $city = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $postCode = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $county = null;
 
     #[ORM\Column(length: 255)]
     private ?string $emailAddress = null;
 
-    #[ORM\Column]
-    private ?int $phoneNumber = null;
+    #[ORM\Column(length: 30)]
+    private ?string $phoneNumber = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
@@ -45,7 +45,7 @@ class Address
     #[ORM\Column]
     private ?\DateTimeImmutable $modified_at = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
 
     public function getAddressId(): ?int
@@ -137,12 +137,12 @@ class Address
         return $this;
     }
 
-    public function getPhoneNumber(): ?int
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setPhoneNumber(int $phoneNumber): static
+    public function setPhoneNumber(string $phoneNumber): static
     {
         $this->phoneNumber = $phoneNumber;
 
