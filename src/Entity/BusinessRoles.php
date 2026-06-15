@@ -1,13 +1,12 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\BusinessRoleRepository;
+use App\Repository\BusinessrolesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BusinessRoleRepository::class)]
-class BusinessRoles
+#[ORM\Entity(repositoryClass: BusinessrolesRepository::class)]
+class Businessroles
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,7 +14,7 @@ class BusinessRoles
     private ?int $role_id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    private ?string $name_of_role = null;
 
     #[ORM\Column]
     private ?float $salary = null;
@@ -25,14 +24,14 @@ class BusinessRoles
         return $this->role_id;
     }
 
-    public function getRole(): ?string
+    public function getNameOfRole(): ?string
     {
-        return $this->role;
+        return $this->name_of_role;
     }
 
-    public function setRole(string $role): static
+    public function setNameOfRole(string $name_of_role): static
     {
-        $this->role = $role;
+        $this->name_of_role = $name_of_role;
 
         return $this;
     }
