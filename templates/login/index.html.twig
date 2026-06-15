@@ -22,12 +22,6 @@
 
                 <p class="login-subtitle">Sign in to your Arbor MIS</p>
 
-                {% if error is defined and error %}
-                    <div class="alert">
-                        {{ error }}
-                    </div>
-                {% endif %}
-
                 <form method="post" onsubmit="showLoader()">
 
                     <div class="form-group">
@@ -39,7 +33,7 @@
                            class="form-control"
                            required>
 
-                        {% if emailError is defined and emailError %}
+                       {% if emailError is defined %}
                             <span class="field-error">{{ emailError }}</span>
                         {% endif %}
                     </div>
@@ -53,7 +47,7 @@
                            class="form-control"
                            required>
 
-                        {% if passwordError is defined and passwordError %}
+                     {% if passwordError is defined %}
                             <span class="field-error">{{ passwordError }}</span>
                         {% endif %}
                     </div>
