@@ -15,8 +15,8 @@ final class LoginController extends AbstractController
     #[Route('/login', name: 'login')]
     public function login(Request $request,LoginService $loginService): Response {
         if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
-            $password = $request->request->get('password');
+             $email = trim((string) $request->request->get('email', ''));
+            $password = (string) $request->request->get('password', '');
             $result = $loginService->authenticate($email, $password);
             if ($result['success']) {
                 return $this->redirectToRoute('homepage');
