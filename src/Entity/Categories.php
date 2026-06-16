@@ -34,7 +34,7 @@ class Categories
         $this->behaviours = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getcategoryId(): ?int
     {
         return $this->categoryId;
     }
