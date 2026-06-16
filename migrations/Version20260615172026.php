@@ -26,15 +26,15 @@ final class Version20260615172026 extends AbstractMigration
                    INDEX IDX_STUDENT (student_id),
                    INDEX IDX_GUARDIAN (guardian_id),
                    PRIMARY KEY (relation_id),
-                   CONSTRAINT FK_RELATIONSHIP_TYPE
-                        FOREIGN KEY (relationship_type_id)
-                        REFERENCES relationship_types (relationship_type_id),
-                   CONSTRAINT FK_STUDENT
+                   CONSTRAINT FK_STUDENT_GUARDIAN_RELATION_STUDENT
                         FOREIGN KEY (student_id)
                         REFERENCES students (student_id),
-                   CONSTRAINT FK_GUARDIAN
+                   CONSTRAINT FK_STUDENT_GUARDIAN_RELATION_GUARDIAN
                         FOREIGN KEY (guardian_id)
-                        REFERENCES guardian (guardian_id))
+                        REFERENCES guardian (guardian_id),
+                   CONSTRAINT FK_STUDENT_GUARDIAN_RELATION_TYPE
+                        FOREIGN KEY (relationship_type_id)
+                        REFERENCES relationship_types (relationship_type_id))
                    DEFAULT CHARACTER SET utf8mb4');
     }
 
