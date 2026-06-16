@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataFixtures;
 
 use App\Entity\Genders;
-use App\Entity\Users;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -24,12 +24,10 @@ class GenderFixture extends Fixture
         $gender2=new Genders();
         $gender2->setGenderType('Not Known');
         $manager->persist($gender2);
-        $manager->flush();
 
-        $gender2=new Genders();
-        $gender2->setGenderType('Not Specified');
-        $manager->persist($gender2);
+        $gender3=new Genders();
+        $gender3->setGenderType('Not Specified');
+        $manager->persist($gender);
         $manager->flush();
-
     }
 }
