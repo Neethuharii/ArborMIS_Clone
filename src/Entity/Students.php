@@ -33,34 +33,34 @@ class Students
     private ?\DateTimeImmutable $dob = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'ethnicity_id', referencedColumnName: 'ethnicity_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'ethnicity_id', referencedColumnName: 'ethnicity_id', nullable: true)]
     private ?Ethnicities $ethnicity = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'nationality_id', referencedColumnName: 'nationality_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'nationality_id', referencedColumnName: 'nationality_id', nullable: true)]
     private ?Nationality $nationality = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'religion_id', referencedColumnName: 'religion_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'religion_id', referencedColumnName: 'religion_id', nullable: true)]
     private ?Religions $religion = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: true)]
     private ?Documents $document = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'country_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'country_id', nullable: true)]
     private ?Countries $country = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'address_id', nullable: false)]
     private ?Address $address = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100,nullable: true)]
     private ?string $upn = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'card_id', referencedColumnName: 'card_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'card_id', referencedColumnName: 'card_id', nullable: true)]
     private ?Cards $card = null;
 
     #[ORM\Column]
