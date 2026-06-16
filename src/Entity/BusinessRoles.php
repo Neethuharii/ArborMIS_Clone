@@ -8,6 +8,8 @@ use App\Repository\BusinessrolesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BusinessrolesRepository::class)]
+#[ORM\Table(name: 'businessroles')]
+
 class BusinessRoles
 {
     #[ORM\Id]
