@@ -22,7 +22,7 @@ class Behaviours
     #[ORM\JoinColumn(name:'category_id', referencedColumnName: 'category_id', nullable: false)]
     private ?Categories $category = null;
 
-    public function getId(): ?int
+    public function getbehaviourId(): ?int
     {
         return $this->behaviourId;
     }
