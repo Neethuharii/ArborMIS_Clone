@@ -26,7 +26,7 @@ class GenderFixture extends Fixture
 
         $gender3=new Genders();
         $gender3->setGenderType('Not Specified');
-        $manager->persist($gender);
+        $manager->persist($gender3);
         $manager->flush();
     }
 }
