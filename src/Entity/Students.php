@@ -27,7 +27,7 @@ class Students
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'gender_id', nullable: false)]
-    private ?Genders $gender= null;
+    private ?Genders $gender = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $dob = null;
@@ -56,7 +56,7 @@ class Students
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'address_id', nullable: false)]
     private ?Address $address = null;
 
-    #[ORM\Column(length: 100,nullable: true)]
+    #[ORM\Column(length: 100, unique: true)]
     private ?string $upn = null;
 
     #[ORM\ManyToOne]
@@ -209,7 +209,7 @@ class Students
         return $this;
     }
 
-    public function getUpn(): ?string
+    public function getUpn(): string
     {
         return $this->upn;
     }
@@ -220,7 +220,7 @@ class Students
 
         return $this;
     }
-
+    
     public function getCard(): ?Cards
     {
         return $this->card;

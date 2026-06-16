@@ -22,7 +22,7 @@ final class Version20260615103041 extends AbstractMigration
                     middle_name VARCHAR(150) DEFAULT NULL,
                     last_name VARCHAR(150) NOT NULL,
                     dob DATE NOT NULL,
-                    upn VARCHAR(100) NULL,
+                    upn VARCHAR(100) NOT NULL,
                     gender_id INT NOT NULL,
                     ethnicity_id INT  NULL,
                     nationality_id INT  NULL,
