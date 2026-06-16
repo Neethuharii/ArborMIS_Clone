@@ -19,7 +19,7 @@ class Behaviours
     private ?string $behaviourName = null;
 
     #[ORM\ManyToOne(inversedBy: 'behaviours')]
-    #[ORM\JoinColumn(name:'category', referencedColumnName: 'category_id', nullable: false)]
+    #[ORM\JoinColumn(name:'category_id', referencedColumnName: 'category_id', nullable: false)]
     private ?Categories $category = null;
 
     public function getId(): ?int
