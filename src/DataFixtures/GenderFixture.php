@@ -11,10 +11,6 @@ use Doctrine\Persistence\ObjectManager;
 class GenderFixture extends Fixture
 {
 
-    public function __construct(
-        private UserPasswordHasherInterface $passhasher){
-    }
-
     public function load(ObjectManager $manager): void
     {
         $gender =new Genders();
