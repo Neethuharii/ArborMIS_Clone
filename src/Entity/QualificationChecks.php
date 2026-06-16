@@ -14,7 +14,7 @@ class QualificationChecks
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $qualification_checks_id = null;
 
     #[ORM\ManyToOne(targetEntity: QualificationType::class, inversedBy: 'qualificationChecks')]
     #[ORM\JoinColumn(name: 'qualification_id', referencedColumnName: 'qualification_id', nullable: false)]
@@ -44,9 +44,9 @@ class QualificationChecks
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
 
-    public function getId(): ?int
+    public function getQualificationChecksId(): ?int
     {
-        return $this->id;
+        return $this->qualification_checks_id;
     }
 
     public function getQualificationType(): ?QualificationType

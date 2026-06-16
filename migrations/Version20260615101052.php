@@ -17,7 +17,7 @@ final class Version20260615101052 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE IF NOT EXISTS qualification_checks 
-        (id INT AUTO_INCREMENT NOT NULL, 
+        (qualification_checks_id INT AUTO_INCREMENT NOT NULL, 
         clearance_level VARCHAR(255) NOT NULL, 
         requested_date DATE NOT NULL, 
         returned_date DATE NOT NULL, 
@@ -28,7 +28,7 @@ final class Version20260615101052 extends AbstractMigration
         deleted_at DATETIME DEFAULT NULL, 
         qualification_id INT NOT NULL, 
         INDEX IDX_758AA8F41A75EE38 (qualification_id), 
-        PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8');
+        PRIMARY KEY (qualification_checks_id)) DEFAULT CHARACTER SET utf8');
         }
 
     public function down(Schema $schema): void
