@@ -16,7 +16,6 @@ final class Version20260616152039 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        
         $this->addSql('CREATE TABLE suspension_details(
             suspension_detail_id INT AUTO_INCREMENT NOT NULL, 
             suspended_from DATETIME NOT NULL, 
@@ -40,7 +39,6 @@ final class Version20260616152039 extends AbstractMigration
                 REFERENCES suspension_reasons(suspension_id)
         )     
         DEFAULT CHARACTER SET utf8mb4');
-        
     }
 
     public function down(Schema $schema): void
