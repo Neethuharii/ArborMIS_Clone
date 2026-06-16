@@ -8,7 +8,7 @@ use App\Repository\BusinessrolesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BusinessrolesRepository::class)]
-class Businessroles
+class BusinessRoles
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
