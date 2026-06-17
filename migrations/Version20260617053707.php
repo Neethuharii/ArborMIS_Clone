@@ -21,10 +21,20 @@ final class Version20260617053707 extends AbstractMigration
                  MODIFY city VARCHAR(255) NULL,
                  MODIFY email_address VARCHAR(255) NULL,
                  MODIFY phone_number VARCHAR(30) NULL;');
+
+       $this->addSql('ALTER TABLE students    
+                 MODIFY ethnicity_id INT NULL,
+                 MODIFY nationality_id INT NULL,
+                 MODIFY religion_id INT NULL,
+                 MODIFY document_id INT NULL,
+                 MODIFY country_id INT NULL,
+                 MODIFY address_id INT NULL,
+                 MODIFY card_id INT NULL;');
     }
 
     public function down(Schema $schema): void
     {
          $this->addSql('DROP TABLE IF EXISTS address');
+        $this->addSql('DROP TABLE IF EXISTS students');
     }
 }
