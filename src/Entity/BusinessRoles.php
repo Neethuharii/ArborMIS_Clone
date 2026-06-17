@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\BusinessrolesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BusinessrolesRepository::class)]
@@ -22,6 +24,17 @@ class BusinessRoles
 
     #[ORM\Column]
     private ?float $salary = null;
+
+    /**
+     * @var Collection<int, CurrentRoles>
+     */
+    #[ORM\OneToMany(targetEntity: CurrentRoles::class, mappedBy: 'businessRole')]
+    private Collection $currentRoles;
+
+    public function __construct()
+    {
+        $this->currentRoles = new ArrayCollection();
+    }
 
     public function getRoleId(): ?int
     {
@@ -48,6 +61,35 @@ class BusinessRoles
     public function setSalary(float $salary): static
     {
         $this->salary = $salary;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CurrentRoles>
+     */
+    public function getCurrentRoles(): Collection
+    {
+        return $this->currentRoles;
+    }
+
+    public function addCurrentRole(CurrentRoles $currentRole): static
+    {
+        if (!$this->currentRoles->contains($currentRole)) {
+            $this->currentRoles->add($currentRole);
+            $currentRole->setBusinessRole($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCurrentRole(CurrentRoles $currentRole): static
+    {
+        if ($this->currentRoles->removeElement($currentRole)) {
+            if ($currentRole->getBusinessRole() === $this) {
+                $currentRole->setBusinessRole(null);
+            }
+        }
 
         return $this;
     }
