@@ -21,6 +21,17 @@ class Classrooms
     #[ORM\Column]
     private ?int $staff_id = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(
+        name: 'academic_year_id',
+        referencedColumnName: 'academicyear_id',
+        nullable: false
+    )]
+    private ?Academicyears $academicYear = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
     public function getClassroomId(): ?int
     {
         return $this->classroom_id;
@@ -46,6 +57,30 @@ class Classrooms
     public function setStaffId(int $staff_id): static
     {
         $this->staff_id = $staff_id;
+
+        return $this;
+    }
+
+    public function getAcademicYear(): ?Academicyears
+    {
+        return $this->academicYear;
+    }
+
+    public function setAcademicYear(?Academicyears $academicYear): static
+    {
+        $this->academicYear = $academicYear;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
