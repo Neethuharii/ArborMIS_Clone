@@ -12,7 +12,7 @@ final class Version20260616152651 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Created a table to store the current roles held by a staff';
     }
 
     public function up(Schema $schema): void
