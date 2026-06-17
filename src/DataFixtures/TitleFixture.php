@@ -19,13 +19,10 @@ class TitleFixture extends Fixture
         ];
         
         for ($i = 0; $i < count($values); $i++) {
-
             $title = new Titles();
             $title->setTitleName($values[$i]);
             $manager->persist($title);
-
         }
-
         $manager->flush();
     }
 }

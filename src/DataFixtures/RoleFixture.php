@@ -26,8 +26,6 @@ class RoleFixture extends Fixture
             $role->setSalary($salaryValues[$i]);
             $manager->persist($role);
         }
-        
         $manager->flush();
-
     }
 }
