@@ -69,7 +69,6 @@ class SuspensionReasons
     public function removeSuspensionDetail(SuspensionDetails $suspensionDetail): static
     {
         if ($this->suspensionDetails->removeElement($suspensionDetail)) {
-            // set the owning side to null (unless already changed)
             if ($suspensionDetail->getSuspensionReason() === $this) {
                 $suspensionDetail->setSuspensionReason(null);
             }

@@ -303,7 +303,6 @@ class Students
     public function removeSuspensionDetail(SuspensionDetails $suspensionDetail): static
     {
         if ($this->suspensionDetails->removeElement($suspensionDetail)) {
-            // set the owning side to null (unless already changed)
             if ($suspensionDetail->getStudent() === $this) {
                 $suspensionDetail->setStudent(null);
             }
