@@ -20,7 +20,16 @@ final class Version20260612062227 extends AbstractMigration
             classroom_id INT AUTO_INCREMENT NOT NULL,
             class_name VARCHAR(50) NOT NULL,
             staff_id INT NOT NULL,
-            PRIMARY KEY (classroom_id)
+            academic_year_id INT NOT NULL,
+            created_at DATETIME NOT NULL,
+
+            INDEX IDX_CLASSROOM_ACADEMIC_YEAR (academic_year_id),
+
+            PRIMARY KEY (classroom_id),
+
+            CONSTRAINT FK_CLASSROOM_ACADEMIC_YEAR
+                FOREIGN KEY (academic_year_id)
+                REFERENCES academicyears (academicyear_id)
         ) DEFAULT CHARACTER SET utf8mb4');
     }
 
