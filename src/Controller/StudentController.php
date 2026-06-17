@@ -13,19 +13,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class StudentController extends AbstractController
 {
-    #[Route('/student', name: 'app_student')]
+    #[Route('/addstudent', name: 'newstudent')]
     public function index(
         Request $request,
         StudentService $studentService,
         GendersRepository $gendersRepository
     ): Response {
-
         if ($request->isMethod('POST')) {
-
             $result = $studentService->createStudent($request);
 
             if ($result['success']) {
-                return $this->redirectToRoute('homepage');
+               $this->addFlash('success', 'Student created successfully!');
+                return $this->redirectToRoute('newstudent');
             }
 
             return $this->render('student/AddStudent.html.twig', [

@@ -58,7 +58,7 @@ class Students
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'address_id', nullable: false)]
     private ?Address $address = null;
 
-    #[ORM\Column(length: 100, unique: true)]
+    #[ORM\Column(length: 100, unique: true, nullable: true)]
     private ?string $upn = null;
 
     #[ORM\ManyToOne]
@@ -222,16 +222,16 @@ class Students
         return $this;
     }
 
-    public function getUpn(): string
+    public function getUpn(): ?string
     {
         return $this->upn;
     }
 
-    public function setUpn(string $upn): static
+    public function setUpn(?string $upn): static
     {
-        $this->upn = $upn;
+    $this->upn = $upn;
 
-        return $this;
+    return $this;
     }
     
     public function getCard(): ?Cards

@@ -29,6 +29,7 @@ final class Version20260617053707 extends AbstractMigration
                  MODIFY document_id INT NULL,
                  MODIFY country_id INT NULL,
                  MODIFY address_id INT NULL,
+                 MODIFY upn VARCHAR(100) NULL,
                  MODIFY card_id INT NULL;');
     }
 

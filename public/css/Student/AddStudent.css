@@ -62,6 +62,13 @@
         color: red;
     }
 
+   .error-message {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: 4px;
+        display: block;
+    }
+
     .button-container {
         margin-top: 30px;
         text-align: right;
@@ -88,5 +95,44 @@
 
     .btn:hover {
         opacity: 0.9;
+    }
+    
+    .success-message{
+        background: rgb(12, 112, 12); 
+        color: white; 
+        padding: 10px; 
+        margin: 10px 0; 
+        border-radius: 5px;
+    }
+
+    #page-loader {
+        position: fixed;
+        inset: 0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .loader-box {
+        text-align: center;
+    }
+
+    .rotating-logo {
+        width: 80px;
+        height: auto;
+        animation: rotateLogo 1.5s linear infinite;
+        display: block;
+        margin: 0 auto;
+    }
+
+    @keyframes rotateLogo {
+        from {
+           transform: rotate(0deg);
+        }
+        to {
+           transform: rotate(360deg);
+        }
     }
 
