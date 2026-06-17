@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\StudentsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -71,6 +73,17 @@ class Students
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
+
+    /**
+     * @var Collection<int, SuspensionDetails>
+     */
+    #[ORM\OneToMany(targetEntity: SuspensionDetails::class, mappedBy: 'student')]
+    private Collection $suspensionDetails;
+
+    public function __construct()
+    {
+        $this->suspensionDetails = new ArrayCollection();
+    }
 
     public function getStudentId(): ?int
     {
@@ -265,6 +278,35 @@ class Students
     public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SuspensionDetails>
+     */
+    public function getSuspensionDetails(): Collection
+    {
+        return $this->suspensionDetails;
+    }
+
+    public function addSuspensionDetail(SuspensionDetails $suspensionDetail): static
+    {
+        if (!$this->suspensionDetails->contains($suspensionDetail)) {
+            $this->suspensionDetails->add($suspensionDetail);
+            $suspensionDetail->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSuspensionDetail(SuspensionDetails $suspensionDetail): static
+    {
+        if ($this->suspensionDetails->removeElement($suspensionDetail)) {
+            if ($suspensionDetail->getStudent() === $this) {
+                $suspensionDetail->setStudent(null);
+            }
+        }
 
         return $this;
     }
