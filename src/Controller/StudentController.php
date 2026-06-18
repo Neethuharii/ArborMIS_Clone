@@ -42,7 +42,6 @@ final class StudentController extends AbstractController
     #[Route('/studentList', name: 'studentsList')]
     public function listStudent(StudentService $studentService, Request $request): Response
     {
-
         $search = $request->query->get('search', '');
         return $this->render('student/StudentsList.html.twig', [
             'studentList' => $studentService->listAllStudent($search),
