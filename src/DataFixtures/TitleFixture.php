@@ -7,8 +7,9 @@ namespace App\DataFixtures;
 use App\Entity\Titles;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class TitleFixture extends Fixture
+class TitleFixture extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -18,11 +19,15 @@ class TitleFixture extends Fixture
             'Mr','Mrs','Ms','Mx','Pr','Prof','Rabbi','Rev','Sergeant','Sir','Sister','The Honorable','Ven'
         ];
         
-        for ($i = 0; $i < count($values); $i++) {
+        foreach($values as $titleName) {
             $title = new Titles();
-            $title->setTitleName($values[$i]);
+            $title->setTitleName($titleName);
             $manager->persist($title);
         }
         $manager->flush();
+    }
+    public static function getGroups():array
+    {
+        return ['title-fixture'];
     }
 }
