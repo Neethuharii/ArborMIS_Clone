@@ -1,3 +1,5 @@
+console.log("JS loaded");
+
 const drawer = document.getElementById('drawer');
 const overlay = document.getElementById('overlay');
 
