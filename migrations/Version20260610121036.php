@@ -16,18 +16,26 @@ final class Version20260610121036 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('
+        $this->addSql("
             CREATE TABLE IF NOT EXISTS attendance_codes (
                 attendance_code_id INT AUTO_INCREMENT NOT NULL,
+                academic_year_id INT NOT NULL,
                 code VARCHAR(20) NOT NULL,
                 description VARCHAR(255) NOT NULL,
                 category VARCHAR(50) NOT NULL,
-                effective_from DATE NOT NULL,
-                effective_to DATE DEFAULT NULL,
+                is_active TINYINT(1) NOT NULL DEFAULT 1,
+                created_at DATETIME NOT NULL COMMENT '(DC2Type:datetime_immutable)',
+                modified_at DATETIME DEFAULT NULL COMMENT '(DC2Type:datetime_immutable)',
+                INDEX IDX_ATTENDANCE_CODES_ACADEMIC_YEAR (academic_year_id),
+                UNIQUE INDEX UNIQ_ATTENDANCE_CODE_YEAR (academic_year_id, code),
                 PRIMARY KEY (attendance_code_id),
-                UNIQUE INDEX UNIQ_CODE (code)
+                CONSTRAINT FK_ATTENDANCE_CODES_ACADEMIC_YEAR
+                    FOREIGN KEY (academic_year_id)
+                    REFERENCES academicyears (academicyear_id)
             ) DEFAULT CHARACTER SET utf8mb4
-        ');
+              COLLATE `utf8mb4_unicode_ci`
+              ENGINE = InnoDB
+        ");
     }
 
     public function down(Schema $schema): void
@@ -35,4 +43,3 @@ final class Version20260610121036 extends AbstractMigration
         $this->addSql('DROP TABLE IF EXISTS attendance_codes');
     }
 }
-
