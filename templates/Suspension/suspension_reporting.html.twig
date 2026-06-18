@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+{% block title %}Suspension Reporting{% endblock %}
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/Suspension/suspension_reporting.css') }}">
+
+<div class="page-wrapper">
+
+    {{ include('Suspension/suspension_base.html.twig') }}
+    
+    <div class="main-content">
+        <div class="suspension-reporting">
+            <div>
+                <h3>Suspensions</h3>
+            </div>
+            <div class="add-suspension-btn">
+                <button class="add-btn" id="openDrawer">Add Suspension</button>
+            </div>
+            
+            <div id="drawer" class="drawer">
+
+                <div class="drawer-header">
+                    <h3>Add Suspension</h3>
+                </div>
+
+                <form class="suspension-form">
+
+                    <div class="form-group">
+                        <label>Student</label>
+                        <select>
+                            <option>Select Student</option>
+                            <option>John Doe</option>
+                            <option>Jane Smith</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Suspension Reason</label>
+                        <select>
+                            <option>Select Reason</option>
+                            <option>Bullying</option>
+                            <option>Fighting</option>
+                            <option>Misconduct</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Suspension From</label>
+                        <input type="datetime-local">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Suspension Until</label>
+                        <input type="datetime-local">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Decision Made Time</label>
+                        <input type="datetime-local">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Supporting Document</label>
+
+                        <div class="upload-box">
+                            <input type="file">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" id="cancelDrawer">Cancel</button>
+                        <button type="submit" class="save-btn">
+                            Save Suspension
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div id="overlay" class="overlay"></div>
+            
+        </div>
+        <div class="suspension-table-container">
+            <table class="suspension-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Suspension Reason</th>
+                        <th>Suspended From</th>
+                        <th>Suspended Until</th>
+                        <th>Days Lost</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+
+    document.getElementById('openDrawer').addEventListener('click', () => {
+        drawer.classList.add('open');
+        overlay.classList.add('show');
+    });
+
+    document.getElementById('cancelDrawer').addEventListener('click', () => {
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+    });
+
+    overlay.addEventListener('click', () => {
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+    });
+</script>
+
+{% endblock %}
