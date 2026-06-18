@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Browse Students{% endblock %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{{ asset('css/Student/StudentLists.css') }}">
+    <div id="page-loader" style="display:none;">
+        <div class="loader-box">
+            <img src="{{ asset('images/arborlogo.png') }}"  class="rotating-logo">
+                <p>Loading...</p>
+        </div>
+    </div>
+<div id="list-student-card">
+    <div class="browse-container">
+        <div class="top-bar">
+            <h1>Browse Students</h1>
+        </div>
+
+        <div class="search-box">
+            <form method="get" onsubmit="showLoader()">
+                <input
+                type="text"
+                name="search"
+                placeholder="Search students..."
+                value="{{ search }}"
+            >
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="student-grid">
+            {% for student in studentList %}
+                <div class="student-card">
+                    <div class="avatar">
+                        <img src="{% if student.profileImage %}
+                                    {{ asset('uploads/students/'.student.profileImage) }}
+                                {% else %}
+                                    {{ asset('images/defaultProfile.png') }}
+                                {% endif %}">
+                    </div>
+                    <div class="info">
+                        <h2>
+                            {{ student.firstName }} <strong>{{ student.lastName }}</strong>
+                        </h2>
+
+                    <div class="row">
+                        <span>DOB:</span>
+                        <b>{{ student.dob|date('d M Y') }}</b>
+                    </div>
+
+                    <div class="row">
+                        <span>Email</span>
+                        <b>{{ student.address.emailAddress }}</b>
+                    </div>
+
+                    <div class="row">
+                        <span>Phone Number</span>
+                        <b>{{ student.address.phoneNumber }}</b>
+                    </div>
+                </div>
+        </div>
+        {% else %}
+            <p>No students found</p>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function showLoader() {
+        document.getElementById("list-student-card").style.display = "flex";
+        document.getElementById("page-loader").style.display = "flex";
+    }
+</script>
+
+{% endblock %}
