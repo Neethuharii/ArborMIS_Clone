@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Student Profile{% endblock %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/Student/StudentProfile.css') }}">
+
+<div class="profile-page">
+
+    <h1>Student Profile</h1>
+
+    <div class="profile-card">
+
+        <div class="profile-image">
+            <img src="{% if student.profileImage %}
+                        {{ asset('uploads/students/' ~ student.profileImage) }}
+                      {% else %}
+                        {{ asset('images/defaultProfile.png') }}
+                      {% endif %}">
+        </div>
+
+        <div class="profile-info">
+
+            <h2>
+                {{ student.firstName|title }}
+                {{ student.lastName|title }}
+            </h2>
+
+            <div class="profile-row">
+                <span>Date of Birth</span>
+                <strong>{{ student.dob|date('d M Y') }}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Email</span>
+                <strong>{{ student.address.emailAddress }}</strong>
+            </div>
+
+            <div class="profile-row">
+                <span>Phone</span>
+                <strong>{{ student.address.phoneNumber }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-header">
+            <h2>Identity</h2>
+        </div>
+
+        <table class="details-table">
+
+            <tr>
+                <th>Name</th>
+                <td>
+                    {{ student.firstName }}
+                    {{ student.lastName }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Date of Birth</th>
+                <td>{{ student.dob|date('d M Y') }}</td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td>{{ student.address.emailAddress }}</td>
+            </tr>
+
+            <tr>
+                <th>Phone Number</th>
+                <td>{{ student.address.phoneNumber }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

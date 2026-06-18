@@ -116,4 +116,11 @@ final class StudentService
             ->getQuery()
             ->getResult();
     }
+
+    public function getStudentById(int $studentId): ?Students
+    {
+        return $this->entityManager
+            ->getRepository(Students::class)
+            ->find($studentId);
+    }
 }

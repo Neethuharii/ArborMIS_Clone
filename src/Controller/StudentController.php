@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Students;
 use App\Repository\GendersRepository;
 use App\Service\StudentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +20,7 @@ final class StudentController extends AbstractController
         StudentService $studentService,
         GendersRepository $gendersRepository
     ): Response {
-    
+
         if ($request->isMethod('POST')) {
             $result = $studentService->createStudent($request);
 
@@ -46,6 +47,23 @@ final class StudentController extends AbstractController
         return $this->render('student/StudentsList.html.twig', [
             'studentList' => $studentService->listAllStudent($search),
             'search' => $search,
+        ]);
+    }
+
+    #[Route('/student/{studentId}', name: 'studentProfile')]
+    public function studentProfile(
+        int $studentId,
+        StudentService $studentService
+    ): Response {
+
+        $student = $studentService->getStudentById($studentId);
+
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found');
+        }
+
+        return $this->render('student/StudentProfile.html.twig', [
+            'student' => $student,
         ]);
     }
 }
