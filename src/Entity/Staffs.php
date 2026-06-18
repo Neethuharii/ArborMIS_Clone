@@ -1,0 +1,271 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Entity;
+
+use App\Repository\StaffsRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: StaffsRepository::class)]
+class Staffs
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $staffId = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $middleName = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastName = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'title_id', referencedColumnName: 'title_id')]
+    private ?Titles $title = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'gender_id')]
+    private ?Genders $gender = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $abbreviation = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $dateOfBirth = null;
+
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $dateOfJoining = null;
+
+    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn( name: 'address_id', referencedColumnName: 'address_id', nullable: true)]
+    private ?Address $address = null;
+    
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'ethnicity_id', referencedColumnName: 'ethnicity_id', nullable: true)]
+    private ?Ethnicities $ethnicity = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'religion_id', referencedColumnName: 'religion_id', nullable: true)]
+    private ?Religions $religion = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $staffNumber = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: true)]
+    private ?Documents $identityDocument = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profilePhoto = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $modifiedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $deletedAt = null;
+
+    public function getStaffId(): ?int
+    {
+        return $this->staffId;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getMiddleName(): ?string
+    {
+        return $this->middleName;
+    }
+
+    public function setMiddleName(?string $middleName): static
+    {
+        $this->middleName = $middleName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getTitle(): ?Titles
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?Titles $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+    public function getGender(): ?Genders
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?Genders $gender): static
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getAbbreviation(): ?string
+    {
+        return $this->abbreviation;
+    }
+
+    public function setAbbreviation(?string $abbreviation): static
+    {
+        $this->abbreviation = $abbreviation;
+
+        return $this;
+    }
+
+    public function getDateOfBirth(): ?\DateTimeImmutable
+    {
+        return $this->dateOfBirth;
+    }
+
+    public function setDateOfBirth(?\DateTimeImmutable $dateOfBirth): static
+    {
+        $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    public function getDateOfJoining(): ?\DateTimeImmutable
+    {
+        return $this->dateOfJoining;
+    }
+
+    public function setDateOfJoining(?\DateTimeImmutable $dateOfJoining): static
+    {
+        $this->dateOfJoining = $dateOfJoining;
+
+        return $this;
+    }
+
+    public function getEthnicity(): ?Ethnicities
+    {
+        return $this->ethnicity;
+    }
+
+    public function setEthnicity(?Ethnicities $ethnicity): static
+    {
+        $this->ethnicity = $ethnicity;
+
+        return $this;
+    }
+
+    public function getReligion(): ?Religions
+    {
+        return $this->religion;
+    }
+
+    public function setReligion(?Religions $religion): static
+    {
+        $this->religion = $religion;
+
+        return $this;
+    }
+
+    public function getStaffNumber(): ?int
+    {
+        return $this->staffNumber;
+    }
+
+    public function setStaffNumber(?int $staffNumber): static
+    {
+        $this->staffNumber = $staffNumber;
+
+        return $this;
+    }
+
+    public function getIdentityDocument(): ?Documents
+    {
+        return $this->identityDocument;
+    }
+
+    public function setIdentityDocument(?Documents $identityDocument): static
+    {
+        $this->identityDocument = $identityDocument;
+
+        return $this;
+    }
+
+    public function getProfilePhoto(): ?string
+    {
+        return $this->profilePhoto;
+    }
+
+    public function setProfilePhoto(?string $profilePhoto): static
+    {
+        $this->profilePhoto = $profilePhoto;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?\DateTimeImmutable
+    {
+        return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(?\DateTimeImmutable $modifiedAt): static
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(?\DateTimeImmutable $deletedAt): static
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+}
