@@ -80,9 +80,16 @@ class Students
     #[ORM\OneToMany(targetEntity: SuspensionDetails::class, mappedBy: 'student')]
     private Collection $suspensionDetails;
 
+    /**
+     * @var Collection<int, StudentEnrollments>
+     */
+    #[ORM\OneToMany(targetEntity: StudentEnrollments::class, mappedBy: 'student')]
+    private Collection $studentEnrollments;
+
     public function __construct()
     {
         $this->suspensionDetails = new ArrayCollection();
+        $this->studentEnrollments = new ArrayCollection();
     }
 
     public function getStudentId(): ?int
@@ -229,11 +236,11 @@ class Students
 
     public function setUpn(?string $upn): static
     {
-    $this->upn = $upn;
+        $this->upn = $upn;
 
-    return $this;
+        return $this;
     }
-    
+
     public function getCard(): ?Cards
     {
         return $this->card;
@@ -305,6 +312,35 @@ class Students
         if ($this->suspensionDetails->removeElement($suspensionDetail)) {
             if ($suspensionDetail->getStudent() === $this) {
                 $suspensionDetail->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, StudentEnrollments>
+     */
+    public function getStudentEnrollments(): Collection
+    {
+        return $this->studentEnrollments;
+    }
+
+    public function addStudentEnrollment(StudentEnrollments $studentEnrollment): static
+    {
+        if (!$this->studentEnrollments->contains($studentEnrollment)) {
+            $this->studentEnrollments->add($studentEnrollment);
+            $studentEnrollment->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStudentEnrollment(StudentEnrollments $studentEnrollment): static
+    {
+        if ($this->studentEnrollments->removeElement($studentEnrollment)) {
+            if ($studentEnrollment->getStudent() === $this) {
+                $studentEnrollment->setStudent(null);
             }
         }
 
