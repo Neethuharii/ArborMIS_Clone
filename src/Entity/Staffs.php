@@ -173,6 +173,17 @@ class Staffs
         return $this;
     }
 
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): static
+    {
+        $this->address = $address;
+        return $this;
+    }
+    
     public function getEthnicity(): ?Ethnicities
     {
         return $this->ethnicity;
