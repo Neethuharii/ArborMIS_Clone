@@ -52,11 +52,11 @@ final class StudentService
         }
 
         if ($phoneNumber !== '') {
-            if(strlen($phoneNumber) !== 10) {
+            if (strlen($phoneNumber) !== 10) {
                 $errors['phoneNumber'] = 'Phone Number must be exactly 10 digits.';
             }
         }
-        
+
         if (!empty($errors)) {
             return [
                 'success' => false,
@@ -98,5 +98,22 @@ final class StudentService
             'success' => true,
             'errors' => [],
         ];
+    }
+
+    public function listAllStudent(string $search)
+    {
+        $repository = $this->entityManager->getRepository(Students::class);
+
+        if ($search === '') {
+            return $repository->findBy([], ['studentId' => 'DESC']);
+        }
+
+        return $repository->createQueryBuilder('s')
+            ->where('s.firstName LIKE :search')
+            ->orWhere('s.lastName LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('s.studentId', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

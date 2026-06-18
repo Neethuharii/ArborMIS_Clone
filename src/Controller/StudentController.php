@@ -19,11 +19,12 @@ final class StudentController extends AbstractController
         StudentService $studentService,
         GendersRepository $gendersRepository
     ): Response {
+    
         if ($request->isMethod('POST')) {
             $result = $studentService->createStudent($request);
 
             if ($result['success']) {
-               $this->addFlash('success', 'Student created successfully!');
+                $this->addFlash('success', 'Student created successfully!');
                 return $this->redirectToRoute('newstudent');
             }
 
@@ -35,6 +36,16 @@ final class StudentController extends AbstractController
 
         return $this->render('student/AddStudent.html.twig', [
             'genders' => $gendersRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/studentList', name: 'studentsList')]
+    public function listStudent(StudentService $studentService, Request $request): Response
+    {
+        $search = $request->query->get('search', '');
+        return $this->render('student/StudentsList.html.twig', [
+            'studentList' => $studentService->listAllStudent($search),
+            'search' => $search,
         ]);
     }
 }

@@ -65,6 +65,9 @@ class Students
     #[ORM\JoinColumn(name: 'card_id', referencedColumnName: 'card_id', nullable: true)]
     private ?Cards $card = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImage = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -249,6 +252,18 @@ class Students
     public function setCard(?Cards $card): static
     {
         $this->card = $card;
+
+        return $this;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?string $profileImage): static
+    {
+        $this->profileImage = $profileImage;
 
         return $this;
     }
