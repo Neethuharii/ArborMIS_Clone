@@ -15,7 +15,7 @@ class Address
     #[ORM\Column]
     private ?int $address_id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $address1 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -24,7 +24,7 @@ class Address
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $address3 = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -33,10 +33,10 @@ class Address
     #[ORM\Column(length: 255,nullable: true)]
     private ?string $county = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable: true)]
     private ?string $emailAddress = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 30,nullable: true)]
     private ?string $phoneNumber = null;
 
     #[ORM\Column]

@@ -20,14 +20,14 @@ final class Version20260615050517 extends AbstractMigration
         $this->addSql('CREATE TABLE IF NOT EXISTS address 
     (
         address_id INT AUTO_INCREMENT NOT NULL, 
-        address1 VARCHAR(255) NOT NULL, 
+        address1 VARCHAR(255) DEFAULT NULL, 
         address2 VARCHAR(255) DEFAULT NULL, 
         address3 VARCHAR(255) DEFAULT NULL, 
-        city VARCHAR(255) NOT NULL,
+        city VARCHAR(255) DEFAULT NULL,
         post_code VARCHAR(20) DEFAULT NULL, 
         county VARCHAR(255) DEFAULT NULL,   
-        email_address VARCHAR(255) NOT NULL, 
-        phone_number VARCHAR(30) NOT NULL,  
+        email_address VARCHAR(255) DEFAULT NULL, 
+        phone_number VARCHAR(30) DEFAULT NULL,  
         created_at DATETIME NOT NULL, 
         modified_at DATETIME NOT NULL, 
         deleted_at DATETIME DEFAULT NULL, 
