@@ -18,6 +18,10 @@ class AttendanceCodes
     #[ORM\Column]
     private ?int $attendance_code_id = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'academic_year_id', referencedColumnName: 'academicyear_id', nullable: false)]
+    private ?Academicyears $academicYear = null;
+
     #[ORM\Column(length: 20)]
     private ?string $code = null;
 
@@ -27,11 +31,14 @@ class AttendanceCodes
     #[ORM\Column(length: 50)]
     private ?string $category = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $effective_from = null;
+    #[ORM\Column]
+    private ?bool $is_active = true;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTime $effective_to = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $modified_at = null;
 
     /**
      * @var Collection<int, Attendances>
@@ -47,6 +54,18 @@ class AttendanceCodes
     public function getAttendanceCodeId(): ?int
     {
         return $this->attendance_code_id;
+    }
+
+    public function getAcademicYear(): ?Academicyears
+    {
+        return $this->academicYear;
+    }
+
+    public function setAcademicYear(?Academicyears $academicYear): static
+    {
+        $this->academicYear = $academicYear;
+
+        return $this;
     }
 
     public function getCode(): ?string
@@ -85,26 +104,38 @@ class AttendanceCodes
         return $this;
     }
 
-    public function getEffectiveFrom(): ?\DateTime
+    public function isActive(): ?bool
     {
-        return $this->effective_from;
+        return $this->is_active;
     }
 
-    public function setEffectiveFrom(\DateTime $effective_from): static
+    public function setIsActive(bool $is_active): static
     {
-        $this->effective_from = $effective_from;
+        $this->is_active = $is_active;
 
         return $this;
     }
 
-    public function getEffectiveTo(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->effective_to;
+        return $this->created_at;
     }
 
-    public function setEffectiveTo(?\DateTime $effective_to): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
-        $this->effective_to = $effective_to;
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?\DateTimeImmutable
+    {
+        return $this->modified_at;
+    }
+
+    public function setModifiedAt(?\DateTimeImmutable $modified_at): static
+    {
+        $this->modified_at = $modified_at;
 
         return $this;
     }
@@ -130,10 +161,11 @@ class AttendanceCodes
     public function removeAttendance(Attendances $attendance): static
     {
         if ($this->attendances->removeElement($attendance)) {
-            
+            if ($attendance->getAttendanceCode() === $this) {
+                $attendance->setAttendanceCode(null);
+            }
         }
 
         return $this;
     }
 }
-
