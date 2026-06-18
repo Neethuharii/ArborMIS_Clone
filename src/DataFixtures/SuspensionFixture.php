@@ -27,7 +27,6 @@ class SuspensionFixture extends Fixture implements FixtureGroupInterface
             $suspensionReason = new SuspensionReasons();
             $suspensionReason->setSuspensionReason($reason);
             $manager->persist($suspensionReason);
-            
         }
         $manager->flush();
     }
@@ -37,4 +36,3 @@ class SuspensionFixture extends Fixture implements FixtureGroupInterface
     }
 }
 
-?>
