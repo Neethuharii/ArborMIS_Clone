@@ -17,7 +17,7 @@ final class Version20260610121036 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql("
-            CREATE TABLE attendance_codes (
+            CREATE TABLE IF NOT EXISTS attendance_codes (
                 attendance_code_id INT AUTO_INCREMENT NOT NULL,
                 academic_year_id INT NOT NULL,
                 code VARCHAR(20) NOT NULL,
@@ -31,7 +31,7 @@ final class Version20260610121036 extends AbstractMigration
                 PRIMARY KEY (attendance_code_id),
                 CONSTRAINT FK_ATTENDANCE_CODES_ACADEMIC_YEAR
                     FOREIGN KEY (academic_year_id)
-                    REFERENCES academic_years (academicyear_id)
+                    REFERENCES academicyears (academicyear_id)
             ) DEFAULT CHARACTER SET utf8mb4
               COLLATE `utf8mb4_unicode_ci`
               ENGINE = InnoDB
