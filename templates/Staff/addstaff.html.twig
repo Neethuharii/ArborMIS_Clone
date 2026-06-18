@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Staff{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Staff/addstaff.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <h2>Add New Member of Staff</h2>
+
+    <form method="POST">
+    <div class="contact">
+
+        <h4>Contact Details</h4>        
+        <div class="contact-form">
+
+                <label>Sex *</label>
+                <select name="gender" required>
+                    <option value="">Select Gender</option>
+                    {% for gender in all_genders %}
+                        <option value="{{ gender.genderId }}">{{ gender.genderType }}</option>
+                    {% endfor %}
+                </select>
+
+                {% if errors.gender is defined %}
+                    <span class="error-message">{{ errors.gender }}</span>
+                {% endif %}
+
+                <label>Title *</label>
+                <select name="title" required>
+                    <option value="">Select Title</option>
+                    {% for title in all_titles %}
+                        <option value="{{ title.titleId }}">{{ title.titleName }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>Legal First Name *</label>
+                <input name="first_name" type="text" required>
+
+                {% if errors.firstName is defined %}
+                    <span class="error-message">{{ errors.firstName }}</span>
+                {% endif %}
+
+                <label>Legal Middle Name</label>
+                <input name="middle_name" type="text">
+
+                <label>Legal Last Name *</label>
+                <input name="last_name" type="text" required>
+
+                {% if errors.lastName is defined %} 
+                    <span class="error-message"> {{ errors.lastName }} </span> 
+                {% endif %}
+ 
+                <label>Abbreviation</label>
+                <input name="abbreviation" type="text" > 
+
+                <label>Date Of Birth *</label>
+                <input name="dob" type="date" required >
+
+                {% if errors.dob is defined %}
+                    <span class="error-message"> {{ errors.dob }} </span>
+                {% endif %}
+
+                <label>Email Address</label>
+                <input name="email" type="email">
+
+                {% if errors.email is defined %}
+                    <span class="error-message"> {{ errors.email }} </span>
+                {% endif %} 
+
+                <label>Contact Number</label>
+                <input name="phone_number" type="tel" >
+
+                {% if errors.phoneNumber is defined %}
+                    <span class="error-message"> {{ errors.phoneNumber }} </span>
+                {% endif %}
+        </div>
+    </div>
+
+    <div class="role">
+
+        <h4>Role</h4>
+ 
+        <div class="role-form">
+            <label>Assign Business Role *</label>
+            <select name="roles">
+                <option value=""> Select Role </option>
+                {% for role in all_businessRoles %}
+                    <option value="{{ role.roleId }}">{{ role.nameOfRole }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Start Date *</label>
+            <input name="start_date" type="date">
+
+            <label>End Date</label>
+            <input name="end_date" type="date">
+
+        </div>
+    </div>
+
+<button type="submit" class="btn btn-save" id="create-btn">  Create Staff Member </button>
+
+</form>
+
+{% endblock %}
