@@ -16,8 +16,9 @@ class Attendances
     #[ORM\Column]
     private ?int $attendance_id = null;
 
-    #[ORM\Column]
-    private ?int $student_id = null;
+    #[ORM\ManyToOne(inversedBy: 'attendances')]
+    #[ORM\JoinColumn(name: "student_enrollment_id", referencedColumnName: "student_enrollment_id", nullable: false)]
+    private ?StudentEnrollments $studentEnrollment = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $attendance_date = null;
@@ -41,19 +42,25 @@ class Attendances
     #[ORM\Column]
     private ?\DateTimeImmutable $marked_at = null;
 
+    #[ORM\column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $modified_at = null;
+
     public function getAttendanceId(): ?int
     {
         return $this->attendance_id;
     }
 
-    public function getStudentId(): ?int
+    public function getStudentEnrollment(): ?StudentEnrollments
     {
-        return $this->student_id;
+        return $this->studentEnrollment;
     }
 
-    public function setStudentId(int $student_id): static
+    public function setStudentEnrollment(?StudentEnrollments $studentEnrollment): static
     {
-        $this->student_id = $student_id;
+        $this->studentEnrollment = $studentEnrollment;
 
         return $this;
     }
@@ -138,6 +145,30 @@ class Attendances
     public function setMarkedAt(\DateTimeImmutable $marked_at): static
     {
         $this->marked_at = $marked_at;
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?\DateTimeImmutable
+    {
+        return $this->modified_at;
+    }
+
+    public function setModifiedAt(?\DateTimeImmutable $modified_at): static
+    {
+        $this->modified_at = $modified_at;
+
         return $this;
     }
 }
