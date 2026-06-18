@@ -236,11 +236,11 @@ class Students
 
     public function setUpn(?string $upn): static
     {
-    $this->upn = $upn;
+        $this->upn = $upn;
 
-    return $this;
+        return $this;
     }
-    
+
     public function getCard(): ?Cards
     {
         return $this->card;

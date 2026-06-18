@@ -14,7 +14,6 @@ final class Version20260618022252 extends AbstractMigration
         return 'Created student_enrollments table with student, academic year and classroom foreign keys';
     }
 
-
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE IF NOT EXISTS student_enrollments (
@@ -38,7 +37,6 @@ final class Version20260618022252 extends AbstractMigration
                 REFERENCES classrooms (classroom_id)
         ) DEFAULT CHARACTER SET utf8mb4');
     }
-
 
     public function down(Schema $schema): void
     {
