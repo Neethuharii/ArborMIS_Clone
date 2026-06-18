@@ -23,7 +23,7 @@
                     <h3>Add Suspension</h3>
                 </div>
 
-                <form class="suspension-form">
+                <form class="suspension-form" action="POST">
 
                     <div class="form-group">
                         <label>Student</label>
@@ -37,10 +37,12 @@
                     <div class="form-group">
                         <label>Suspension Reason</label>
                         <select>
-                            <option>Select Reason</option>
-                            <option>Bullying</option>
-                            <option>Fighting</option>
-                            <option>Misconduct</option>
+                            <option>Select Reason</opttion>
+                                {% for reasons in suspensionReasons %}
+                                    <option value="{{ reasons.suspensionId }}">
+                                        {{ reasons.suspensionReason }}
+                                    </option>
+                                {% endfor %}
                         </select>
                     </div>
 
