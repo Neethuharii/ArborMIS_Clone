@@ -30,13 +30,11 @@ class Academicyears
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-
     #[ORM\OneToMany(
         targetEntity: StudentEnrollments::class,
         mappedBy: 'academicYear'
     )]
     private Collection $studentEnrollments;
-
 
     #[ORM\OneToMany(
         targetEntity: Classrooms::class,
@@ -44,25 +42,21 @@ class Academicyears
     )]
     private Collection $classrooms;
 
-
     public function __construct()
     {
         $this->studentEnrollments = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
     }
 
-
     public function getAcademicyearId(): ?int
     {
         return $this->academicyear_id;
     }
 
-
     public function getName(): ?string
     {
         return $this->name;
     }
-
 
     public function setName(string $name): static
     {
@@ -71,12 +65,10 @@ class Academicyears
         return $this;
     }
 
-
     public function getStartDate(): ?\DateTimeImmutable
     {
         return $this->start_date;
     }
-
 
     public function setStartDate(\DateTimeImmutable $start_date): static
     {
@@ -85,12 +77,10 @@ class Academicyears
         return $this;
     }
 
-
     public function getEndDate(): ?\DateTimeImmutable
     {
         return $this->end_date;
     }
-
 
     public function setEndDate(\DateTimeImmutable $end_date): static
     {
@@ -99,12 +89,10 @@ class Academicyears
         return $this;
     }
 
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }
-
 
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
@@ -113,7 +101,6 @@ class Academicyears
         return $this;
     }
 
-
     /**
      * @return Collection<int, StudentEnrollments>
      */
@@ -121,7 +108,6 @@ class Academicyears
     {
         return $this->studentEnrollments;
     }
-
 
     public function addStudentEnrollment(StudentEnrollments $studentEnrollment): static
     {
@@ -132,7 +118,6 @@ class Academicyears
 
         return $this;
     }
-
 
     public function removeStudentEnrollment(StudentEnrollments $studentEnrollment): static
     {
@@ -145,7 +130,6 @@ class Academicyears
         return $this;
     }
 
-
     /**
      * @return Collection<int, Classrooms>
      */
@@ -153,7 +137,6 @@ class Academicyears
     {
         return $this->classrooms;
     }
-
 
     public function addClassroom(Classrooms $classroom): static
     {
@@ -164,7 +147,6 @@ class Academicyears
 
         return $this;
     }
-
 
     public function removeClassroom(Classrooms $classroom): static
     {

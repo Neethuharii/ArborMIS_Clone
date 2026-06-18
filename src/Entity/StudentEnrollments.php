@@ -15,7 +15,6 @@ class StudentEnrollments
     #[ORM\Column]
     private ?int $student_enrollment_id = null;
 
-
     #[ORM\ManyToOne(inversedBy: 'studentEnrollments')]
     #[ORM\JoinColumn(
         name: 'student_id',
@@ -23,7 +22,6 @@ class StudentEnrollments
         nullable: false
     )]
     private ?Students $student = null;
-
 
     #[ORM\ManyToOne(inversedBy: 'studentEnrollments')]
     #[ORM\JoinColumn(
@@ -40,18 +38,15 @@ class StudentEnrollments
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-
     public function getStudentEnrollmentId(): ?int
     {
         return $this->student_enrollment_id;
     }
 
-
     public function getStudent(): ?Students
     {
         return $this->student;
     }
-
 
     public function setStudent(?Students $student): static
     {
@@ -60,12 +55,10 @@ class StudentEnrollments
         return $this;
     }
 
-
     public function getAcademicYear(): ?Academicyears
     {
         return $this->academicYear;
     }
-
 
     public function setAcademicYear(?Academicyears $academicYear): static
     {
