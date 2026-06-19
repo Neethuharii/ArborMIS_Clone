@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Genders;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class GenderFixture extends Fixture
+class GenderFixture extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -28,5 +29,9 @@ class GenderFixture extends Fixture
         $gender3->setGenderType('Not Specified');
         $manager->persist($gender3);
         $manager->flush();
+    }
+    public static function getGroups(): array
+    {
+        return ['gender-fixture'];
     }
 }
