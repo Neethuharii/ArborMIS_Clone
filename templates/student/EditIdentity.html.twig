@@ -6,52 +6,122 @@
 
 <div class="container mt-4">
 
-    <h2>Edit {{ data.field }}</h2>
+   <h3>Edit {{ data.field|title }}</h3>
 
-    <form method="post">
+<form method="post" onsubmit="submitEditForm(event)">
 
-        {% if data.field == 'dob' %}
+    {% if data.field == 'dob' %}
 
-            <input
-                type="date"
-                name="value"
-                value="{{ data.value }}"
-                class="form-control"
-                required
-            >
+        <input type="date"
+               name="value"
+               value="{{ data.value }}"
+               class="form-control">
 
-        {% else %}
+    {% elseif data.field == 'country' %}
 
-            <input
-                type="text"
-                name="value"
-                value="{{ data.value }}"
-                class="form-control"
-                required
-            >
+        <select name="value" class="form-control">
 
-        {% endif %}
+            {% for country in data.countries %}
+                <option value="{{ country.countryId }}"
+                    {% if data.value == country.countryId %}selected{% endif %}>
+                    {{ country.countryName }}
+                </option>
+            {% endfor %}
 
-        <br>
+        </select>
 
-        <button
-            type="submit"
-            class="btn btn-primary"
-        >
-            Save
-        </button>
+    {% elseif data.field == 'religion' %}
 
-        <a
-            href="{{ path('studentProfile', {
-                studentId: data.student.studentId
-            }) }}"
-            class="btn btn-secondary"
-        >
-            Cancel
-        </a>
+        <select name="value" class="form-control">
 
-    </form>
+            {% for religion in data.religions %}
+                <option value="{{ religion.religionId }}"
+                    {% if data.value == religion.religionId %}selected{% endif %}>
+                    {{ religion.religionName }}
+                </option>
+            {% endfor %}
 
+        </select>
+
+    {% elseif data.field == 'ethnicity' %}
+
+        <select name="value" class="form-control">
+
+            {% for ethnicity in data.ethnicities %}
+                <option value="{{ ethnicity.ethnicityId }}"
+                    {% if data.value == ethnicity.ethnicityId %}selected{% endif %}>
+                    {{ ethnicity.ethnicityName }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+    {% elseif data.field == 'nationality' %}
+
+        <select name="value" class="form-control">
+
+            {% for nationality in data.nationalities %}
+                <option value="{{ nationality.nationalityId }}"
+                    {% if data.value == nationality.nationalityId %}selected{% endif %}>
+                    {{ nationality.nationalityName }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+    {% else %}
+
+        <input type="text"
+               name="value"
+               value="{{ data.value }}"
+               class="form-control">
+
+    {% endif %}
+
+    <br>
+
+    <button type="submit" class="btn btn-success">
+        Save
+    </button>
+
+</form>
+
+<script>
+function submitEditForm(e)
+{
+    e.preventDefault();
+
+    fetch(window.location.href, {
+        method: "POST",
+        body: new FormData(e.target)
+    })
+    .then(() => {
+        location.reload(); 
+    });
+}
+
+</script>
+
+<style>
+
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: white;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.side-panel.open {
+    right: 0;
+}
+
+</style>
 </div>
 
 {% endblock %}

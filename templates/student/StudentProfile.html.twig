@@ -54,105 +54,81 @@
 
         <table class="details-table">
 
-    <tr>
-        <th>Name</th>
-        <td>{{ student.firstName }} {{ student.lastName }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'name'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ student.firstName }} {{ student.lastName }}</td>
+                <td>
+                    <button onclick="openSidePanel('name', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-        <th>Sex</th>
-        <td>{{ student.gender.genderType }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'gender'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>Sex</th>
+                <td>{{ student.gender ? student.gender.genderType : 'Not specified' }}</td>
+                <td>
+                    <button onclick="openSidePanel('gender', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-        <th>Date of Birth</th>
-        <td>{{ student.dob|date('d M Y') }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'dob'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>Date of Birth</th>
+                <td>{{ student.dob|date('d M Y') }}</td>
+                <td>
+                    <button onclick="openSidePanel('dob', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-    <th>Country of Birth</th>
-    <td>
-        {{ student.country ? student.country.countryName : 'Not specified' }}
-    </td>
-    <td>
-        <button class="side-edit-btn"
-                onclick="openSidePanel('country', {{ student.studentId }})">
-            ▶
-        </button>
-    </td>
-</tr>
+            <tr>
+                <th>Country of Birth</th>
+                <td>{{ student.country ? student.country.countryName : 'Not specified' }}</td>
+                <td>
+                    <button onclick="openSidePanel('country', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-        <th>Ethnicity</th>
-        <td>{{ student.ethnicity? student.ethnicity.ethnicity_name }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'ethnicity'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>Ethnicity</th>
+                <td>{{ student.ethnicity ? student.ethnicity.ethnicityName : 'Not specified' }}</td>
+                <td>
+                    <button onclick="openSidePanel('ethnicity', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-        <th>Nationality</th>
-        <td>{{ student.nationality ? student.nationality.nationality_status }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'nationality'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>Nationality</th>
+                <td>{{ student.nationality ? student.nationality.nationalityName : 'Not specified' }}</td>
+                <td>
+                    <button onclick="openSidePanel('nationality', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-        <th>Religion</th>
-        <td>{{ student.religion ?student.religion.religionName }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'religion'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>Religion</th>
+                <td>{{ student.religion ? student.religion.religionName : 'Not specified' }}</td>
+                <td>
+                    <button onclick="openSidePanel('religion', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-    <tr>
-        <th>UPN</th>
-        <td>{{ student.upn }}</td>
-        <td>
-            <a href="{{ path('student_identity_edit', {
-                studentId: student.studentId,
-                field: 'upn'
-            }) }}">▶</a>
-        </td>
-    </tr>
+            <tr>
+                <th>UPN</th>
+                <td>{{ student.upn ?: 'Not assigned' }}</td>
+                <td>
+                    <button onclick="openSidePanel('upn', {{ student.studentId }})">▶</button>
+                </td>
+            </tr>
 
-</table>
+        </table>
 
     </div>
 
 </div>
+
+<!-- SIDE PANEL -->
 <div id="sidePanel" class="side-panel">
 
     <div class="side-panel-header">
-        <h3 id="sideTitle">Edit</h3>
+        <h3>Edit Field</h3>
         <button onclick="closeSidePanel()">✖</button>
     </div>
 
@@ -161,5 +137,22 @@
     </div>
 
 </div>
+
+<script>
+function openSidePanel(field, studentId)
+{
+    fetch(`/student/${studentId}/identity/${field}`)
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById('sideContent').innerHTML = html;
+            document.getElementById('sidePanel').classList.add('open');
+        });
+}
+
+function closeSidePanel()
+{
+    document.getElementById('sidePanel').classList.remove('open');
+}
+</script>
 
 {% endblock %}
