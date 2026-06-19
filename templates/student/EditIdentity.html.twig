@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Identity{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+
+    <h2>Edit {{ data.field }}</h2>
+
+    <form method="post">
+
+        {% if data.field == 'dob' %}
+
+            <input
+                type="date"
+                name="value"
+                value="{{ data.value }}"
+                class="form-control"
+                required
+            >
+
+        {% else %}
+
+            <input
+                type="text"
+                name="value"
+                value="{{ data.value }}"
+                class="form-control"
+                required
+            >
+
+        {% endif %}
+
+        <br>
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Save
+        </button>
+
+        <a
+            href="{{ path('studentProfile', {
+                studentId: data.student.studentId
+            }) }}"
+            class="btn btn-secondary"
+        >
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

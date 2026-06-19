@@ -6,15 +6,23 @@ namespace App\Service;
 
 use App\Entity\Address;
 use App\Entity\Students;
+use App\Repository\CountriesRepository;
+use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
+use App\Repository\NationalityRepository;
+use App\Repository\ReligionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class StudentService
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly GendersRepository $gendersRepository
+       private readonly EntityManagerInterface $entityManager,
+        private readonly GendersRepository $gendersRepository,
+        private readonly CountriesRepository $countriesRepository,
+        private readonly EthnicitiesRepository $ethnicitiesRepository,
+        private readonly NationalityRepository $nationalityRepository,
+        private readonly ReligionsRepository $religionsRepository,
     ) {}
 
     public function createStudent(Request $request): array
@@ -123,4 +131,69 @@ final class StudentService
             ->getRepository(Students::class)
             ->find($studentId);
     }
+  public function getEditData(
+    int $studentId,
+    string $field
+): array {
+    $student = $this->getStudentById($studentId);
+
+    if (!$student) {
+        throw new \RuntimeException('Student not found.');
+    }
+
+    $value = match ($field) {
+        'firstName' => $student->getFirstName(),
+        'middleName' => $student->getMiddleName(),
+        'lastName' => $student->getLastName(),
+        'upn' => $student->getUpn(),
+        'dob' => $student->getDob()?->format('Y-m-d'),
+          'country' => $student->getCountry()?->getCountryId(),
+        default => '',
+    };
+
+    return [
+        'student' => $student,
+        'field' => $field,
+        'value' => $value,
+        'countries' => $this->countriesRepository->findAll(),
+    ];
+}
+
+public function updateField(
+    int $studentId,
+    string $field,
+    mixed $value
+): void {
+    $student = $this->getStudentById($studentId);
+
+    if (!$student) {
+        throw new \RuntimeException('Student not found.');
+    }
+
+    match ($field) {
+        'firstName' => $student->setFirstName((string) $value),
+
+        'middleName' => $student->setMiddleName(
+            $value !== '' ? (string) $value : null
+        ),
+
+        'lastName' => $student->setLastName((string) $value),
+
+        'upn' => $student->setUpn((string) $value),
+
+        'dob' => $student->setDob(
+            new \DateTimeImmutable((string) $value)
+        ),
+
+        default => throw new \InvalidArgumentException(
+            sprintf('Field "%s" cannot be edited.', $field)
+        ),
+    };
+
+    $student->setModifiedAt(
+        new \DateTimeImmutable()
+    );
+
+    $this->entityManager->flush();
+}
 }

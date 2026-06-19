@@ -54,31 +54,110 @@
 
         <table class="details-table">
 
-            <tr>
-                <th>Name</th>
-                <td>
-                    {{ student.firstName }}
-                    {{ student.lastName }}
-                </td>
-            </tr>
+    <tr>
+        <th>Name</th>
+        <td>{{ student.firstName }} {{ student.lastName }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'name'
+            }) }}">▶</a>
+        </td>
+    </tr>
 
-            <tr>
-                <th>Date of Birth</th>
-                <td>{{ student.dob|date('d M Y') }}</td>
-            </tr>
+    <tr>
+        <th>Sex</th>
+        <td>{{ student.gender.genderType }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'gender'
+            }) }}">▶</a>
+        </td>
+    </tr>
 
-            <tr>
-                <th>Email</th>
-                <td>{{ student.address.emailAddress }}</td>
-            </tr>
+    <tr>
+        <th>Date of Birth</th>
+        <td>{{ student.dob|date('d M Y') }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'dob'
+            }) }}">▶</a>
+        </td>
+    </tr>
 
-            <tr>
-                <th>Phone Number</th>
-                <td>{{ student.address.phoneNumber }}</td>
-            </tr>
+    <tr>
+    <th>Country of Birth</th>
+    <td>
+        {{ student.country ? student.country.countryName : 'Not specified' }}
+    </td>
+    <td>
+        <button class="side-edit-btn"
+                onclick="openSidePanel('country', {{ student.studentId }})">
+            ▶
+        </button>
+    </td>
+</tr>
 
-        </table>
+    <tr>
+        <th>Ethnicity</th>
+        <td>{{ student.ethnicity? student.ethnicity.ethnicity_name }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'ethnicity'
+            }) }}">▶</a>
+        </td>
+    </tr>
 
+    <tr>
+        <th>Nationality</th>
+        <td>{{ student.nationality ? student.nationality.nationality_status }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'nationality'
+            }) }}">▶</a>
+        </td>
+    </tr>
+
+    <tr>
+        <th>Religion</th>
+        <td>{{ student.religion ?student.religion.religionName }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'religion'
+            }) }}">▶</a>
+        </td>
+    </tr>
+
+    <tr>
+        <th>UPN</th>
+        <td>{{ student.upn }}</td>
+        <td>
+            <a href="{{ path('student_identity_edit', {
+                studentId: student.studentId,
+                field: 'upn'
+            }) }}">▶</a>
+        </td>
+    </tr>
+
+</table>
+
+    </div>
+
+</div>
+<div id="sidePanel" class="side-panel">
+
+    <div class="side-panel-header">
+        <h3 id="sideTitle">Edit</h3>
+        <button onclick="closeSidePanel()">✖</button>
+    </div>
+
+    <div id="sideContent">
+        Loading...
     </div>
 
 </div>
