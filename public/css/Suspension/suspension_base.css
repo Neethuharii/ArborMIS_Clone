@@ -1,0 +1,39 @@
+.sidebar {
+    padding: 20px;
+    width: 250px;
+    background-color: #eae7e7;
+    height: 100vh;
+}
+
+.nav-items ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.nav-items ul li {
+    margin-bottom: 5px;
+}
+
+
+.nav-links {
+    display: block;
+    padding: 10px 12px;
+    color: #333;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+
+.nav-links:hover {
+    color: green;
+}
+
+
+.nav-links.active {
+    background-color: #cfcfcf;
+    color: black;
+}
