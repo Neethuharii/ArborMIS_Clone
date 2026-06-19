@@ -39,6 +39,9 @@ class SuspensionDetails
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $suspensionNotes = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $documentPath = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -138,6 +141,17 @@ class SuspensionDetails
     {
         $this->suspensionNotes = $suspensionNotes;
 
+        return $this;
+    }
+
+    public function getDocumentPath(): ?string
+    {
+        return $this->documentPath;
+    }
+
+    public function setDocumentPath(?string $documentPath): static
+    {
+        $this->documentPath = $documentPath;
         return $this;
     }
 

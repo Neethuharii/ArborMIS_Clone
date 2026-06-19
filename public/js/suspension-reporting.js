@@ -1,5 +1,10 @@
 const drawer = document.getElementById('drawer');
 const overlay = document.getElementById('overlay');
+const form = document.getElementById('suspensionForm');
+
+function showLoader() {
+    document.getElementById('page-loader').style.display = "flex";
+}
 
 document.getElementById('openDrawer').addEventListener('click', () => {
     drawer.classList.add('open');
@@ -16,3 +21,6 @@ overlay.addEventListener('click', () => {
     overlay.classList.remove('show');
 });
 
+form.addEventListener('submit', function () {
+    showLoader();
+});
