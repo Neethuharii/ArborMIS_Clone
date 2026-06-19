@@ -178,3 +178,11 @@
     padding: 12px;
     border-bottom: 1px solid #eee;
 }
+
+.success-message{
+    background: rgb(12, 112, 12); 
+    color: white; 
+    padding: 10px; 
+    margin: 10px 0; 
+    border-radius: 5px;
+}

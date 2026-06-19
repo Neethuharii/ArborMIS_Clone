@@ -16,6 +16,11 @@
     {{ include('Suspension/suspension_base.html.twig') }}
     
     <div class="main-content">
+        {% for message in app.flashes('success') %}
+            <div class="success-message">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="suspension-reporting">
             <div>
                 <h3>Suspensions</h3>
