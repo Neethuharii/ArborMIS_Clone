@@ -4,11 +4,23 @@
 
 <link rel="stylesheet" href="{{ asset('css/Suspension/suspension_reporting.css') }}">
 
+<div id="page-loader" style="display: none;">
+    <div class="loader-box">
+        <img src="{{ asset('images/arborlogo.png') }}"  class="rotating-logo">
+            <p>Loading...</p>
+    </div>
+</div>
+
 <div class="page-wrapper">
 
     {{ include('Suspension/suspension_base.html.twig') }}
     
     <div class="main-content">
+        {% for message in app.flashes('success') %}
+            <div class="success-message">
+                {{ message }}
+            </div>
+        {% endfor %}
         <div class="suspension-reporting">
             <div>
                 <h3>Suspensions</h3>
@@ -33,7 +45,16 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                {% for suspension in suspensions %}
+                <tr>
+                    <td>{{ suspension.student }}</td>
+                    <td>{{ suspension.suspensionReason }}</td>
+                    <td>{{ suspension.suspendedFrom }}</td>
+                    <td>{{ suspension.suspendedUntil }}</td>
+                    <td>{{ suspension.daysLost }}</td>
+                    <td>{{ suspension.notes }}</td>
+                </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -43,15 +64,29 @@
                 <h3>Add Suspension</h3>
             </div>
 
+            {% if errors is defined and errors is not empty %}
+                <div class="error-box">
+                    {% for error in errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <form method="POST"
                 class="suspension-form"
-                enctype="multipart/form-data" 
-                action="{{ path('app_suspension')}}">
+                id="suspensionForm"
+                enctype="multipart/form-data"
+                action="{{ path('app_suspension') }} " onsubmit="showLoader()">
 
                 <div class="form-group">
                     <label>Student</label>
                     <select name="student_id" required>
                         <option value="">Select Student</option>
+                        {% for student in students %}
+                            <option value="{{ student.studentId }}">
+                                {{ student.firstName }} {{ student.lastName }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -101,6 +136,7 @@
                         <input type="file"
                             name="document">
                     </div>
+
                 </div>
 
                 <div class="form-actions">
