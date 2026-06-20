@@ -68,37 +68,46 @@ final class StudentController extends AbstractController
         ]);
     }
 
-    #[Route(
-        '/student/{studentId}/identity/{field}',
-        name: 'student_identity_edit',
-        methods: ['GET', 'POST']
-    )]
-    public function editIdentity(
-        int $studentId,
-        string $field,
-        Request $request,
-        StudentService $studentService
-    ): Response {
-        if ($request->isMethod('POST')) {
+   #[Route(
+    '/student/{studentId}/identity/{field}',
+    name: 'student_identity_edit',
+    methods: ['GET', 'POST']
+)]
+public function editIdentity(
+    int $studentId,
+    string $field,
+    Request $request,
+    StudentService $studentService
+): Response {
 
-            $studentService->updateField(
-                $studentId,
-                $field,
-                $request->request->get('value')
-            );
+    $student = $studentService->getStudentById($studentId);
 
-            $this->addFlash('success', 'Student updated successfully.');
-
-            return $this->redirectToRoute('studentProfile', [
-                'studentId' => $studentId,
-            ]);
-        }
-
-        return $this->render('student/EditIdentity.html.twig', [
-            'data' => $studentService->getEditData(
-                $studentId,
-                $field
-            ),
-        ]);
+    if (!$student) {
+        throw $this->createNotFoundException('Student not found');
     }
+
+    if ($request->isMethod('POST')) {
+
+        $studentService->updateField(
+            $studentId,
+            $field,
+            $request->request->get('value')
+        );
+
+        return new Response('success');
+    }
+
+    $data = $studentService->getEditData(
+        $studentId,
+        $field
+    );
+
+    return $this->render(
+        'student/EditIdentity.html.twig',
+        [
+            'student' => $student,
+            'data' => $data,
+        ]
+    );
+}
 }

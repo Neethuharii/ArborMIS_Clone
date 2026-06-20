@@ -1,127 +1,175 @@
-{% extends 'base.html.twig' %}
 
 {% block title %}Edit Identity{% endblock %}
 
 {% block body %}
 
-<div class="container mt-4">
 
-   <h3>Edit {{ data.field|title }}</h3>
+   <div class="identity-drawer-content">
 
-<form method="post" onsubmit="submitEditForm(event)">
+    <div class="drawer-header">
+        <h2>{{ data.field|replace({'_':' '})|title }}</h2>
+    </div>
+<form
+    method="post"
+    action="{{ path('student_identity_edit', {
+        studentId: student.studentId,
+        field: data.field
+    }) }}"
+    onsubmit="submitEditForm(event)"
+>
 
-    {% if data.field == 'dob' %}
+        {% if data.field == 'dob' %}
 
-        <input type="date"
-               name="value"
-               value="{{ data.value }}"
-               class="form-control">
+            <label>Date of Birth</label>
 
-    {% elseif data.field == 'country' %}
+            <input
+                type="date"
+                name="value"
+                value="{{ data.value }}"
+                class="form-control">
 
-        <select name="value" class="form-control">
+        {% elseif data.field == 'country' %}
 
-            {% for country in data.countries %}
-                <option value="{{ country.countryId }}"
-                    {% if data.value == country.countryId %}selected{% endif %}>
-                    {{ country.countryName }}
-                </option>
-            {% endfor %}
+            <label>Country</label>
 
-        </select>
+            <select name="value" class="form-control">
+                {% for country in data.countries %}
+                    <option
+                        value="{{ country.countryId }}"
+                        {% if data.value == country.countryId %}selected{% endif %}>
+                        {{ country.countryName }}
+                    </option>
+                {% endfor %}
+            </select>
 
-    {% elseif data.field == 'religion' %}
+        {% elseif data.field == 'religion' %}
 
-        <select name="value" class="form-control">
+            <label>Religion</label>
 
-            {% for religion in data.religions %}
-                <option value="{{ religion.religionId }}"
-                    {% if data.value == religion.religionId %}selected{% endif %}>
-                    {{ religion.religionName }}
-                </option>
-            {% endfor %}
+            <select name="value" class="form-control">
+                {% for religion in data.religions %}
+                    <option
+                        value="{{ religion.religionId }}"
+                        {% if data.value == religion.religionId %}selected{% endif %}>
+                        {{ religion.religionName }}
+                    </option>
+                {% endfor %}
+            </select>
 
-        </select>
+        {% elseif data.field == 'ethnicity' %}
 
-    {% elseif data.field == 'ethnicity' %}
+            <label>Ethnicity</label>
 
-        <select name="value" class="form-control">
+            <select name="value" class="form-control">
+                {% for ethnicity in data.ethnicities %}
+                    <option
+                        value="{{ ethnicity.ethnicityId }}"
+                        {% if data.value == ethnicity.ethnicityId %}selected{% endif %}>
+                        {{ ethnicity.ethnicityName }}
+                    </option>
+                {% endfor %}
+            </select>
 
-            {% for ethnicity in data.ethnicities %}
-                <option value="{{ ethnicity.ethnicityId }}"
-                    {% if data.value == ethnicity.ethnicityId %}selected{% endif %}>
-                    {{ ethnicity.ethnicityName }}
-                </option>
-            {% endfor %}
+       {% elseif data.field == 'nationality' %}
 
-        </select>
+    <select name="value" class="form-control">
 
-    {% elseif data.field == 'nationality' %}
+        {% for nationality in data.nationalities %}
+            <option
+                value="{{ nationality.nationalityId }}"
+                {% if data.value == nationality.nationalityId %}selected{% endif %}>
+                {{ nationality.nationalityStatus }}
+            </option>
+        {% endfor %}
 
-        <select name="value" class="form-control">
+    </select>
 
-            {% for nationality in data.nationalities %}
-                <option value="{{ nationality.nationalityId }}"
-                    {% if data.value == nationality.nationalityId %}selected{% endif %}>
-                    {{ nationality.nationalityName }}
-                </option>
-            {% endfor %}
 
-        </select>
 
-    {% else %}
+        {% else %}
 
-        <input type="text"
-               name="value"
-               value="{{ data.value }}"
-               class="form-control">
+            <label>{{ data.field|title }}</label>
 
-    {% endif %}
+            <input
+                type="text"
+                name="value"
+                value="{{ data.value }}"
+                class="form-control">
 
-    <br>
+        {% endif %}
 
-    <button type="submit" class="btn btn-success">
-        Save
-    </button>
+        <div class="form-actions">
 
-</form>
+            <button
+                type="button"
+                class="cancel-btn"
+                onclick="closeDrawer()">
+                Cancel
+            </button>
+
+            <button
+                type="submit"
+                class="save-btn">
+                Save
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
 
 <script>
 function submitEditForm(e)
 {
     e.preventDefault();
 
-    fetch(window.location.href, {
-        method: "POST",
+    fetch(e.target.action, {
+        method: 'POST',
         body: new FormData(e.target)
     })
     .then(() => {
-        location.reload(); 
+        location.reload();
     });
 }
-
 </script>
 
 <style>
-
-.side-panel {
-    position: fixed;
-    top: 0;
-    right: -400px;
-    width: 400px;
-    height: 100%;
-    background: white;
-    box-shadow: -5px 0 20px rgba(0,0,0,0.2);
-    transition: 0.3s;
-    z-index: 9999;
+.identity-drawer-content {
     padding: 20px;
 }
 
-.side-panel.open {
-    right: 0;
+.drawer-header {
+    margin-bottom: 20px;
 }
 
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-btn {
+    background: #ddd;
+    border: none;
+    padding: 10px 18px;
+    cursor: pointer;
+}
+
+.save-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    cursor: pointer;
+}
 </style>
-</div>
 
 {% endblock %}

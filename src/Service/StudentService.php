@@ -147,7 +147,7 @@ final class StudentService
             'upn' => $student->getUpn(),
             'dob' => $student->getDob()?->format('Y-m-d'),
 
-            // RELATIONS (IDs for dropdowns)
+    
             'country' => $student->getCountry()?->getCountryId(),
             'religion' => $student->getReligion()?->getReligionId(),
             'ethnicity' => $student->getEthnicity()?->getEthnicityId(),
@@ -161,7 +161,7 @@ final class StudentService
             'field' => $field,
             'value' => $value,
 
-            // ALL DROPDOWNS FROM DB
+           
             'countries' => $this->countriesRepository->findAll(),
             'religions' => $this->religionsRepository->findAll(),
             'ethnicities' => $this->ethnicitiesRepository->findAll(),

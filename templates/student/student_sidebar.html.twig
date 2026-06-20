@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Students{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ asset('css/Student/Sidebar.css') }}">
+</head>
+
+<body>
+
+<div class="app-wrapper">
+
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar">
+
+        <div class="sidebar-header">
+            Students
+        </div>
+
+        <a href="{{ path('newstudent') }}"
+           class="menu-item {% if app.request.get('_route') == 'newstudent' %}active{% endif %}">
+            New Student
+        </a>
+
+        <a href="{{ path('studentsList') }}"
+           class="menu-item {% if app.request.get('_route') == 'studentsList' %}active{% endif %}">
+            Browse
+        </a>
+
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="content">
+
+        {% block body %}{% endblock %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

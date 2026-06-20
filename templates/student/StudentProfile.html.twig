@@ -8,151 +8,239 @@
 
 <div class="profile-page">
 
-    <h1>Student Profile</h1>
 
-    <div class="profile-card">
+<h1>Student Profile</h1>
 
-        <div class="profile-image">
-            <img src="{% if student.profileImage %}
-                        {{ asset('uploads/students/' ~ student.profileImage) }}
-                      {% else %}
-                        {{ asset('images/defaultProfile.png') }}
-                      {% endif %}">
-        </div>
+<div class="profile-card">
 
-        <div class="profile-info">
-
-            <h2>
-                {{ student.firstName|title }}
-                {{ student.lastName|title }}
-            </h2>
-
-            <div class="profile-row">
-                <span>Date of Birth</span>
-                <strong>{{ student.dob|date('d M Y') }}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Email</span>
-                <strong>{{ student.address.emailAddress }}</strong>
-            </div>
-
-            <div class="profile-row">
-                <span>Phone</span>
-                <strong>{{ student.address.phoneNumber }}</strong>
-            </div>
-
-        </div>
-
+    <div class="profile-image">
+        <img src="{% if student.profileImage %}
+                    {{ asset('uploads/students/' ~ student.profileImage) }}
+                  {% else %}
+                    {{ asset('images/defaultProfile.png') }}
+                  {% endif %}">
     </div>
 
-    <div class="section">
+    <div class="profile-info">
 
-        <div class="section-header">
-            <h2>Identity</h2>
+        <h2>
+            {{ student.firstName|title }}
+            {{ student.lastName|title }}
+        </h2>
+
+        <div class="profile-row">
+            <span>Date of Birth</span>
+            <strong>{{ student.dob|date('d M Y') }}</strong>
         </div>
 
-        <table class="details-table">
+        <div class="profile-row">
+            <span>Email</span>
+            <strong>{{ student.address.emailAddress }}</strong>
+        </div>
 
-            <tr>
-                <th>Name</th>
-                <td>{{ student.firstName }} {{ student.lastName }}</td>
-                <td>
-                    <button onclick="openSidePanel('name', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>Sex</th>
-                <td>{{ student.gender ? student.gender.genderType : 'Not specified' }}</td>
-                <td>
-                    <button onclick="openSidePanel('gender', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>Date of Birth</th>
-                <td>{{ student.dob|date('d M Y') }}</td>
-                <td>
-                    <button onclick="openSidePanel('dob', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>Country of Birth</th>
-                <td>{{ student.country ? student.country.countryName : 'Not specified' }}</td>
-                <td>
-                    <button onclick="openSidePanel('country', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>Ethnicity</th>
-                <td>{{ student.ethnicity ? student.ethnicity.ethnicityName : 'Not specified' }}</td>
-                <td>
-                    <button onclick="openSidePanel('ethnicity', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>Nationality</th>
-                <td>{{ student.nationality ? student.nationality.nationalityName : 'Not specified' }}</td>
-                <td>
-                    <button onclick="openSidePanel('nationality', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>Religion</th>
-                <td>{{ student.religion ? student.religion.religionName : 'Not specified' }}</td>
-                <td>
-                    <button onclick="openSidePanel('religion', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-            <tr>
-                <th>UPN</th>
-                <td>{{ student.upn ?: 'Not assigned' }}</td>
-                <td>
-                    <button onclick="openSidePanel('upn', {{ student.studentId }})">▶</button>
-                </td>
-            </tr>
-
-        </table>
+        <div class="profile-row">
+            <span>Phone</span>
+            <strong>{{ student.address.phoneNumber }}</strong>
+        </div>
 
     </div>
 
 </div>
 
-<!-- SIDE PANEL -->
-<div id="sidePanel" class="side-panel">
+<div class="section">
 
-    <div class="side-panel-header">
-        <h3>Edit Field</h3>
-        <button onclick="closeSidePanel()">✖</button>
+    <div class="section-header">
+        <h2>Identity</h2>
     </div>
 
-    <div id="sideContent">
-        Loading...
-    </div>
+    <table class="details-table">
+
+        <tr>
+            <th>Name</th>
+            <td>{{ student.firstName }} {{ student.lastName }}</td>
+            <td>
+                <button onclick="openSideOver('name', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Sex</th>
+            <td>{{ student.gender ? student.gender.genderType : 'Not specified' }}</td>
+            <td>
+                <button onclick="openSideOver('gender', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Date of Birth</th>
+            <td>{{ student.dob|date('d M Y') }}</td>
+            <td>
+                <button onclick="openSideOver('dob', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Country of Birth</th>
+            <td>{{ student.country ? student.country.countryName : 'Not specified' }}</td>
+            <td>
+                <button onclick="openSideOver('country', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Ethnicity</th>
+            <td>{{ student.ethnicity ? student.ethnicity.ethnicityName : 'Not specified' }}</td>
+            <td>
+                <button onclick="openSideOver('ethnicity', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Nationality</th>
+            <td>{{ student.nationality ? student.nationality.nationalityName : 'Not specified' }}</td>
+            <td>
+                <button onclick="openSideOver('nationality', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Religion</th>
+            <td>{{ student.religion ? student.religion.religionName : 'Not specified' }}</td>
+            <td>
+                <button onclick="openSideOver('religion', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>UPN</th>
+            <td>{{ student.upn ?: 'Not assigned' }}</td>
+            <td>
+                <button onclick="openSideOver('upn', {{ student.studentId }})">
+                    ▶
+                </button>
+            </td>
+        </tr>
+
+    </table>
 
 </div>
+
+
+</div>
+
+<!-- Side Drawer -->
+
+<div id="identityDrawer" class="drawer">
+
+
+<div class="drawer-header">
+    <h3>Edit Student Information</h3>
+
+    <button type="button" id="closeDrawer">
+        ✖
+    </button>
+</div>
+
+<div id="drawerContent">
+    Loading...
+</div>
+
+
+</div>
+
+<div id="overlay" class="overlay"></div>
+
+<style>
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -5px 0 20px rgba(0,0,0,.2);
+    transition: .3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.drawer.open {
+    right: 0;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+#drawerContent {
+    padding: 20px;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    opacity: 0;
+    visibility: hidden;
+    transition: .3s;
+    z-index: 999;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+</style>
 
 <script>
-function openSidePanel(field, studentId)
+
+const drawer = document.getElementById('identityDrawer');
+const overlay = document.getElementById('overlay');
+
+function openSideOver(field, studentId)
 {
     fetch(`/student/${studentId}/identity/${field}`)
-        .then(res => res.text())
+        .then(response => response.text())
         .then(html => {
-            document.getElementById('sideContent').innerHTML = html;
-            document.getElementById('sidePanel').classList.add('open');
+
+            document.getElementById('drawerContent').innerHTML = html;
+
+            drawer.classList.add('open');
+            overlay.classList.add('show');
         });
 }
 
-function closeSidePanel()
+function closeDrawer()
 {
-    document.getElementById('sidePanel').classList.remove('open');
+    drawer.classList.remove('open');
+    overlay.classList.remove('show');
 }
+
+document.getElementById('closeDrawer')
+    .addEventListener('click', closeDrawer);
+
+overlay.addEventListener('click', closeDrawer);
+
 </script>
 
 {% endblock %}
