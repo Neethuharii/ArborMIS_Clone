@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class StaffController extends AbstractController
 {
     #[Route('/Staff/addstaff', name: 'addstaff')]
-
     public function addstaff(StaffService $addstaffService, Request $request):Response
     {
         $genders = $addstaffService->getAllGenders();
@@ -27,11 +26,11 @@ class StaffController extends AbstractController
                 return $this->redirectToRoute('browseStaff');
             }
         }
-            return $this->render('Staff/addstaff.html.twig', [
-                'all_genders' => $genders,
-                'all_titles' => $titles,
-                'all_businessRoles' => $businessRoles,
-            ]);
+        return $this->render('Staff/addstaff.html.twig', [
+            'all_genders' => $genders,
+            'all_titles' => $titles, 
+            'all_businessRoles' => $businessRoles,
+        ]);
     }
     
     #[Route('/Staff/browseStaff', name:'browseStaff')]
