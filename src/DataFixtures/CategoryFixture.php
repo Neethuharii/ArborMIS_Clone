@@ -32,15 +32,11 @@ class CategoryFixture extends Fixture implements FixtureGroupInterface
             $category = new Categories();
             $category->setCategoryName($name);
             $category->setCategoryPoints($points);
-
             $manager->persist($category);
-
             $this->addReference($name,$category);
-
+            
         }
-
         $manager->flush();
-
     }
     public static function getGroups():array
     {
