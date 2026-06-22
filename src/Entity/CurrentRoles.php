@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Staffs;
 use App\Repository\CurrentRolesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,13 +18,13 @@ class CurrentRoles
     private ?int $currentRole_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'currentRoles')]
-    #[ORM\JoinColumn(name: 'business_role_id',referencedColumnName: 'role_id')]
+    #[ORM\JoinColumn(name: 'business_role_id', referencedColumnName: 'role_id')]
     private ?BusinessRoles $businessRole = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $startDate = null;
 
-    #[ORM\Column(nullable: true,type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(nullable: true, type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $endDate = null;
 
     #[ORM\Column]
@@ -34,6 +35,10 @@ class CurrentRoles
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
+
+    #[ORM\ManyToOne(targetEntity: Staffs::class, inversedBy: 'currentRoles')]
+    #[ORM\JoinColumn(name: 'staff_id', referencedColumnName: 'staff_id', nullable: false)]
+    private ?Staffs $staff = null;
 
     public function getCurrentRoleId(): ?int
     {
@@ -108,6 +113,17 @@ class CurrentRoles
     public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+    public function getStaff(): ?Staffs
+    {
+        return $this->staff;
+    }
+
+    public function setStaff(?Staffs $staff): static
+    {
+        $this->staff = $staff;
 
         return $this;
     }

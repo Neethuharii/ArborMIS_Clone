@@ -15,8 +15,26 @@
 </head>
 <body>
 <nav>
-    <ul>    
-        <li>My Items</li>
+    <ul>   
+    <li class="students">
+            My Items ▼
+            <ul class="menu">
+                <li>
+                    Enrollments ▶
+                    <ul class="submenu">
+                        <li>
+                            <a href="#">
+                                Enroll Student
+                        </li>
+                        <li>
+                            <a href="#">
+                                Assign Staff
+                            </a>
+                        </li>
+                    </ul> 
+                </li>
+            </ul>
+        </li> 
         <li class="students">
             Students ▼
             <ul class="menu">
@@ -50,8 +68,8 @@
                 <li>
                     All Staff ▶
                     <ul class="submenu">
-                        <li>Browse Staff</li>
-                        <li>Add New Staff</li>
+                        <li><a href="{{ path('browseStaff') }}">Browse Staff </a></li>
+                        <li><a href="{{ path('addstaff') }}">Add New Staff </a></li>
                   </ul>
                 </li>
             </ul>

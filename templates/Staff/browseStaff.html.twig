@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Staff List{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{asset('css/Staff/browseStaff.css')}}"
+{% endblock %}
+
+{% block body %}
+
+    <h2>Staff Members</h2>
+    <div class="staff-container">
+
+        {% for staff in staffs %}
+            <a href="{{ path('staffProfile', {id: staff.staffId}) }}" class="staff-link">
+                <div class="staff-card">
+
+                    <div class="staff-photo">
+                        <img src="{{ asset('images/dummy-profile.png') }}"
+                            alt="Profile Photo">
+                    </div>
+
+                    <div class="staff-info">
+                        <h3>
+                            {{ staff.title.titleName }}
+                            {{ staff.firstName }}
+                            {{ staff.lastName }}
+                        </h3>
+
+                        <div class="staff-role">
+                            Staff Member
+                        </div>
+                        
+                        <div class="staff-meta">
+                            <div>{{ staff.staffNumber }}</div>
+                            <div>{{ staff.address.emailAddress }}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+</div>
+
+{% endblock %}
