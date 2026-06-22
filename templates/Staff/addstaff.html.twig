@@ -10,13 +10,13 @@
 {% block body %}
 
     <h2>Add New Member of Staff</h2>
-
+    
     <form method="POST">
     <div class="contact">
 
-        <h4>Contact Details</h4>        
-        <div class="contact-form">
+        <h4>Contact Details</h4> 
 
+        <div class="contact-form">
                 <label>Sex *</label>
                 <select name="gender" required>
                     <option value="">Select Gender</option>
@@ -87,10 +87,10 @@
         <div class="role-form">
             <label>Assign Business Role *</label>
             <select name="roles">
-                <option value=""> Select Role </option>
-                {% for role in all_businessRoles %}
-                    <option value="{{ role.roleId }}">{{ role.nameOfRole }}</option>
-                {% endfor %}
+                    <option value=""> Select Role </option>
+                    {% for role in all_businessRoles %}
+                        <option value="{{ role.roleId }}">{{ role.nameOfRole }}</option>
+                    {% endfor %}
             </select>
 
             <label>Start Date *</label>
@@ -98,7 +98,6 @@
 
             <label>End Date</label>
             <input name="end_date" type="date">
-
         </div>
     </div>
 

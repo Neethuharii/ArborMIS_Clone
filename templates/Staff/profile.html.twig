@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teacher Profile{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('css/Staff/profile.css')}}">
+{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+
+    <div class="profile-header">
+        <div class="profile-image">
+        </div>
+
+        <div class="profile-info">
+            <h1>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</h1>
+
+            <table class="summary-table">
+                <tr>
+                    <td class="label">Role</td>
+                    <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Joined</td>
+                    <td><strong></strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Identity</h2>
+        </div>
+
+        <table class="details-table">
+            <tbody>
+            <tr>
+                <th>Name</th>
+                <td>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Sex</th>
+                <td>{{ staff.gender.genderType }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Date of birth</th>
+                <td>{{staff.dateOfBirth|date('d/m/Y')}}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Ethnicity</th>
+                <td>Not recorded</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Teacher Number</th>
+                <td>Not recorded</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Religion</th>
+                <td>Not recorded</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Arbor Staff ID</th>
+                <td>Not recorded</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Staff Number</th>
+                <td>Not recorded</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>School ID Card</th>
+                <td>Not issued</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Abbreviation</th>
+                <td>{{ staff.abbreviation }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

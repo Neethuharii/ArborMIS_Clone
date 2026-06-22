@@ -6,26 +6,25 @@ namespace App\Service;
 
 use App\Entity\Address;
 use App\Entity\Staffs;
+use App\Entity\CurrentRoles;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
+use App\Repository\CurrentRolesRepository;
 use App\Repository\BusinessrolesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Repository\StaffsRepository;
 
 class StaffService
 {
-    private GendersRepository $gendersRepository;
-    private TitlesRepository $titlesRepository;
-    private BusinessrolesRepository $businessRolesRepository;
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(GendersRepository $GendersRepository, TitlesRepository $TitlesRepository, BusinessrolesRepository $BusinessrolesRepository, EntityManagerInterface $entityManager)
-    {
-        $this->gendersRepository = $GendersRepository;
-        $this->titlesRepository = $TitlesRepository;
-        $this->businessRolesRepository = $BusinessrolesRepository;
-        $this->entityManager = $entityManager;
-    }
+    public function __construct(
+        private GendersRepository $gendersRepository,
+        private TitlesRepository $titlesRepository,
+        private CurrentRolesRepository $currentRolesRepository,
+        private BusinessrolesRepository $businessRolesRepository,
+        private EntityManagerInterface $entityManager,
+        private StaffsRepository $staffsRepository
+    ) {}
 
     public function getAllGenders(): array
     {
@@ -42,6 +41,17 @@ class StaffService
         return $this->businessRolesRepository->findAll();
     }
 
+    public function getAllStaffs(): array
+    {
+        return $this->staffsRepository->findAll();
+    }
+
+
+    public function getStaffById(int $id): ?Staffs
+    {
+        return $this->staffsRepository->find($id);
+    }
+
     public function addStaff(Request $request)
     {
         $genderId = $request->request->get('gender', 0);
@@ -49,33 +59,34 @@ class StaffService
         $middleName = $request->request->get('middle_name', '');
         $lastName = $request->request->get('last_name');
         $abbreviation = $request->request->get('abbreviation', '');
-        $dob = $request->request->get('dob', '');
+        $dateofBirth = $request->request->get('dob', '');
         $email = $request->request->get('email', '');
         $phoneNumber = $request->request->get('phone_number', '');
         $title = null;
         $titleId = $request->request->get('title', 0);
+        $roleId = $request->request->get('roles', 0);
 
         $errors = [];
 
         if ($firstName === '') {
-            $errors['firstName'] = 'First Name is required.';
+            $errors['firstName'] = 'Please enter your first name';
         }
 
         if ($lastName === '') {
-            $errors['lastName'] = 'Last Name is required.';
+            $errors['lastName'] = 'Please enter your last name';
         }
 
         if ($genderId === 0) {
-            $errors['gender'] = 'Gender is required.';
+            $errors['gender'] = 'Please select your gender.';
         }
 
-        if ($dob === '') {
-            $errors['dob'] = 'Date of Birth is required.';
+        if ($dateofBirth === '') {
+            $errors['dateofBirth'] = 'Please enter your date of birth.';
         }
 
         if ($email !== '') {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = 'Please enter a valid email address.';
+                $errors['email'] = 'Enter a valid email address.';
             }
         }
 
@@ -83,13 +94,6 @@ class StaffService
             if (strlen($phoneNumber) !== 10) {
                 $errors['phoneNumber'] = 'Phone Number must be exactly 10 digits.';
             }
-        }
-
-        if (!empty($errors)) {
-            return [
-                'success' => false,
-                'errors' => $errors,
-            ];
         }
 
         $gender = $this->gendersRepository->find($genderId);
@@ -107,7 +111,28 @@ class StaffService
             $title = $this->titlesRepository->find($titleId);
         }
 
+        if (!empty($errors)) {
+            return [
+                'success' => false,
+                'errors' => $errors,
+            ];
+        }
+
+        $staff = new Staffs();
         $address = new Address();
+
+        $staff->setFirstName($firstName);
+        $staff->setMiddleName($middleName ?: null);
+        $staff->setLastName($lastName);
+        $staff->setTitle($title);
+        $staff->setGender($gender);
+        $staff->setAbbreviation($abbreviation ?: null);
+        $staff->setDateOfBirth(new \DateTimeImmutable($dateofBirth));
+        $staff->setAddress($address);
+        $staff->setCreatedAt(new \DateTimeImmutable());
+        $staff->setModifiedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($staff);
+
         $address->setEmailAddress($email);
         $address->setPhoneNumber($phoneNumber);
         $address->setCreatedAt(new \DateTimeImmutable());
@@ -115,19 +140,28 @@ class StaffService
 
         $this->entityManager->persist($address);
 
-        $staff = new Staffs();
-        $staff->setFirstName($firstName);
-        $staff->setMiddleName($middleName ?: null);
-        $staff->setLastName($lastName);
-        $staff->setTitle($title);
-        $staff->setGender($gender);
-        $staff->setAbbreviation($abbreviation ?: null);
-        $staff->setDateOfBirth(new \DateTimeImmutable($dob));
-        $staff->setAddress($address);
-        $staff->setCreatedAt(new \DateTimeImmutable());
-        $staff->setModifiedAt(new \DateTimeImmutable());
+        $businessRole = $this->businessRolesRepository->find($roleId);
 
-        $this->entityManager->persist($staff);
+        if (!$businessRole) {
+            return [
+                'success' => false,
+                'errors' => [
+                    'role' => 'Invalid role selected.'
+                ]
+            ];
+        }
+
+        $roleHistory = new CurrentRoles();
+        $roleHistory->setStaff($staff);
+        $roleHistory->setBusinessRole($businessRole);
+        $roleHistory->setStartDate(new \DateTimeImmutable());
+        $roleHistory->setCreatedAt(new \DateTimeImmutable());
+        $roleHistory->setModifiedAt(new \DateTimeImmutable());
+        $this->entityManager->persist($roleHistory);
+
+        $this->entityManager->flush();
+
+        $staff->setCurrentRole($roleHistory);
         $this->entityManager->flush();
 
         return [
