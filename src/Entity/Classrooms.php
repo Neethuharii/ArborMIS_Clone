@@ -20,9 +20,10 @@ class Classrooms
     #[ORM\Column(length: 50)]
     private ?string $class_name = null;
 
-    #[ORM\Column]
-    private ?int $staff_id = null;
-
+    #[ORM\ManyToOne(targetEntity: Staffs::class, inversedBy: 'classrooms')]
+    #[ORM\JoinColumn(name: 'staff_id', referencedColumnName: 'staff_id', nullable: true)]
+    private ?Staffs $staff = null;
+ 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(
         name: 'academic_year_id',
@@ -62,14 +63,14 @@ class Classrooms
         return $this;
     }
 
-    public function getStaffId(): ?int
+    public function getStaff(): ?Staffs
     {
-        return $this->staff_id;
+        return $this->staff;
     }
 
-    public function setStaffId(int $staff_id): static
+    public function setStaff(Staffs $staff): static
     {
-        $this->staff_id = $staff_id;
+        $this->staff = $staff;
 
         return $this;
     }

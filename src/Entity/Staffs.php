@@ -58,6 +58,7 @@ class Staffs
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'religion_id', referencedColumnName: 'religion_id', nullable: true)]
     private ?Religions $religion = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: true)]
     private ?Documents $identityDocument = null;
@@ -69,6 +70,9 @@ class Staffs
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'current_role_id', nullable: true)]
     private ?CurrentRoles $currentRole = null;
 
+    #[ORM\OneToMany(mappedBy: 'staff', targetEntity: Classrooms::class)]
+    private Collection $classrooms;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -77,6 +81,13 @@ class Staffs
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
+
+
+    public function __construct()
+    {
+        $this->classrooms = new ArrayCollection();
+    }
+
 
     public function getStaffId(): ?int
     {
@@ -130,6 +141,7 @@ class Staffs
 
         return $this;
     }
+
     public function getGender(): ?Genders
     {
         return $this->gender;
@@ -186,6 +198,7 @@ class Staffs
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -212,7 +225,7 @@ class Staffs
 
         return $this;
     }
-    
+
     public function getCurrentRole(): ?CurrentRoles
     {
         return $this->currentRole;
@@ -221,6 +234,7 @@ class Staffs
     public function setCurrentRole(?CurrentRoles $currentRole): static
     {
         $this->currentRole = $currentRole;
+
         return $this;
     }
 
@@ -258,6 +272,11 @@ class Staffs
         $this->profilePhoto = $profilePhoto;
 
         return $this;
+    }
+
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
