@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use DateTime;
 use App\Entity\SuspensionDetails;
 use App\Repository\SuspensionReasonRepository;
 use App\Repository\StudentsRepository;
@@ -48,7 +49,7 @@ class SuspensionService
             $errors['end_date'] = 'End Date is required.';
         }
 
-        if ((!empty($startDate)) && (!empty($endDate)) && new \DateTime($endDate) < new \DateTime($startDate)) 
+        if ((!empty($startDate)) && (!empty($endDate)) && new DateTime($endDate) < new DateTime($startDate)) 
         {
             $errors['end_date'] = 'End Date cannot be before Start Date.';
         }
@@ -59,7 +60,7 @@ class SuspensionService
 
         if ((!empty($decisionMadeTime)) &&
             (!empty($startDate)) &&
-            new \DateTime($decisionMadeTime) > new \DateTime($startDate)
+            new DateTime($decisionMadeTime) > new DateTime($startDate)
         ) 
         {
             $errors['decision_made_time'] = 'Decision Made Time cannot be after Start Date.';
@@ -80,14 +81,27 @@ class SuspensionService
             return ['success' => false, 'errors' => ['suspension_reason_id' => 'Invalid Suspension Reason selected.']];
         }
         
-        $daysLost = (new \DateTime($startDate))->diff(new \DateTime($endDate))->days;
+        $start = new DateTime($startDate);
+        $end = new DateTime($endDate);
+
+        $current = clone $start;
+        $daysLost = 0;
+
+        while($current <= $end)
+        {
+            $dayOfWeek = (int) $current->format('N');
+            if($dayOfWeek!=6 && $dayOfWeek!=7){
+                $daysLost++;
+            }
+            $current->modify('+1 day');
+        }
 
         $suspensionDetail = new SuspensionDetails();
         $suspensionDetail->setStudent($student);
         $suspensionDetail->setSuspensionReason($suspensionReason);
-        $suspensionDetail->setSuspendedFrom(new \DateTime($startDate));
-        $suspensionDetail->setSuspendedUntil(new \DateTime($endDate));
-        $suspensionDetail->setDecisionMadeTime(new \DateTime($decisionMadeTime));
+        $suspensionDetail->setSuspendedFrom(new DateTime($startDate));
+        $suspensionDetail->setSuspendedUntil(new DateTime($endDate));
+        $suspensionDetail->setDecisionMadeTime(new DateTime($decisionMadeTime));
         $suspensionDetail->setDaysLost($daysLost);
         $suspensionDetail->setSuspensionNotes($note);
 
