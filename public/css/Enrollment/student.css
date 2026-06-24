@@ -1,0 +1,86 @@
+.allocation-container {
+    margin-top:120px;
+    padding: 20px;
+}
+
+.table-wrapper {
+    border: 1px solid #d9d9d9;
+    max-height: 650px;
+    overflow: auto;
+    background: white;
+}
+
+.allocation-table {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+}
+
+.allocation-table th {
+    background: #f2f2f2;
+    color: #444;
+    font-weight: 600;
+    padding: 16px;
+    border-bottom: 1px solid #d9d9d9;
+    position: sticky;
+    top: 0;
+}
+
+.allocation-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.allocation-table th,
+.allocation-table td {
+    text-align: center;
+}
+
+.allocation-table th:nth-child(2),
+.allocation-table td:nth-child(2) {
+    text-align: left;
+    min-width: 250px;
+}
+
+.allocation-table th:nth-child(3),
+.allocation-table td:nth-child(3) {
+    text-align: left;
+    width: 120px;
+}
+
+.allocation-table tbody tr:hover {
+    background: #fafafa;
+}
+
+
+input[type="checkbox"] {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+
+.tick {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #5d911f;
+    color: white;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 6px;
+}
+
+tfoot td {
+    background: #f4f4f4;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+}
+
+tfoot div {
+    font-size: 24px;
+    font-weight: 600;
+    margin-top: 4px;
+}

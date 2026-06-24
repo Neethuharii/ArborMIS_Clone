@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Student Allocation{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Enrollment/student.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="allocation-container">
+
+    <div class="table-wrapper">
+
+        <table class="allocation-table">
+
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Student</th>
+                    <th>Year Group</th>
+                    <th>Classroom</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>Adams Arden</td>
+                    <td>Year 2</td>
+                    <td>
+                    <select>
+                        <option value="">Class 5A</option>    
+                    </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>Anderson Wanda</td>
+                    <td>Year 2</td>
+                    <td>
+                    <select>
+                        <option value="">Class 5A</option>    
+                    </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td> Barnett Damian </td>
+                    <td>Year 2</td>
+                    <td>
+                    <select>
+                        <option value="">Class 5A</option>    
+                    </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td> Bowers Kim </td>
+                    <td>Year 2</td>
+                    <td>
+                    <select>
+                        <option value="">Class 5A</option>    
+                    </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td> Brock Cheryl </td>
+                    <td>Year 2</td>
+                   <td>
+                    <select>
+                        <option value="">Class 5A</option>    
+                    </select>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
