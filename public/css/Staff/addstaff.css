@@ -1,0 +1,66 @@
+body {
+    font-weight: 550;
+    color: grey;
+}
+
+h2 {
+    color: black;
+    font-weight: 600;
+    margin-left: 30px;
+}
+
+.contact,
+.role {
+    border: 1px solid lightgrey;
+    margin: 30px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.contact h4,
+.role h4 {
+    background-color: grey;
+    color: white;
+    padding: 12px;
+    margin: 0;
+}
+
+.contact-form,
+.role-form {
+    padding: 25px;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 18px;
+    align-items: center;
+}
+
+.contact-form input,
+.contact-form select,
+.role-form input,
+.role-form select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+}
+
+button.btn {
+    margin-left: 30px;
+    margin-bottom: 30px;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+#create-btn {
+    background-color: rgb(21, 223, 58);
+    color: white;
+}

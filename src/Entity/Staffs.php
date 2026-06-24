@@ -7,6 +7,8 @@ namespace App\Entity;
 use App\Repository\StaffsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: StaffsRepository::class)]
 class Staffs
@@ -42,10 +44,13 @@ class Staffs
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $dateOfJoining = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $staffNumber = null;
+
     #[ORM\ManyToOne(targetEntity: Address::class)]
-    #[ORM\JoinColumn( name: 'address_id', referencedColumnName: 'address_id', nullable: true)]
+    #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'address_id', nullable: true)]
     private ?Address $address = null;
-    
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'ethnicity_id', referencedColumnName: 'ethnicity_id', nullable: true)]
     private ?Ethnicities $ethnicity = null;
@@ -54,15 +59,19 @@ class Staffs
     #[ORM\JoinColumn(name: 'religion_id', referencedColumnName: 'religion_id', nullable: true)]
     private ?Religions $religion = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $staffNumber = null;
-
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: true)]
     private ?Documents $identityDocument = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profilePhoto = null;
+
+    #[ORM\ManyToOne(targetEntity: CurrentRoles::class)]
+    #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'current_role_id', nullable: true)]
+    private ?CurrentRoles $currentRole = null;
+
+    #[ORM\OneToMany(mappedBy: 'staff', targetEntity: Classrooms::class)]
+    private Collection $classrooms;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -72,6 +81,13 @@ class Staffs
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
+
+
+    public function __construct()
+    {
+        $this->classrooms = new ArrayCollection();
+    }
+
 
     public function getStaffId(): ?int
     {
@@ -125,6 +141,7 @@ class Staffs
 
         return $this;
     }
+
     public function getGender(): ?Genders
     {
         return $this->gender;
@@ -181,9 +198,10 @@ class Staffs
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
+
         return $this;
     }
-    
+
     public function getEthnicity(): ?Ethnicities
     {
         return $this->ethnicity;
@@ -204,6 +222,18 @@ class Staffs
     public function setReligion(?Religions $religion): static
     {
         $this->religion = $religion;
+
+        return $this;
+    }
+
+    public function getCurrentRole(): ?CurrentRoles
+    {
+        return $this->currentRole;
+    }
+
+    public function setCurrentRole(?CurrentRoles $currentRole): static
+    {
+        $this->currentRole = $currentRole;
 
         return $this;
     }
@@ -242,6 +272,11 @@ class Staffs
         $this->profilePhoto = $profilePhoto;
 
         return $this;
+    }
+
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
