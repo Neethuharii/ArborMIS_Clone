@@ -156,7 +156,6 @@ class Classrooms
     public function removeBehaviourIncident(BehaviourIncidents $behaviourIncident): static
     {
         if ($this->behaviourIncidents->removeElement($behaviourIncident)) {
-            // set the owning side to null (unless already changed)
             if ($behaviourIncident->getRoom() === $this) {
                 $behaviourIncident->setRoom(null);
             }

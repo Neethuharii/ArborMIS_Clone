@@ -85,7 +85,6 @@ class Behaviours
     public function removeBehaviourIncident(BehaviourIncidents $behaviourIncident): static
     {
         if ($this->behaviourIncidents->removeElement($behaviourIncident)) {
-            // set the owning side to null (unless already changed)
             if ($behaviourIncident->getBehaviour() === $this) {
                 $behaviourIncident->setBehaviour(null);
             }
