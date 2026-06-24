@@ -93,8 +93,8 @@ body {
 
 .details-table th,
 .details-table td {
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 4px 12px;
+    font-size: 12px;
 }
 
 .details-table th {
@@ -113,4 +113,116 @@ body {
     text-align: right;
     color: #aaa;
     font-size: 12px;
+}
+
+.details-table tr:hover{
+    background-color: rgb(209, 244, 255);
+}
+
+.clickable-row {
+    cursor: pointer;
+}
+
+.clickable-row:hover {
+    background: #f5f5f5;
+}
+
+.slideover-container {
+    position: fixed;
+    inset: 0;
+    visibility: hidden;
+}
+
+.slideover-container.is-open {
+    visibility: visible;
+}
+
+.slideover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+}
+
+.slideover-drawer {
+    position: absolute;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: white;
+    transition: right .3s ease;
+}
+
+.slideover-container.is-open .slideover-drawer {
+    right: 0;
+}
+
+.slideover-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+#closeBtn{
+    padding:7px;
+    font-weight:bold;
+    font-size: 11px;
+    margin: 7px;
+    background-color:#cdcdcd;
+    border: 0;
+    width: 60px;
+    height: 35px;
+    border-radius: 5px;
+}
+.slideover-header{
+    display: flex;
+}
+
+#nextBtn{
+    padding:4px;
+    font-weight:bold;
+    font-size: 11px;
+    margin: 7px;
+    border: 0;
+    width: 40px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: rgb(240, 158, 5);
+    color: white;
+}
+
+.slideover-body table{
+    margin:3px;
+    padding: 5px;
+    border: 1px solid grey;
+    width: 100%;
+}
+
+.slideover-body table th,td{
+    padding: 4px 12px;
+}
+
+.slideover-body table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.slideover-body table tr {
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.slideover-body table th,
+.slideover-body table td {
+    padding: 4px 12px;
+    font-size: 12px;
+}
+
+.slideover-body table th {
+    width: 180px;
+    text-align: right;
+    color: #666;
+    font-weight: 600;
+}
+
+.slideover-body table td {
+    color: #555;
 }

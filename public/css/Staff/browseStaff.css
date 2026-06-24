@@ -5,6 +5,10 @@
     margin: 30px;
 }
 
+.staff-role hr{
+    opacity: 10%;
+}
+
 .staff-link {
     text-decoration: none;
     color: inherit;
