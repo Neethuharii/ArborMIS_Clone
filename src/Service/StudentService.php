@@ -131,82 +131,82 @@ final class StudentService
             ->getRepository(Students::class)
             ->find($studentId);
     }
-    public function getEditData(int $studentId, string $field): array
-    {
-        $student = $this->getStudentById($studentId);
+    // public function getEditData(int $studentId, string $field): array
+    // {
+    //     $student = $this->getStudentById($studentId);
 
-        if (!$student) {
-            throw new \RuntimeException('Student not found.');
-        }
+    //     if (!$student) {
+    //         throw new \RuntimeException('Student not found.');
+    //     }
 
-        $value = match ($field) {
+    //     $value = match ($field) {
 
-            'firstName' => $student->getFirstName(),
-            'middleName' => $student->getMiddleName(),
-            'lastName' => $student->getLastName(),
-            'upn' => $student->getUpn(),
-            'dob' => $student->getDob()?->format('Y-m-d'),
+    //         'firstName' => $student->getFirstName(),
+    //         'middleName' => $student->getMiddleName(),
+    //         'lastName' => $student->getLastName(),
+    //         'upn' => $student->getUpn(),
+    //         'dob' => $student->getDob()?->format('Y-m-d'),
 
     
-            'country' => $student->getCountry()?->getCountryId(),
-            'religion' => $student->getReligion()?->getReligionId(),
-            'ethnicity' => $student->getEthnicity()?->getEthnicityId(),
-            'nationality' => $student->getNationality()?->getNationalityId(),
+    //         'country' => $student->getCountry()?->getCountryId(),
+    //         'religion' => $student->getReligion()?->getReligionId(),
+    //         'ethnicity' => $student->getEthnicity()?->getEthnicityId(),
+    //         'nationality' => $student->getNationality()?->getNationalityId(),
 
-            default => ''
-        };
+    //         default => ''
+    //     };
 
-        return [
-            'student' => $student,
-            'field' => $field,
-            'value' => $value,
+    //     return [
+    //         'student' => $student,
+    //         'field' => $field,
+    //         'value' => $value,
 
            
-            'countries' => $this->countriesRepository->findAll(),
-            'religions' => $this->religionsRepository->findAll(),
-            'ethnicities' => $this->ethnicitiesRepository->findAll(),
-            'nationalities' => $this->nationalityRepository->findAll(),
-        ];
-    }
-    public function updateField(int $studentId, string $field, mixed $value): void
-    {
-        $student = $this->getStudentById($studentId);
+    //         'countries' => $this->countriesRepository->findAll(),
+    //         'religions' => $this->religionsRepository->findAll(),
+    //         'ethnicities' => $this->ethnicitiesRepository->findAll(),
+    //         'nationalities' => $this->nationalityRepository->findAll(),
+    //     ];
+    // }
+    // public function updateField(int $studentId, string $field, mixed $value): void
+    // {
+    //     $student = $this->getStudentById($studentId);
 
-        if (!$student) {
-            throw new \RuntimeException('Student not found.');
-        }
+    //     if (!$student) {
+    //         throw new \RuntimeException('Student not found.');
+    //     }
 
-        match ($field) {
+    //     match ($field) {
 
-            'firstName' => $student->setFirstName((string) $value),
-            'middleName' => $student->setMiddleName((string) $value),
-            'lastName' => $student->setLastName((string) $value),
-            'upn' => $student->setUpn((string) $value),
+    //         'firstName' => $student->setFirstName((string) $value),
+    //         'middleName' => $student->setMiddleName((string) $value),
+    //         'lastName' => $student->setLastName((string) $value),
+    //         'upn' => $student->setUpn((string) $value),
 
-            'dob' => $student->setDob(new \DateTimeImmutable((string) $value)),
+    //         'dob' => $student->setDob(new \DateTimeImmutable((string) $value)),
 
-            // RELATIONS (VERY IMPORTANT)
-            'country' => $student->setCountry(
-                $this->countriesRepository->find($value)
-            ),
+    //         // RELATIONS (VERY IMPORTANT)
+    //         'country' => $student->setCountry(
+    //             $this->countriesRepository->find($value)
+    //         ),
 
-            'religion' => $student->setReligion(
-                $this->religionsRepository->find($value)
-            ),
+    //         'religion' => $student->setReligion(
+    //             $this->religionsRepository->find($value)
+    //         ),
 
-            'ethnicity' => $student->setEthnicity(
-                $this->ethnicitiesRepository->find($value)
-            ),
+    //         'ethnicity' => $student->setEthnicity(
+    //             $this->ethnicitiesRepository->find($value)
+    //         ),
 
-            'nationality' => $student->setNationality(
-                $this->nationalityRepository->find($value)
-            ),
+    //         'nationality' => $student->setNationality(
+    //             $this->nationalityRepository->find($value)
+    //         ),
 
-            default => throw new \InvalidArgumentException("Field not editable")
-        };
+    //         default => throw new \InvalidArgumentException("Field not editable")
+    //     };
 
-        $student->setModifiedAt(new \DateTimeImmutable());
+    //     $student->setModifiedAt(new \DateTimeImmutable());
 
-        $this->entityManager->flush();
-    }
+    //     $this->entityManager->flush();
+    // }
 }

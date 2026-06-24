@@ -1,246 +1,200 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Student Profile{% endblock %}
+{% block title %}Teacher Profile{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('css/Staff/profile.css')}}">
+{% endblock %}
 
 {% block body %}
+<div class="profile-container">
 
-<link rel="stylesheet" href="{{ asset('css/Student/StudentProfile.css') }}">
-
-<div class="profile-page">
-
-
-<h1>Student Profile</h1>
-
-<div class="profile-card">
-
-    <div class="profile-image">
-        <img src="{% if student.profileImage %}
-                    {{ asset('uploads/students/' ~ student.profileImage) }}
-                  {% else %}
-                    {{ asset('images/defaultProfile.png') }}
-                  {% endif %}">
-    </div>
-
-    <div class="profile-info">
-
-        <h2>
-            {{ student.firstName|title }}
-            {{ student.lastName|title }}
-        </h2>
-
-        <div class="profile-row">
-            <span>Date of Birth</span>
-            <strong>{{ student.dob|date('d M Y') }}</strong>
+    <div class="profile-header">
+        <div class="profile-image">
+            <img src="{{asset('images/defaultProfile.png')}}">
         </div>
 
-        <div class="profile-row">
-            <span>Email</span>
-            <strong>{{ student.address.emailAddress }}</strong>
-        </div>
+        <div class="profile-info">
+            <h1>{{ student.firstName }} {{ student.lastName }}</h1>
 
-        <div class="profile-row">
-            <span>Phone</span>
-            <strong>{{ student.address.phoneNumber }}</strong>
+            <table class="summary-table">
+                 <tr>
+                    <td class="label">Date of Birth</td>
+                    <td><strong>{{student.dob|date('d F Y')}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="label">Joined</td>
+                    <td><strong>{{student.createdAt|date('d F')}}</strong></td>
+                </tr>
+            </table>
         </div>
-
     </div>
 
-</div>
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Identity</h2>
+        </div>
 
-<div class="section">
+        <table class="details-table">
+            <tbody>
+            {#<tr>
+                <th>Name</th>
+                <td>{{ student.firstName }} {{ student.lastName }}</td>
+                <td class="arrow">▶</td>
+            </tr>#}
 
-    <div class="section-header">
-        <h2>Identity</h2>
+            <tr class="clickable-row" 
+                data-title="Name" 
+                data-type="identity"
+                data-first-name="{{ student.firstName }}"
+                data-middle-name="{{ student.middleName }}"
+                data-last-name="{{ student.lastName }}">
+                <th>Name</th>
+                <td>{{ student.firstName }} {{ student.lastName }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr class="clickable-row" 
+                data-title="Gender" 
+                data-type="sex"
+                data-gender-type="{{ student.gender.genderType }}">
+                <th>Gender</th>
+                <td>{{ student.gender.genderType }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr class="clickable-row" 
+                data-title="Date of birth" 
+                data-type="dob"
+                data-dob="{{ student.dob|date('d/m/Y') }}">
+                <th>Date of birth</th>
+                <td>{{ student.dob|date('d/m/Y') }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="Country of birth" 
+                data-type="country"
+                data-dob="{{ student.country }}">
+                <th>Country of birth</th>
+                <td>{{ student.country ?: 'Not recorded'}}</td>
+                <td class="arrow">▶</td>
+            </tr>
+             <tr class="clickable-row" 
+                data-title="Ethnicity" 
+                data-type="ethnicity"
+                data-dob="{{ student.ethnicity}}">
+                <th>Ethnicity</th>
+               <td>{{ student.ethnicity ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+             <tr class="clickable-row" 
+                data-title="Nationality" 
+                data-type="nationality"
+                data-dob="{{ student.nationality}}">
+                <th>Nationality</th>
+               <td>{{ student.nationality ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+             <tr class="clickable-row" 
+                data-title="Religion" 
+                data-type="religion"
+                data-dob="{{ student.religion}}">
+                <th>Religion</th>
+               <td>{{ student.religion ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="Student Id" 
+                data-type="studentId"
+                data-dob="{{ student.studentId}}">
+                <th>Arbor Student Id</th>
+                <td>{{ student.studentId ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="School Card Id" 
+                data-type="cardId"
+                data-dob="{{ student.card}}">
+                <th>School Id Card</th>
+                <td>{{ student.card ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="UPN" 
+                data-type="upn"
+                data-dob="{{ student.upn}}">
+                <th>UPN</th>
+                <td>{{ student.upn ?: 'Not Assigned' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
-    <table class="details-table">
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Student Contact Details</h2>
+        </div>
 
-        <tr>
-            <th>Name</th>
-            <td>{{ student.firstName }} {{ student.lastName }}</td>
-            <td>
-                <button onclick="openSideOver('name', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
+        <table class="details-table">
+            <tbody>
+            <tr>
+                <th>Work Email</th>
+                <td>{{ student.address.emailAddress }}</td>
+                <td class="arrow">▶</td>
+            </tr>
 
-        <tr>
-            <th>Sex</th>
-            <td>{{ student.gender ? student.gender.genderType : 'Not specified' }}</td>
-            <td>
-                <button onclick="openSideOver('gender', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
+            <tr>
+                <th>Student Home Number</th>
+                <td>{{ student.address.phoneNumber }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <tr>
-            <th>Date of Birth</th>
-            <td>{{ student.dob|date('d M Y') }}</td>
-            <td>
-                <button onclick="openSideOver('dob', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
+     <div class="section-card">
+        <div class="section-header">
+            <h2>Family, Guardians and Contacts</h2>
+        </div>
 
-        <tr>
-            <th>Country of Birth</th>
-            <td>{{ student.country ? student.country.countryName : 'Not specified' }}</td>
-            <td>
-                <button onclick="openSideOver('country', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
+        <table class="details-table">
+            <tbody>
+            <tr>
+                <th>Work Email</th>
+                <td>{{ student.address.emailAddress }}</td>
+                <td class="arrow">▶</td>
+            </tr>
 
-        <tr>
-            <th>Ethnicity</th>
-            <td>{{ student.ethnicity ? student.ethnicity.ethnicityName : 'Not specified' }}</td>
-            <td>
-                <button onclick="openSideOver('ethnicity', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
+            <tr>
+                <th>Student Home Number</th>
+                <td>{{ student.address.phoneNumber }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <tr>
-            <th>Nationality</th>
-            <td>{{ student.nationality ? student.nationality.nationalityName : 'Not specified' }}</td>
-            <td>
-                <button onclick="openSideOver('nationality', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
+    <div id="slideoverContainer" class="slideover-container">
+        <div id="slideoverOverlay" class="slideover-overlay"></div>
+            <div class="slideover-drawer">
+                <div class="slideover-header">
+                    <button id="closeBtn"><< Back</button>
+                    <h3 id="slideTitle">Details</h3>
+                    <button id="nextBtn">Edit</button>
+                </div>
+                <hr>
+                <div class="slideover-body">
+                    <div id="slideDynamicContent"></div>
+                </div>
+            </div>
+    </div>
 
-        <tr>
-            <th>Religion</th>
-            <td>{{ student.religion ? student.religion.religionName : 'Not specified' }}</td>
-            <td>
-                <button onclick="openSideOver('religion', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
-
-        <tr>
-            <th>UPN</th>
-            <td>{{ student.upn ?: 'Not assigned' }}</td>
-            <td>
-                <button onclick="openSideOver('upn', {{ student.studentId }})">
-                    ▶
-                </button>
-            </td>
-        </tr>
-
-    </table>
-
-</div>
-
-
-</div>
-
-<!-- Side Drawer -->
-
-<div id="identityDrawer" class="drawer">
-
-
-<div class="drawer-header">
-    <h3>Edit Student Information</h3>
-
-    <button type="button" id="closeDrawer">
-        ✖
-    </button>
-</div>
-
-<div id="drawerContent">
-    Loading...
-</div>
-
-
-</div>
-
-<div id="overlay" class="overlay"></div>
-
-<style>
-
-.drawer {
-    position: fixed;
-    top: 0;
-    right: -450px;
-    width: 450px;
-    height: 100%;
-    background: #fff;
-    box-shadow: -5px 0 20px rgba(0,0,0,.2);
-    transition: .3s ease;
-    z-index: 1000;
-    overflow-y: auto;
-}
-
-.drawer.open {
-    right: 0;
-}
-
-.drawer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-}
-
-#drawerContent {
-    padding: 20px;
-}
-
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.4);
-    opacity: 0;
-    visibility: hidden;
-    transition: .3s;
-    z-index: 999;
-}
-
-.overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-</style>
-
-<script>
-
-const drawer = document.getElementById('identityDrawer');
-const overlay = document.getElementById('overlay');
-
-function openSideOver(field, studentId)
-{
-    fetch(`/student/${studentId}/identity/${field}`)
-        .then(response => response.text())
-        .then(html => {
-
-            document.getElementById('drawerContent').innerHTML = html;
-
-            drawer.classList.add('open');
-            overlay.classList.add('show');
-        });
-}
-
-function closeDrawer()
-{
-    drawer.classList.remove('open');
-    overlay.classList.remove('show');
-}
-
-document.getElementById('closeDrawer')
-    .addEventListener('click', closeDrawer);
-
-overlay.addEventListener('click', closeDrawer);
-
-</script>
+{% block javascripts %}
+    <script src="{{asset('js/slide.js')}}"></script>
+{% endblock %}
 
 {% endblock %}
