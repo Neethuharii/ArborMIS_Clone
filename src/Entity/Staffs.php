@@ -58,6 +58,7 @@ class Staffs
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'religion_id', referencedColumnName: 'religion_id', nullable: true)]
     private ?Religions $religion = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: true)]
     private ?Documents $identityDocument = null;
@@ -68,6 +69,9 @@ class Staffs
     #[ORM\ManyToOne(targetEntity: CurrentRoles::class)]
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'current_role_id', nullable: true)]
     private ?CurrentRoles $currentRole = null;
+
+    #[ORM\OneToMany(mappedBy: 'staff', targetEntity: Classrooms::class)]
+    private Collection $classrooms;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -94,6 +98,7 @@ class Staffs
     {
         $this->behaviourIncidents = new ArrayCollection();
         $this->staffInvolvedIncidents = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
     public function getStaffId(): ?int
@@ -148,6 +153,7 @@ class Staffs
 
         return $this;
     }
+
     public function getGender(): ?Genders
     {
         return $this->gender;
@@ -204,6 +210,7 @@ class Staffs
     public function setAddress(?Address $address): static
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -230,7 +237,7 @@ class Staffs
 
         return $this;
     }
-    
+
     public function getCurrentRole(): ?CurrentRoles
     {
         return $this->currentRole;
@@ -239,6 +246,7 @@ class Staffs
     public function setCurrentRole(?CurrentRoles $currentRole): static
     {
         $this->currentRole = $currentRole;
+
         return $this;
     }
 
@@ -276,6 +284,11 @@ class Staffs
         $this->profilePhoto = $profilePhoto;
 
         return $this;
+    }
+
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
@@ -335,7 +348,6 @@ class Staffs
     public function removeBehaviourIncident(BehaviourIncidents $behaviourIncident): static
     {
         if ($this->behaviourIncidents->removeElement($behaviourIncident)) {
-            // set the owning side to null (unless already changed)
             if ($behaviourIncident->getAssignedStaff() === $this) {
                 $behaviourIncident->setAssignedStaff(null);
             }
@@ -371,3 +383,4 @@ class Staffs
         return $this;
     }
 }
+
