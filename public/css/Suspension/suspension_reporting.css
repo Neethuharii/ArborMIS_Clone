@@ -186,3 +186,9 @@
     margin: 10px 0; 
     border-radius: 5px;
 }
+.error-box{
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}

@@ -41,9 +41,16 @@ class Classrooms
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    /**
+     * @var Collection<int, BehaviourIncidents>
+     */
+    #[ORM\OneToMany(targetEntity: BehaviourIncidents::class, mappedBy: 'room')]
+    private Collection $behaviourIncidents;
+
     public function __construct()
     {
         $this->studentEnrollments = new ArrayCollection();
+        $this->behaviourIncidents = new ArrayCollection();
     }
 
     public function getClassroomId(): ?int
@@ -124,6 +131,35 @@ class Classrooms
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BehaviourIncidents>
+     */
+    public function getBehaviourIncidents(): Collection
+    {
+        return $this->behaviourIncidents;
+    }
+
+    public function addBehaviourIncident(BehaviourIncidents $behaviourIncident): static
+    {
+        if (!$this->behaviourIncidents->contains($behaviourIncident)) {
+            $this->behaviourIncidents->add($behaviourIncident);
+            $behaviourIncident->setRoom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBehaviourIncident(BehaviourIncidents $behaviourIncident): static
+    {
+        if ($this->behaviourIncidents->removeElement($behaviourIncident)) {
+            if ($behaviourIncident->getRoom() === $this) {
+                $behaviourIncident->setRoom(null);
+            }
+        }
 
         return $this;
     }
