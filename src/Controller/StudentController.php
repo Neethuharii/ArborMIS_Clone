@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Students;
 use App\Repository\GendersRepository;
 use App\Service\StudentService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -55,8 +58,10 @@ final class StudentController extends AbstractController
     #[Route('/student/{studentId}', name: 'studentProfile')]
     public function studentProfile(
         int $studentId,
-        StudentService $studentService
+        StudentService $studentService,
+        GendersRepository $gendersRepository
     ): Response {
+
         $student = $studentService->getStudentById($studentId);
 
         if (!$student) {
@@ -65,49 +70,21 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
+            'genders' => $gendersRepository->findAll()
         ]);
     }
 
-//    #[Route(
-//     '/student/{studentId}/identity/{field}',
-//     name: 'student_identity_edit',
-//     methods: ['GET', 'POST']
-// )]
-// public function editIdentity(
-//     int $studentId,
-//     string $field,
-//     Request $request,
-//     StudentService $studentService
-// ): Response {
+    #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
+    public function update(
+        Students $student,
+        Request $request,
+        StudentService $studentService
+    ): Response {
 
-//     $student = $studentService->getStudentById($studentId);
+        $studentService->updateStudent($student, $request);
 
-//     if (!$student) {
-//         throw $this->createNotFoundException('Student not found');
-//     }
-
-//     if ($request->isMethod('POST')) {
-
-//         $studentService->updateField(
-//             $studentId,
-//             $field,
-//             $request->request->get('value')
-//         );
-
-//         return new Response('success');
-//     }
-
-//     $data = $studentService->getEditData(
-//         $studentId,
-//         $field
-//     );
-
-//     return $this->render(
-//         'student/EditIdentity.html.twig',
-//         [
-//             'student' => $student,
-//             'data' => $data,
-//         ]
-//     );
-// }
+        return $this->redirectToRoute('studentProfile', [
+            'studentId' => $student->getStudentId()
+        ]);
+    }
 }

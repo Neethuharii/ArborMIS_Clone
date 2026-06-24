@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
 {{parent()}}
-<link rel="stylesheet" href="{{asset('css/Staff/profile.css')}}">
+<link rel="stylesheet" href="{{asset('css/student/StudentProfile.css')}}">
 {% endblock %}
 
 {% block body %}
@@ -178,23 +178,171 @@
         </table>
     </div>
 
-    <div id="slideoverContainer" class="slideover-container">
-        <div id="slideoverOverlay" class="slideover-overlay"></div>
-            <div class="slideover-drawer">
-                <div class="slideover-header">
-                    <button id="closeBtn"><< Back</button>
-                    <h3 id="slideTitle">Details</h3>
-                    <button id="nextBtn">Edit</button>
-                </div>
-                <hr>
-                <div class="slideover-body">
-                    <div id="slideDynamicContent"></div>
-                </div>
+   <div id="slideoverContainer" class="slideover-container">
+    <div id="slideoverOverlay" class="slideover-overlay"></div>
+
+    <div class="slideover-drawer">
+
+        <div class="slideover-header">
+            <button id="closeBtn">← Back</button>
+
+            <h3 id="slideTitle">Details</h3>
+
+            <button id="nextBtn">Edit</button>
+        </div>
+
+        <hr>
+
+        <div class="slideover-body">
+            <div id="slideDynamicContent"></div>
+        </div>
+
+    </div>
+</div>
+
+{# Hidden template used when Edit is clicked #}
+<template id="nameEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Name</h2>
+
+        <form id="editIdentityForm">
+
+            <input
+                type="hidden"
+                name="studentId"
+                value="{{ student.studentId }}"
+            >
+
+            <div class="form-row">
+                <label>Legal first name</label>
+
+                <input
+                    type="text"
+                    name="firstName"
+                    value="{{ student.firstName }}"
+                >
             </div>
+
+            <div class="form-row">
+                <label>Preferred first name</label>
+
+                <input
+                    type="text"
+                    name="preferredFirstName"
+                    value="{{ student.firstName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Legal middle names</label>
+
+                <input
+                    type="text"
+                    name="middleName"
+                    value="{{ student.middleName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Legal last name</label>
+
+                <input
+                    type="text"
+                    name="lastName"
+                    value="{{ student.lastName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Preferred last name</label>
+
+                <input
+                    type="text"
+                    name="preferredLastName"
+                    value="{{ student.lastName }}"
+                >
+            </div>
+
+            <div class="button-group">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    id="cancelEdit"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
 
+</template>
+<template id="genderEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Gender</h2>
+
+        <form id="editGenderForm" method="POST"
+              action="{{ path('student_update', {'id': student.studentId}) }}">
+
+            <input type="hidden" name="studentId" value="{{ student.studentId }}">
+
+            <div class="form-row">
+                <label>Gender</label>
+
+                <select name="gender" class="form-control">
+
+                    <option value="">Select Gender</option>
+
+                    {% for gender in genders %}
+
+                        <option value="{{ gender.genderId }}"
+                            {% if student.gender and student.gender.genderId == gender.genderId %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ gender.genderType }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="button-group">
+
+                <button type="button" class="cancel-btn" id="cancelEdit">
+                    Cancel
+                </button>
+
+                <button type="submit" class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</template>
+
 {% block javascripts %}
-    <script src="{{asset('js/slide.js')}}"></script>
+    <script src="{{ asset('js/slide.js') }}"></script>
 {% endblock %}
 
 {% endblock %}
