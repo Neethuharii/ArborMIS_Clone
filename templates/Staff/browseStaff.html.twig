@@ -17,7 +17,7 @@
                 <div class="staff-card">
 
                     <div class="staff-photo">
-                        <img src="{{ asset('images/dummy-profile.png') }}"
+                        <img src="{{ asset('images/defaultProfile.png') }}"
                             alt="Profile Photo">
                     </div>
 
@@ -29,12 +29,14 @@
                         </h3>
 
                         <div class="staff-role">
-                            Staff Member
+                        <hr>
+                            Roles: {{staff.currentRole.businessRole.nameOfRole}}
+                        <hr>
                         </div>
                         
                         <div class="staff-meta">
-                            <div>{{ staff.staffNumber }}</div>
-                            <div>{{ staff.address.emailAddress }}</div>
+                            <div>Staff ID: {{ staff.staffId }}</div>
+                            <div>Email: {{ staff.address.emailAddress }}</div>
                         </div>
                     </div>
                 </div>
