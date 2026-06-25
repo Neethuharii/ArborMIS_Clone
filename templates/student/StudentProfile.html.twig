@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block body %}
+{{ include('_modalbase.html.twig') }}
 <div class="profile-container">
 
     <div class="profile-header">
@@ -34,6 +35,9 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Identity</h2>
+             <div id="identityAdd" style="cursor: pointer;">
+                    <p>✚ Add</p>
+                </div>
         </div>
 
         <table class="details-table">
@@ -137,6 +141,9 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Student Contact Details</h2>
+             <div id="contactAdd" style="cursor: pointer;">
+                            <p>✚ Add</p>
+                    </div>
         </div>
 
         <table class="details-table">
@@ -159,6 +166,9 @@
      <div class="section-card">
         <div class="section-header">
             <h2>Family, Guardians and Contacts</h2>
+             <div id="contactAddGuardian" style="cursor: pointer;">
+                        <p>✚ Add</p>
+                    </div>
         </div>
 
         <table class="details-table">
@@ -615,8 +625,10 @@
     </div>
 </template>
 
-{% block javascripts %}
-    <script src="{{ asset('js/slide.js') }}"></script>
 {% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/modal.js') }}"></script>
+    <script src="{{ asset('js/slide.js') }}"></script>
 {% endblock %}
