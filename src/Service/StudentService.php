@@ -140,7 +140,21 @@ final class StudentService
         $gender = $this->gendersRepository->find($genderId);
         $student->setGender($gender);
     }
+    
+    $countryId = $request->request->get('country');
 
+    if ($countryId) {
+        $country = $this->countriesRepository->find($countryId);
+        $student->setCountry($country);
+    }
+
+    $ethnicityId = $request->request->get('ethnicity');
+
+    if ($ethnicityId) {
+        $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
+        $student->setEthnicity($ethnicity);
+    }
+    
     $firstName = $request->request->get('firstName');
     if ($firstName !== null) {
         $student->setFirstName($firstName);

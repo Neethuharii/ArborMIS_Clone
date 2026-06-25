@@ -56,7 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-            
+            else if (type === 'country') {
+
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Country</th>
+                            <td>${row.dataset.countryName || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+
+             else if (type === 'ethnicity') {
+
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Ethnicity</th>
+                            <td>${row.dataset.ethnicityName || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
 
             else {
 
@@ -107,6 +129,28 @@ else if (type === 'dob') {
 
     initialiseSaveForm('editDobForm');
 }
+
+else if (type === 'country') {
+
+    slideTitle.textContent = 'Country';
+
+    dynamicContent.innerHTML =
+        document.getElementById('countryEditTemplate').innerHTML;
+
+    initialiseSaveForm('editCountryForm');
+}
+
+else if (type === 'ethnicity') {
+
+    slideTitle.textContent = 'Ethnicity';
+
+    dynamicContent.innerHTML =
+        document.getElementById('ethnicityEditTemplate').innerHTML;
+
+    initialiseSaveForm('editEthnicityForm');
+}
+
+
     });
 
     function initialiseSaveForm(formId) {

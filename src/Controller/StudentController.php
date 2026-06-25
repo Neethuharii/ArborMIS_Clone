@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Students;
+use App\Repository\CountriesRepository;
+use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -59,7 +61,9 @@ final class StudentController extends AbstractController
     public function studentProfile(
         int $studentId,
         StudentService $studentService,
-        GendersRepository $gendersRepository
+        GendersRepository $gendersRepository,
+        CountriesRepository $countriesRepository,
+        EthnicitiesRepository $ethnicitiesRepository
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -70,7 +74,9 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
-            'genders' => $gendersRepository->findAll()
+            'genders' => $gendersRepository->findAll(),
+            'countries'=> $countriesRepository->findAll(),
+            'ethnicities' => $ethnicitiesRepository->findAll()
         ]);
     }
 #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
