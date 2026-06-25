@@ -3,192 +3,199 @@
 {% block title %}Teacher Profile{% endblock %}
 
 {% block stylesheets %}
-{{parent()}}
-<link rel="stylesheet" href="{{asset('css/Staff/profile.css')}}">
+    {{parent()}}
+    <link rel="stylesheet" href="{{asset('css/Staff/profile.css')}}">
 {% endblock %}
 
 {% block body %}
-<div class="profile-container">
+    {{ include('_modalbase.html.twig') }}
 
-    <div class="profile-header">
-        <div class="profile-image">
-            <img src="{{asset('images/defaultProfile.png')}}">
+    <div class="profile-container">
+
+        <div class="profile-header">
+            <div class="profile-image">
+                <img src="{{asset('images/defaultProfile.png')}}">
+            </div>
+
+            <div class="profile-info">
+                <h1>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</h1>
+
+                <table class="summary-table">
+                    <tr>
+                        <td class="label">Role</td>
+                        <td><strong>{{staff.currentRole.businessRole.nameOfRole}}</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Joined</td>
+                        <td><strong>{{staff.createdAt|date('d F')}}</strong></td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
-        <div class="profile-info">
-            <h1>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</h1>
+        <div class="section-card">
+            <div class="section-header">
+                <h2>Identity</h2>
+                <div id="identityAdd" style="cursor: pointer;">
+                    <p>✚ Add</p>
+                </div>
+            </div>
+            
+            <table class="details-table">
+                <tbody>
+                    <tr class="clickable-row" 
+                        data-title="Name" 
+                        data-type="identity"
+                        data-title-name="{{ staff.title.titleName }}"
+                        data-first-name="{{ staff.firstName }}"
+                        data-middle-name="{{ staff.middleName }}"
+                        data-last-name="{{ staff.lastName }}">
+                        <th>Name</th>
+                        <td>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</td>
+                        <td class="arrow">▶</td>
+                    </tr>
 
-            <table class="summary-table">
-                <tr>
-                    <td class="label">Role</td>
-                    <td><strong>{{staff.currentRole.businessRole.nameOfRole}}</strong></td>
-                </tr>
-                <tr>
-                    <td class="label">Joined</td>
-                    <td><strong>{{staff.createdAt|date('d F')}}</strong></td>
-                </tr>
+                    <tr class="clickable-row" 
+                        data-title="Sex" 
+                        data-type="sex"
+                        data-gender-type="{{ staff.gender.genderType }}">
+                        <th>Sex</th>
+                        <td>{{ staff.gender.genderType }}</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row" 
+                        data-title="Date of birth" 
+                        data-type="dob"
+                        data-dob="{{ staff.dateOfBirth|date('d/m/Y') }}">
+                        <th>Date of birth</th>
+                        <td>{{ staff.dateOfBirth|date('d/m/Y') }}</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row" 
+                        data-title="Ethnicity" 
+                        data-type="ethnicity"
+                        data-ethnicity="{{ staff.Ethnicity.ethnicityName|default('') }} ">
+                        <th>Ethnicity</th>
+                        <td>Not recorded</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row" 
+                        data-title="Religion" 
+                        data-type="religion"
+                        data-religion="{{ staff.Religion.religionName|default('') }} ">
+                        <th>Religion</th>
+                        <td>Not recorded</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row" 
+                        data-title="Staff Number" 
+                        data-type="staffNumber"
+                        data-staffNumber="{{ staff.staffNumber|default('') }} ">
+                        <th>Staff Number</th>
+                        <td>Not recorded</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr>
+                        <th>School ID Card</th>
+                        <td>Not issued</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row" 
+                        data-title="Abbreviation" 
+                        data-type="abbreviation"
+                        data-abbreviation="{{ staff.abbreviation|default('') }} ">
+                        <th>Abbreviation</th>
+                        <td>{{ staff.abbreviation }}</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
-    </div>
 
-    <div class="section-card">
-        <div class="section-header">
-            <h2>Identity</h2>
+        <div class="section-card">
+            <div class="section-header">
+                <h2>Staff Contact Details</h2>
+                    <div id="contactAdd" style="cursor: pointer;">
+                            <p>✚ Add</p>
+                    </div>
+            </div>
+
+            <table class="details-table">
+                <tbody>
+                    <tr>
+                        <th>Work Email</th>
+                        <td>{{ staff.address.emailAddress }}</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr>
+                        <th>Staff Home Number</th>
+                        <td>{{ staff.address.phoneNumber }}</td>
+                        <td class="arrow">▶</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <table class="details-table">
-            <tbody>
-            {#<tr>
-                <th>Name</th>
-                <td>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</td>
-                <td class="arrow">▶</td>
-            </tr>#}
-
-            <tr class="clickable-row" 
-                data-title="Name" 
-                data-type="identity"
-                data-title-name="{{ staff.title.titleName }}"
-                data-first-name="{{ staff.firstName }}"
-                data-middle-name="{{ staff.middleName }}"
-                data-last-name="{{ staff.lastName }}">
-                <th>Name</th>
-                <td>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr class="clickable-row" 
-                data-title="Sex" 
-                data-type="sex"
-                data-gender-type="{{ staff.gender.genderType }}">
-                <th>Sex</th>
-                <td>{{ staff.gender.genderType }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr class="clickable-row" 
-                data-title="Date of birth" 
-                data-type="dob"
-                data-dob="{{ staff.dateOfBirth|date('d/m/Y') }}">
-                <th>Date of birth</th>
-                <td>{{ staff.dateOfBirth|date('d/m/Y') }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Ethnicity</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Teacher Number</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Religion</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Arbor Staff ID</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Staff Number</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>School ID Card</th>
-                <td>Not issued</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Abbreviation</th>
-                <td>{{ staff.abbreviation }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section-card">
-        <div class="section-header">
-            <h2>Staff Contact Details</h2>
-        </div>
-
-        <table class="details-table">
-            <tbody>
-            <tr>
-                <th>Work Email</th>
-                <td>{{ staff.address.emailAddress }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
-                <th>Staff Home Number</th>
-                <td>{{ staff.address.phoneNumber }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section-card">
+        <div class="section-card">
             <div class="section-header">
                 <h2>Current Business Roles</h2>
+                    <div id="contactAdd" style="cursor: pointer;">
+                        <p>✚ Add</p>
+                    </div>
             </div>
 
             <table class="details-table">
                 <tbody>
-                <tr>
-                    <th>{{staff.currentRole.businessRole.nameOfRole}}</th>
-                    <td>{{ staff.currentRole.startDate|date('d M Y') }} - Ongoing </td>
-                    <td class="arrow">▶</td>
-                </tr>
+                    <tr>
+                        <th>{{ staff.currentRole.businessRole.nameOfRole }}</th>
+                        <td>{{ staff.currentRole.startDate|date('d M Y') }} - Ongoing </td>
+                        <td class="arrow">▶</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-    <div class="section-card">
-            <div class="section-header">
-                <h2>Qualifications & Checks </h2>
-            </div>
+        <div class="section-card">
+                <div class="section-header">
+                    <h2>Qualifications & Checks </h2>
+                    <div id="qualificationAdd" style="cursor: pointer;">
+                        <p>✚ Add</p>
+                    </div>
+                </div>
 
-            <table class="details-table">
-                <tbody>
-                <tr>
-                    <th>Academic Qualifications</th>
-                    <td>No clearance level set</td>
-                    <td class="arrow">▶</td>
-                </tr>
-                </tbody>
-            </table>
-    </div>
+                <table class="details-table">
+                    <tbody>
+                        <tr>
+                            <th>Academic Qualifications</th>
+                            <td>No clearance level set</td>
+                            <td class="arrow">▶</td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
 
     <div id="slideoverContainer" class="slideover-container">
         <div id="slideoverOverlay" class="slideover-overlay"></div>
-            <div class="slideover-drawer">
-                <div class="slideover-header">
-                    <button id="closeBtn"><< Back</button>
-                    <h3 id="slideTitle">Details</h3>
-                    <button id="nextBtn">Edit</button>
-                </div>
-                <hr>
-                <div class="slideover-body">
-                    <div id="slideDynamicContent"></div>
-                </div>
+        <div class="slideover-drawer">
+            <div class="slideover-header">
+                <button id="closeBtn">❮❮ Back</button>
+                <h2 id="slideTitle" style="font-size: 14px; margin: 7px; font-family: sans-serif;"></h2>
+                <a id="nextBtn" data-url="{{ path('slideover') }}" href="#" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center;">Edit</a>
             </div>
+            <div id="slideDynamicContent" class="slideover-body">
+            </div>
+        </div>
     </div>
 
 {% block javascripts %}
+    <script src="{{asset('js/modal.js')}}"></script>
     <script src="{{asset('js/slide.js')}}"></script>
 {% endblock %}
 
