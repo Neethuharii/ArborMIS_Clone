@@ -15,7 +15,7 @@ class Staffs
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name:'staff_id')]
     private ?int $staffId = null;
 
     #[ORM\Column(length: 255)]
@@ -82,12 +82,24 @@ class Staffs
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
 
+    /**
+     * @var Collection<int, BehaviourIncidents>
+     */
+    #[ORM\OneToMany(targetEntity: BehaviourIncidents::class, mappedBy: 'assignedStaff')]
+    private Collection $behaviourIncidents;
+
+    /**
+     * @var Collection<int, BehaviourIncidents>
+     */
+    #[ORM\ManyToMany(targetEntity: BehaviourIncidents::class, mappedBy: 'staffInvolved')]
+    private Collection $staffInvolvedIncidents;
 
     public function __construct()
     {
+        $this->behaviourIncidents = new ArrayCollection();
+        $this->staffInvolvedIncidents = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
     }
-
 
     public function getStaffId(): ?int
     {
@@ -314,4 +326,61 @@ class Staffs
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, BehaviourIncidents>
+     */
+    public function getBehaviourIncidents(): Collection
+    {
+        return $this->behaviourIncidents;
+    }
+
+    public function addBehaviourIncident(BehaviourIncidents $behaviourIncident): static
+    {
+        if (!$this->behaviourIncidents->contains($behaviourIncident)) {
+            $this->behaviourIncidents->add($behaviourIncident);
+            $behaviourIncident->setAssignedStaff($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBehaviourIncident(BehaviourIncidents $behaviourIncident): static
+    {
+        if ($this->behaviourIncidents->removeElement($behaviourIncident)) {
+            if ($behaviourIncident->getAssignedStaff() === $this) {
+                $behaviourIncident->setAssignedStaff(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BehaviourIncidents>
+     */
+    public function getStaffInvolvedIncidents(): Collection
+    {
+        return $this->staffInvolvedIncidents;
+    }
+
+    public function addStaffInvolvedIncident(BehaviourIncidents $staffInvolvedIncident): static
+    {
+        if (!$this->staffInvolvedIncidents->contains($staffInvolvedIncident)) {
+            $this->staffInvolvedIncidents->add($staffInvolvedIncident);
+            $staffInvolvedIncident->addStaffInvolved($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStaffInvolvedIncident(BehaviourIncidents $staffInvolvedIncident): static
+    {
+        if ($this->staffInvolvedIncidents->removeElement($staffInvolvedIncident)) {
+            $staffInvolvedIncident->removeStaffInvolved($this);
+        }
+
+        return $this;
+    }
 }
+

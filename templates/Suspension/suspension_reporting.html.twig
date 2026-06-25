@@ -21,6 +21,14 @@
                 {{ message }}
             </div>
         {% endfor %}
+
+        {% if errors is defined and errors is not empty %}
+            <div class="error-box">
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
         <div class="suspension-reporting">
             <div>
                 <h3>Suspensions</h3>
@@ -63,14 +71,6 @@
             <div class="drawer-header">
                 <h3>Add Suspension</h3>
             </div>
-
-            {% if errors is defined and errors is not empty %}
-                <div class="error-box">
-                    {% for error in errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
 
             <form method="POST"
                 class="suspension-form"
