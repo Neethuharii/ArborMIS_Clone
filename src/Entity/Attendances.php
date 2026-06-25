@@ -42,7 +42,7 @@ class Attendances
     #[ORM\Column]
     private ?\DateTimeImmutable $marked_at = null;
 
-    #[ORM\column(type: Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]

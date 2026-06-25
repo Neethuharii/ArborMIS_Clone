@@ -1,0 +1,220 @@
+{% extends 'Attendances/base_attendance.html.twig' %}
+
+{% block attendance_content %}
+
+<input type="hidden" id="saveAttendanceUrl" value="{{ path('attendance_save') }}">
+
+<div class="page-header">
+    <h1>
+        Take Register:
+        {{ students|first.classroom ?? 'Class' }}
+        -
+        {{ "now"|date("D, d M Y") }}
+        -
+        {{ currentSession }}
+    </h1>
+</div>
+
+<div class="register-list">
+
+{% for student in students %}
+
+    <div
+        class="student-row {{ student.attendanceClass }}"
+        id="row-{{ student.enrollmentId }}"
+        data-student-id="{{ student.enrollmentId }}"
+    >
+
+        <div class="student-info">
+
+            <div class="avatar">
+                {{ student.firstName|first }}
+            </div>
+
+            <div>
+
+                <div class="student-name">
+                    {{ student.firstName }}
+                    {{ student.lastName }}
+                </div>
+
+                <div
+                    class="attendance-status"
+                    id="status-{{ student.enrollmentId }}"
+                >
+                    {{ student.attendanceStatus }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="button-group">
+
+            <button
+                class="attendance-btn absent"
+                data-student="{{ student.enrollmentId }}"
+                data-name="{{ student.firstName }} {{ student.lastName }}"
+            >
+                Absent
+            </button>
+
+            <button
+                class="attendance-btn late"
+                data-student="{{ student.enrollmentId }}"
+                data-name="{{ student.firstName }} {{ student.lastName }}"
+            >
+                Late
+            </button>
+
+            <button
+                class="attendance-btn present"
+                data-student="{{ student.enrollmentId }}"
+            >
+                Present
+            </button>
+
+        </div>
+
+        <button
+            class="skip-btn"
+            data-student="{{ student.enrollmentId }}"
+        >
+            Skip
+        </button>
+
+    </div>
+
+{% endfor %}
+
+</div>
+
+<div class="modal-overlay" id="attendanceModal">
+
+    <div class="modal arbor-modal">
+
+        <h2 id="modalStudentName">
+            Student Name
+        </h2>
+
+        <div class="modal-content">
+
+            <div class="form-row">
+
+                <label>
+                    Attendance Type
+                </label>
+
+                <select id="attendanceType">
+
+                    <option value="absent">
+                        Absent
+                    </option>
+
+                    <option value="late">
+                        Late
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div id="absenceSection">
+
+                <div class="form-row">
+
+                    <label>
+                        Attendance Mark
+                    </label>
+
+                    <select id="absenceCode">
+
+                        {% for code in absenceCodes %}
+                            <option value="{{ code.id }}">
+                                {{ code.code }} - {{ code.description }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div id="lateSection" style="display:none;">
+
+                <div class="form-row">
+
+                    <label>
+                        Attendance Mark
+                    </label>
+
+                    <select id="lateCode">
+
+                        {% for code in lateCodes %}
+                            <option value="{{ code.id }}">
+                                {{ code.code }} - {{ code.description }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="form-row">
+
+                    <label>
+                        Minutes Late
+                    </label>
+
+                    <input
+                        type="number"
+                        id="lateMinutes"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <label>
+                    Note
+                </label>
+
+                <textarea
+                    id="attendanceNote"
+                    rows="4"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+        <div class="modal-actions">
+
+            <button
+                type="button"
+                id="closeAttendanceModal"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="saveAttendanceButton"
+            >
+                Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ asset('js/DailyAttendances.js') }}"></script>
+
+{% endblock %}

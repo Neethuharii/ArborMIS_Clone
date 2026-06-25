@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Attendance/DailyAttendances.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="dashboard">
+
+    <aside class="attendance-sidebar">
+
+        <div class="sidebar-header">
+            <h3>Registers</h3>
+        </div>
+
+        <nav class="sidebar-menu">
+
+            <a
+                href="{{ path('daily_attendance') }}"
+                class="{{ app.request.attributes.get('_route') == 'daily_attendance' ? 'active' : '' }}"
+            >
+                Daily Attendance
+            </a>
+
+            <a>
+                Registers By Date
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <main class="attendance-content">
+        {% block attendance_content %}{% endblock %}
+    </main>
+
+</div>
+
+{% endblock %}
