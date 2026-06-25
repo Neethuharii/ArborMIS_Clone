@@ -13,7 +13,7 @@
 
 <div class="page-wrapper">
 
-    {{ include('Suspension/suspension_base.html.twig') }}
+    {{ include('behaviour_base.html.twig') }}
     
     <div class="main-content">
         {% for message in app.flashes('success') %}
@@ -74,7 +74,7 @@
 
             <form method="POST"
                 class="suspension-form"
-                id="suspensionForm"
+                id="incidentForm"
                 enctype="multipart/form-data"
                 action="{{ path('app_suspension') }} " onsubmit="showLoader()">
 
