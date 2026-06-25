@@ -94,11 +94,18 @@ class Staffs
     #[ORM\ManyToMany(targetEntity: BehaviourIncidents::class, mappedBy: 'staffInvolved')]
     private Collection $staffInvolvedIncidents;
 
+    /**
+     * @var Collection<int, InterventionDetail>
+     */
+    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'staffId')]
+    private Collection $interventionDetails;
+
     public function __construct()
     {
         $this->behaviourIncidents = new ArrayCollection();
         $this->staffInvolvedIncidents = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
+        $this->interventionDetails = new ArrayCollection();
     }
 
     public function getStaffId(): ?int
@@ -378,6 +385,35 @@ class Staffs
     {
         if ($this->staffInvolvedIncidents->removeElement($staffInvolvedIncident)) {
             $staffInvolvedIncident->removeStaffInvolved($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InterventionDetail>
+     */
+    public function getInterventionDetails(): Collection
+    {
+        return $this->interventionDetails;
+    }
+
+    public function addInterventionDetail(InterventionDetail $interventionDetail): static
+    {
+        if (!$this->interventionDetails->contains($interventionDetail)) {
+            $this->interventionDetails->add($interventionDetail);
+            $interventionDetail->setStaff($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInterventionDetail(InterventionDetail $interventionDetail): static
+    {
+        if ($this->interventionDetails->removeElement($interventionDetail)) {
+            if ($interventionDetail->getStaff() === $this) {
+                $interventionDetail->setStaff(null);
+            }
         }
 
         return $this;
