@@ -8,7 +8,7 @@ use App\Repository\ReligionsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReligionsRepository::class)]
-final class Religions
+class Religions
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

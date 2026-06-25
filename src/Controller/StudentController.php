@@ -8,6 +8,8 @@ use App\Entity\Students;
 use App\Repository\CountriesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
+use App\Repository\NationalityRepository;
+use App\Repository\ReligionsRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,7 +65,9 @@ final class StudentController extends AbstractController
         StudentService $studentService,
         GendersRepository $gendersRepository,
         CountriesRepository $countriesRepository,
-        EthnicitiesRepository $ethnicitiesRepository
+        EthnicitiesRepository $ethnicitiesRepository,
+        NationalityRepository $nationalityRepository,
+        ReligionsRepository $religionsRepository
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -76,7 +80,9 @@ final class StudentController extends AbstractController
             'student' => $student,
             'genders' => $gendersRepository->findAll(),
             'countries'=> $countriesRepository->findAll(),
-            'ethnicities' => $ethnicitiesRepository->findAll()
+            'ethnicities' => $ethnicitiesRepository->findAll(),
+            'nationalities'=>$nationalityRepository->findAll(),
+            'religions'=>$religionsRepository->findAll()
         ]);
     }
 #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
