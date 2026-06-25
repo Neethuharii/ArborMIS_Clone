@@ -92,7 +92,6 @@
     overflow: hidden;
 }
 
-/* IMPORTANT */
 .student-sidebar {
     width: 250px;
     min-width: 250px;
@@ -102,7 +101,6 @@
     border-right: 1px solid #ddd;
 }
 
-/* RIGHT SIDE FIX */
 .student-content {
     flex: 1;
     height: 100vh;
