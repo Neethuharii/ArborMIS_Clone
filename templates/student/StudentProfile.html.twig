@@ -75,17 +75,17 @@
             <tr class="clickable-row" 
                 data-title="Country of birth" 
                 data-type="country"
-                data-dob="{{ student.country }}">
+                 data-country-name="{{ student.country?.countryName ?? '' }}">
                 <th>Country of birth</th>
-                <td>{{ student.country ?: 'Not recorded'}}</td>
+                <td>{{ student.country ? student.country.countryName : 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
              <tr class="clickable-row" 
                 data-title="Ethnicity" 
                 data-type="ethnicity"
-                data-dob="{{ student.ethnicity}}">
+                data-ethnicity-name="{{ student.ethnicity?.ethnicityName ?? '' }}">
                 <th>Ethnicity</th>
-               <td>{{ student.ethnicity ?: 'Not recorded' }}</td>
+               <td>{{ student.ethnicity ? student.ethnicity.ethnicityName : 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
 
@@ -390,7 +390,118 @@
         </form>
 
     </div>
+</template>
 
+<template id="countryEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <form id="editCountryForm">
+
+            <input type="hidden"
+                   name="studentId"
+                   value="{{ student.studentId }}">
+
+            <div class="country-row">
+
+    <label for="country">
+        Country <span class="required">*</span>
+    </label>
+
+    <select id="country"
+            name="country"
+            class="country-select">
+
+        <option value="">Select Country</option>
+
+        {% for country in countries %}
+            <option value="{{ country.countryId }}"
+                {% if student.country and student.country.countryId == country.countryId %}
+                    selected
+                {% endif %}
+            >
+                {{ country.countryName }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+</div>
+
+            <div class="button-group">
+
+                <button type="button"
+                        class="cancel-btn"
+                        id="cancelEdit">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</template>
+
+<template id="ethnicityEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <form id="editEthnicityForm">
+
+            <input type="hidden"
+                   name="studentId"
+                   value="{{ student.studentId }}">
+
+            <div class="ethnicity-row">
+
+    <label for="ethnicity">
+       Ethnicity <span class="required">*</span>
+    </label>
+
+    <select id="ethnicity"
+            name="ethnicity"
+            class="ethnicity-select">
+
+        <option value="">Select Ethnicity</option>
+
+        {% for ethnicity in ethnicities %}
+            <option value="{{ ethnicity.ethnicityId }}"
+                {% if student.ethnicity and student.ethnicity.ethnicityId == ethnicity.ethnicityId %}
+                    selected
+                {% endif %}
+            >
+                {{ ethnicity.ethnicityName }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+</div>
+
+            <div class="button-group">
+
+                <button type="button"
+                        class="cancel-btn"
+                        id="cancelEdit">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 </template>
 
 {% block javascripts %}

@@ -65,6 +65,7 @@ class CountryFixture extends Fixture implements FixtureGroupInterface
             'Haiti',
             'Honduras',
             'Iceland',
+            'India',
             'Iran',
             'Iraq',
             'Jamaica',
