@@ -1,0 +1,82 @@
+{% block body %}
+
+<div id="identityModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>What would you like to do?</h2>
+            <span class="close">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="section-title-box">
+                <h3>Add Item in: Identity</h3>
+            </div>
+            <ul class="item-list">
+                <li>Identification Document ▶</li>
+                <li>Nationality ▶</li>
+                <li>Former Name ▶</li>
+                <li>School ID Card ▶</li>
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="document.getElementById('identityModal').style.display='none'">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>What would you like to do?</h2>
+            <span class="contactClose">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="section-title-box">
+                <h3>Add Item in: Staff Contact Details</h3>
+            </div>
+            <ul class="item-list">
+                <li>Email address ▶</li>
+                <li>Telephone number ▶</li>
+                <li>Home address ▶</li>
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="document.getElementById('contactModal').style.display='none'">Cancel</button>
+        </div>
+            </div>
+        </div>
+</div>
+
+<div id="qualificationModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>What would you like to do?</h2>
+            <span class="qualificationClose">&times;</span>
+        </div>
+
+        <div class="modal-body">
+            <div class="section-title-box">
+                <h3>Add Item in: Qualifications & Checks </h3>
+            </div>
+            <ul class="item-list">
+                <li>Check: Academic Qualifications ▶</li>
+                <li>Check: Address Check ▶</li>
+                <li>Check: Character References ▶</li>
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="document.getElementById('qualificationModal').style.display='none'">Cancel</button>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+    <script src="{{asset('js/modal.js')}}"></script>
+{% endblock %}
+
+{% endblock %}
