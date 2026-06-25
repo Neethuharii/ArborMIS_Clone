@@ -1,43 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Attendances;
+use App\Entity\StudentEnrollments;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Attendances>
- */
 class AttendancesRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Attendances::class);
+    public function __construct(
+        ManagerRegistry $registry
+    ) {
+        parent::__construct(
+            $registry,
+            Attendances::class
+        );
     }
 
-    //    /**
-    //     * @return Attendances[] Returns an array of Attendances objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findAttendance(
+        StudentEnrollments $enrollment,
+        \DateTime $date,
+        string $session
+    ): ?Attendances {
+        return $this->createQueryBuilder('a')
+            ->where('a.studentEnrollment = :enrollment')
+            ->andWhere('a.attendance_date = :date')
+            ->andWhere('a.session = :session')
+            ->setParameter('enrollment', $enrollment)
+            ->setParameter('date', $date->format('Y-m-d'))
+            ->setParameter('session', $session)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Attendances
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function findByDateAndSession(
+        \DateTime $date,
+        string $session
+    ): array {
+        return $this->createQueryBuilder('a')
+            ->leftJoin('a.studentEnrollment', 'se')
+            ->leftJoin('se.student', 's')
+            ->addSelect('se')
+            ->addSelect('s')
+            ->where('a.attendance_date = :date')
+            ->andWhere('a.session = :session')
+            ->setParameter('date', $date->format('Y-m-d'))
+            ->setParameter('session', $session)
+            ->getQuery()
+            ->getResult();
+    }
 }
