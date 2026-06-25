@@ -34,15 +34,37 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Identity</h2>
+            <div id="identityAdd" style="cursor: pointer;">
+                <p>✚ Add</p>
+            </div>
+            <div id="identityModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>What would you like to do?</h2>
+                        <span class="close">&times;</span>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="section-title-box">
+                            <h3>Add Item in: Identity</h3>
+                        </div>
+                        <ul class="item-list">
+                            <li>Identification Document ▶</li>
+                            <li>Nationality ▶</li>
+                            <li>Former Name ▶</li>
+                            <li>School ID Card ▶</li>
+                        </ul>
+                    </div>
+
+                <div class="modal-footer">
+                    <button class="cancel-btn" onclick="document.getElementById('identityModal').style.display='none'">Cancel</button>
+                </div>
+            </div>
         </div>
+    </div>
 
         <table class="details-table">
             <tbody>
-            {#<tr>
-                <th>Name</th>
-                <td>{{ staff.title.titleName }} {{ staff.firstName }} {{ staff.lastName }}</td>
-                <td class="arrow">▶</td>
-            </tr>#}
 
             <tr class="clickable-row" 
                 data-title="Name" 
@@ -74,31 +96,28 @@
                 <td class="arrow">▶</td>
             </tr>
 
-            <tr>
+            <tr class="clickable-row" 
+                data-title="Ethnicity" 
+                data-type="ethnicity"
+                data-ethnicity="{{ staff.Ethnicity.ethnicityName|default('') }} ">
                 <th>Ethnicity</th>
                 <td>Not recorded</td>
                 <td class="arrow">▶</td>
             </tr>
 
-            <tr>
-                <th>Teacher Number</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
+            <tr class="clickable-row" 
+                data-title="Religion" 
+                data-type="religion"
+                data-religion="{{ staff.Religion.religionName|default('') }} ">
                 <th>Religion</th>
                 <td>Not recorded</td>
                 <td class="arrow">▶</td>
             </tr>
 
-            <tr>
-                <th>Arbor Staff ID</th>
-                <td>Not recorded</td>
-                <td class="arrow">▶</td>
-            </tr>
-
-            <tr>
+            <tr class="clickable-row" 
+                data-title="Staff Number" 
+                data-type="staffNumber"
+                data-staffNumber="{{ staff.staffNumber|default('') }} ">
                 <th>Staff Number</th>
                 <td>Not recorded</td>
                 <td class="arrow">▶</td>
@@ -110,7 +129,10 @@
                 <td class="arrow">▶</td>
             </tr>
 
-            <tr>
+            <tr class="clickable-row" 
+                data-title="Abbreviation" 
+                data-type="abbreviation"
+                data-abbreviation="{{ staff.abbreviation|default('') }} ">
                 <th>Abbreviation</th>
                 <td>{{ staff.abbreviation }}</td>
                 <td class="arrow">▶</td>
@@ -121,7 +143,33 @@
 
     <div class="section-card">
         <div class="section-header">
-            <h2>Staff Contact Details</h2>
+        <h2>Staff Contact Details</h2>
+        <div id="contactAdd" style="cursor: pointer;">
+                <p>✚ Add</p>
+        </div>
+        <div id="contactModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>What would you like to do?</h2>
+                    <span class="contactClose">&times;</span>
+                </div>
+
+                <div class="modal-body">
+                    <div class="section-title-box">
+                            <h3>Add Item in: Staff Contact Details</h3>
+                    </div>
+                    <ul class="item-list">
+                            <li>Email address ▶</li>
+                            <li>Telephone number ▶</li>
+                            <li>Home address ▶</li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="cancel-btn" onclick="document.getElementById('identityModal').style.display='none'">Cancel</button>
+                </div>
+            </div>
+        </div>
         </div>
 
         <table class="details-table">
@@ -144,23 +192,51 @@
     <div class="section-card">
             <div class="section-header">
                 <h2>Current Business Roles</h2>
+                <div id="contactAdd" style="cursor: pointer;">
+                    <p>✚ Add</p>
+                </div>
             </div>
-
             <table class="details-table">
                 <tbody>
-                <tr>
-                    <th>{{staff.currentRole.businessRole.nameOfRole}}</th>
-                    <td>{{ staff.currentRole.startDate|date('d M Y') }} - Ongoing </td>
-                    <td class="arrow">▶</td>
-                </tr>
+                    <tr>
+                        <th>{{ staff.currentRole.businessRole.nameOfRole }}</th>
+                        <td>{{ staff.currentRole.startDate|date('d M Y') }} - Ongoing </td>
+                        <td class="arrow">▶</td>
+                    </tr>
                 </tbody>
             </table>
-        </div>
+    </div>
 
     <div class="section-card">
             <div class="section-header">
                 <h2>Qualifications & Checks </h2>
+                <div id="qualificationAdd" style="cursor: pointer;">
+                    <p>✚ Add</p>
+                </div>
+                <div id="qualificationModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>What would you like to do?</h2>
+                            <span class="qualificationClose">&times;</span>
+                        </div>
+
+                    <div class="modal-body">
+                    <div class="section-title-box">
+                            <h3>Add Item in: Qualifications & Checks </h3>
+                    </div>
+                    <ul class="item-list">
+                            <li>Check: Academic Qualifications ▶</li>
+                            <li>Check: Address Check ▶</li>
+                            <li>Check: Character References ▶</li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="cancel-btn" onclick="document.getElementById('qualificationModal').style.display='none'">Cancel</button>
+                </div>
             </div>
+        </div>
+        </div>
 
             <table class="details-table">
                 <tbody>
@@ -172,23 +248,23 @@
                 </tbody>
             </table>
     </div>
+</div>
 
-    <div id="slideoverContainer" class="slideover-container">
-        <div id="slideoverOverlay" class="slideover-overlay"></div>
-            <div class="slideover-drawer">
-                <div class="slideover-header">
-                    <button id="closeBtn"><< Back</button>
-                    <h3 id="slideTitle">Details</h3>
-                    <button id="nextBtn">Edit</button>
-                </div>
-                <hr>
-                <div class="slideover-body">
-                    <div id="slideDynamicContent"></div>
-                </div>
-            </div>
+<div id="slideoverContainer" class="slideover-container">
+    <div id="slideoverOverlay" class="slideover-overlay"></div>
+    <div class="slideover-drawer">
+        <div class="slideover-header">
+            <button id="closeBtn">❮❮ Back</button>
+            <h2 id="slideTitle" style="font-size: 14px; margin: 7px; font-family: sans-serif;"></h2>
+            <a id="nextBtn" data-url="{{ path('slideover') }}" href="#" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center;">Edit</a>
+        </div>
+        <div id="slideDynamicContent" class="slideover-body">
+        </div>
     </div>
+</div>
 
 {% block javascripts %}
+    <script src="{{asset('js/profile.js')}}"></script>
     <script src="{{asset('js/slide.js')}}"></script>
 {% endblock %}
 
