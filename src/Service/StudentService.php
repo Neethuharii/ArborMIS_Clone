@@ -6,7 +6,11 @@ namespace App\Service;
 
 use App\Entity\Address;
 use App\Entity\Students;
+use App\Repository\CountriesRepository;
+use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
+use App\Repository\NationalityRepository;
+use App\Repository\ReligionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,7 +18,11 @@ final class StudentService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly GendersRepository $gendersRepository
+        private readonly GendersRepository $gendersRepository,
+        private readonly CountriesRepository $countriesRepository,
+        private readonly EthnicitiesRepository $ethnicitiesRepository,
+        private readonly NationalityRepository $nationalityRepository,
+        private readonly ReligionsRepository $religionsRepository,
     ) {}
 
     public function createStudent(Request $request): array
@@ -116,4 +124,43 @@ final class StudentService
             ->getQuery()
             ->getResult();
     }
+
+    public function getStudentById(int $studentId): ?Students
+    {
+        return $this->entityManager
+            ->getRepository(Students::class)
+            ->find($studentId);
+    }
+
+ public function updateStudent(Students $student, Request $request): void
+{
+    $genderId = $request->request->get('gender');
+
+    if ($genderId) {
+        $gender = $this->gendersRepository->find($genderId);
+        $student->setGender($gender);
+    }
+
+    $firstName = $request->request->get('firstName');
+    if ($firstName !== null) {
+        $student->setFirstName($firstName);
+    }
+
+    $middleName = $request->request->get('middleName');
+    if ($middleName !== null) {
+        $student->setMiddleName($middleName);
+    }
+
+    $lastName = $request->request->get('lastName');
+    if ($lastName !== null) {
+        $student->setLastName($lastName);
+    }
+
+    $dob=$request->request->get('dob');
+    if($dob!==null){
+       $student->setDob(new \DateTimeImmutable($dob));
+    }
+
+    $this->entityManager->flush();
+}
 }

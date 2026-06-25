@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Students;
 use App\Repository\GendersRepository;
 use App\Service\StudentService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,12 +22,12 @@ final class StudentController extends AbstractController
         StudentService $studentService,
         GendersRepository $gendersRepository
     ): Response {
-    
         if ($request->isMethod('POST')) {
             $result = $studentService->createStudent($request);
 
             if ($result['success']) {
                 $this->addFlash('success', 'Student created successfully!');
+
                 return $this->redirectToRoute('newstudent');
             }
 
@@ -40,12 +43,47 @@ final class StudentController extends AbstractController
     }
 
     #[Route('/studentList', name: 'studentsList')]
-    public function listStudent(StudentService $studentService, Request $request): Response
-    {
+    public function listStudent(
+        StudentService $studentService,
+        Request $request
+    ): Response {
         $search = $request->query->get('search', '');
+
         return $this->render('student/StudentsList.html.twig', [
             'studentList' => $studentService->listAllStudent($search),
             'search' => $search,
         ]);
     }
+
+    #[Route('/student/{studentId}', name: 'studentProfile')]
+    public function studentProfile(
+        int $studentId,
+        StudentService $studentService,
+        GendersRepository $gendersRepository
+    ): Response {
+
+        $student = $studentService->getStudentById($studentId);
+
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found');
+        }
+
+        return $this->render('student/StudentProfile.html.twig', [
+            'student' => $student,
+            'genders' => $gendersRepository->findAll()
+        ]);
+    }
+#[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
+public function update(
+    Students $student,
+    Request $request,
+    StudentService $studentService
+): JsonResponse {
+
+    $studentService->updateStudent($student, $request);
+
+    return $this->json([
+        'success' => true
+    ]);
+}
 }

@@ -1,0 +1,400 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Teacher Profile{% endblock %}
+
+{% block stylesheets %}
+{{parent()}}
+<link rel="stylesheet" href="{{asset('css/student/StudentProfile.css')}}">
+{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+
+    <div class="profile-header">
+        <div class="profile-image">
+            <img src="{{asset('images/defaultProfile.png')}}">
+        </div>
+
+        <div class="profile-info">
+            <h1>{{ student.firstName }} {{ student.lastName }}</h1>
+
+            <table class="summary-table">
+                 <tr>
+                    <td class="label">Date of Birth</td>
+                    <td><strong>{{student.dob|date('d F Y')}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="label">Joined</td>
+                    <td><strong>{{student.createdAt|date('d F')}}</strong></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Identity</h2>
+        </div>
+
+        <table class="details-table">
+            <tbody>
+            {#<tr>
+                <th>Name</th>
+                <td>{{ student.firstName }} {{ student.lastName }}</td>
+                <td class="arrow">▶</td>
+            </tr>#}
+
+            <tr class="clickable-row" 
+                data-title="Name" 
+                data-type="identity"
+                data-first-name="{{ student.firstName }}"
+                data-middle-name="{{ student.middleName }}"
+                data-last-name="{{ student.lastName }}">
+                <th>Name</th>
+                <td>{{ student.firstName }} {{ student.lastName }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr class="clickable-row" 
+                data-title="Gender" 
+                data-type="sex"
+                data-gender-type="{{ student.gender.genderType }}">
+                <th>Gender</th>
+                <td>{{ student.gender.genderType }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr class="clickable-row" 
+                data-title="Date of birth" 
+                data-type="dob"
+                data-dob="{{ student.dob|date('d/m/Y') }}">
+                <th>Date of birth</th>
+                <td>{{ student.dob|date('d/m/Y') }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="Country of birth" 
+                data-type="country"
+                data-dob="{{ student.country }}">
+                <th>Country of birth</th>
+                <td>{{ student.country ?: 'Not recorded'}}</td>
+                <td class="arrow">▶</td>
+            </tr>
+             <tr class="clickable-row" 
+                data-title="Ethnicity" 
+                data-type="ethnicity"
+                data-dob="{{ student.ethnicity}}">
+                <th>Ethnicity</th>
+               <td>{{ student.ethnicity ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+             <tr class="clickable-row" 
+                data-title="Nationality" 
+                data-type="nationality"
+                data-dob="{{ student.nationality}}">
+                <th>Nationality</th>
+               <td>{{ student.nationality ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+             <tr class="clickable-row" 
+                data-title="Religion" 
+                data-type="religion"
+                data-dob="{{ student.religion}}">
+                <th>Religion</th>
+               <td>{{ student.religion ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="Student Id" 
+                data-type="studentId"
+                data-dob="{{ student.studentId}}">
+                <th>Arbor Student Id</th>
+                <td>{{ student.studentId ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="School Card Id" 
+                data-type="cardId"
+                data-dob="{{ student.card}}">
+                <th>School Id Card</th>
+                <td>{{ student.card ?: 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="UPN" 
+                data-type="upn"
+                data-dob="{{ student.upn}}">
+                <th>UPN</th>
+                <td>{{ student.upn ?: 'Not Assigned' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header">
+            <h2>Student Contact Details</h2>
+        </div>
+
+        <table class="details-table">
+            <tbody>
+            <tr>
+                <th>Work Email</th>
+                <td>{{ student.address.emailAddress }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Student Home Number</th>
+                <td>{{ student.address.phoneNumber }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+     <div class="section-card">
+        <div class="section-header">
+            <h2>Family, Guardians and Contacts</h2>
+        </div>
+
+        <table class="details-table">
+            <tbody>
+            <tr>
+                <th>Work Email</th>
+                <td>{{ student.address.emailAddress }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+
+            <tr>
+                <th>Student Home Number</th>
+                <td>{{ student.address.phoneNumber }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+   <div id="slideoverContainer" class="slideover-container">
+    <div id="slideoverOverlay" class="slideover-overlay"></div>
+
+    <div class="slideover-drawer">
+
+        <div class="slideover-header">
+            <button id="closeBtn">← Back</button>
+
+            <h3 id="slideTitle">Details</h3>
+
+            <button id="nextBtn">Edit</button>
+        </div>
+
+        <hr>
+
+        <div class="slideover-body">
+            <div id="slideDynamicContent"></div>
+        </div>
+
+    </div>
+</div>
+
+{# Hidden template used when Edit is clicked #}
+<template id="nameEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Name</h2>
+
+        <form id="editIdentityForm">
+
+            <input
+                type="hidden"
+                name="studentId"
+                value="{{ student.studentId }}"
+            >
+
+            <div class="form-row">
+                <label>Legal first name</label>
+
+                <input
+                    type="text"
+                    name="firstName"
+                    value="{{ student.firstName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Preferred first name</label>
+
+                <input
+                    type="text"
+                    name="preferredFirstName"
+                    value="{{ student.firstName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Legal middle names</label>
+
+                <input
+                    type="text"
+                    name="middleName"
+                    value="{{ student.middleName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Legal last name</label>
+
+                <input
+                    type="text"
+                    name="lastName"
+                    value="{{ student.lastName }}"
+                >
+            </div>
+
+            <div class="form-row">
+                <label>Preferred last name</label>
+
+                <input
+                    type="text"
+                    name="preferredLastName"
+                    value="{{ student.lastName }}"
+                >
+            </div>
+
+            <div class="button-group">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    id="cancelEdit"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</template>
+<template id="genderEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <form id="editGenderForm">
+
+            <input type="hidden"
+                   name="studentId"
+                   value="{{ student.studentId }}">
+
+            <div class="gender-row">
+
+    <label for="gender">
+        Gender <span class="required">*</span>
+    </label>
+
+    <select id="gender"
+            name="gender"
+            class="gender-select">
+
+        <option value="">Select Sex</option>
+
+        {% for gender in genders %}
+            <option value="{{ gender.genderId }}"
+                {% if student.gender and student.gender.genderId == gender.genderId %}
+                    selected
+                {% endif %}
+            >
+                {{ gender.genderType }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+</div>
+
+            <div class="button-group">
+
+                <button type="button"
+                        class="cancel-btn"
+                        id="cancelEdit">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</template>
+
+<template id="dobEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Date of Birth</h2>
+
+        <form id="editDobForm">
+
+            <input
+                type="hidden"
+                name="studentId"
+                value="{{ student.studentId }}"
+            >
+
+            <div class="form-row">
+                <label>DOB</label>
+
+                <input
+                    type="Date"
+                    name="dob"
+                    value="{{ student.dob|date('d m') }}"
+                >
+            </div>
+            <div class="button-group">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    id="cancelEdit"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</template>
+
+{% block javascripts %}
+    <script src="{{ asset('js/slide.js') }}"></script>
+{% endblock %}
+
+{% endblock %}
