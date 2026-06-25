@@ -10,7 +10,7 @@ class InterventionDetail
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name:'intervention_detail_id')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventionDetails')]

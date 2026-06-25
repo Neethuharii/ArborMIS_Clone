@@ -17,7 +17,7 @@ final class Version20260624112011 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE intervention_detail (
-            id INT AUTO_INCREMENT NOT NULL, 
+            intervention_detail_id INT AUTO_INCREMENT NOT NULL, 
             behaviour_incident_id INT NOT NULL, 
             staff_id INT DEFAULT NULL, 
             intervention_id INT DEFAULT NULL, 
@@ -29,7 +29,7 @@ final class Version20260624112011 extends AbstractMigration
             INDEX IDX_C4A65DB6D4D57CD (staff_id), 
             INDEX IDX_C4A65DB68EAE3863 (intervention_id), 
             INDEX IDX_C4A65DB6CB944F1A (student_id), 
-            PRIMARY KEY (id)) 
+            PRIMARY KEY (intervention_detail_id)) 
             DEFAULT CHARACTER SET utf8mb4');
 
         $this->addSql('ALTER TABLE intervention_detail 
