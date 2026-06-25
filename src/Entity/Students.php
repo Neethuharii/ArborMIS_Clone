@@ -89,10 +89,17 @@ class Students
     #[ORM\OneToMany(targetEntity: StudentEnrollments::class, mappedBy: 'student')]
     private Collection $studentEnrollments;
 
+    /**
+     * @var Collection<int, InterventionDetail>
+     */
+    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'studentId')]
+    private Collection $interventionDetails;
+
     public function __construct()
     {
         $this->suspensionDetails = new ArrayCollection();
         $this->studentEnrollments = new ArrayCollection();
+        $this->interventionDetails = new ArrayCollection();
     }
 
     public function getStudentId(): ?int
@@ -356,6 +363,35 @@ class Students
         if ($this->studentEnrollments->removeElement($studentEnrollment)) {
             if ($studentEnrollment->getStudent() === $this) {
                 $studentEnrollment->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InterventionDetail>
+     */
+    public function getInterventionDetails(): Collection
+    {
+        return $this->interventionDetails;
+    }
+
+    public function addInterventionDetail(InterventionDetail $interventionDetail): static
+    {
+        if (!$this->interventionDetails->contains($interventionDetail)) {
+            $this->interventionDetails->add($interventionDetail);
+            $interventionDetail->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInterventionDetail(InterventionDetail $interventionDetail): static
+    {
+        if ($this->interventionDetails->removeElement($interventionDetail)) {
+            if ($interventionDetail->getStudent() === $this) {
+                $interventionDetail->setStudent(null);
             }
         }
 

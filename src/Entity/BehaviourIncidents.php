@@ -64,10 +64,17 @@ class BehaviourIncidents
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $deletedAt = null;
 
+    /**
+     * @var Collection<int, InterventionDetail>
+     */
+    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'behaviourLogId')]
+    private Collection $interventionDetails;
+
     public function __construct()
     {
         $this->studentInvolved = new ArrayCollection();
         $this->staffInvolved = new ArrayCollection();
+        $this->interventionDetails = new ArrayCollection();
     }
 
     public function getIncidentId(): ?int
@@ -226,6 +233,35 @@ class BehaviourIncidents
     public function setDeletedAt(\DateTimeImmutable $deletedAt): static
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, InterventionDetail>
+     */
+    public function getInterventionDetails(): Collection
+    {
+        return $this->interventionDetails;
+    }
+
+    public function addInterventionDetail(InterventionDetail $interventionDetail): static
+    {
+        if (!$this->interventionDetails->contains($interventionDetail)) {
+            $this->interventionDetails->add($interventionDetail);
+            $interventionDetail->setBehaviourIncident($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInterventionDetail(InterventionDetail $interventionDetail): static
+    {
+        if ($this->interventionDetails->removeElement($interventionDetail)) {
+            if ($interventionDetail->getBehaviourIncident() === $this) {
+                $interventionDetail->setBehaviourIncident(null);
+            }
+        }
 
         return $this;
     }
