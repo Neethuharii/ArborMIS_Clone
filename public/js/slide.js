@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             else if (type === 'dob') {
-
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
@@ -57,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            
 
             else {
 
@@ -78,79 +78,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const type = currentRow.dataset.type;
 
-        if (type === 'identity') {
+       if (type === 'identity') {
 
-            slideTitle.textContent = 'Name';
+    slideTitle.textContent = 'Name';
 
-            dynamicContent.innerHTML =
-                document.getElementById('nameEditTemplate').innerHTML;
+    dynamicContent.innerHTML =
+        document.getElementById('nameEditTemplate').innerHTML;
 
-            initialiseSaveForm();
-        }
-         else if (type === 'sex') {
+    initialiseSaveForm('editIdentityForm');
+}
 
-            slideTitle.textContent = 'Gender';
+else if (type === 'sex') {
 
-            dynamicContent.innerHTML =
-                document.getElementById('genderEditTemplate').innerHTML;
+    slideTitle.textContent = 'Gender';
 
-            initialiseSaveForm();
-        }
-        
+    dynamicContent.innerHTML =
+        document.getElementById('genderEditTemplate').innerHTML;
+
+    initialiseSaveForm('editGenderForm');
+}
+
+else if (type === 'dob') {
+
+    slideTitle.textContent = 'dob';
+
+    dynamicContent.innerHTML =
+        document.getElementById('dobEditTemplate').innerHTML;
+
+    initialiseSaveForm('editDobForm');
+}
     });
 
-    function initialiseSaveForm() {
+    function initialiseSaveForm(formId) {
 
-        const form = document.getElementById('editIdentityForm');
+    const form = document.getElementById(formId);
+    if (!form) return;
 
-        if (!form) {
-            return;
-        }
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-        form.addEventListener('submit', async (e) => {
+        const studentId = form.querySelector('[name="studentId"]').value;
 
-            e.preventDefault();
+        const formData = new FormData(form);
 
-            const studentId =
-                form.querySelector('[name="studentId"]').value;
-
-            const formData = new FormData(form);
-
-            try {
-
-                const response = await fetch(
-                    `/student/${studentId}/update-name`,
-                    {
-                        method: 'POST',
-                        body: formData
-                    }
-                );
-
-                const result = await response.json();
-
-                if (result.success) {
-
-                    location.reload();
-                }
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert('Unable to save changes');
-            }
-        });
-
-        const cancelBtn = document.getElementById('cancelEdit');
-
-        if (cancelBtn) {
-
-            cancelBtn.addEventListener('click', () => {
-
-                container.classList.remove('is-open');
+        try {
+            const response = await fetch(`/student/${studentId}/update`, {
+                method: 'POST',
+                body: formData
             });
+
+            const result = await response.json();
+
+            if (result.success) {
+                location.reload();
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert('Unable to save changes');
         }
-    }
+    });
+
+    document.getElementById('cancelEdit')?.addEventListener('click', () => {
+        container.classList.remove('is-open');
+    });
+}
 
     document.getElementById('closeBtn').addEventListener('click', () => {
 

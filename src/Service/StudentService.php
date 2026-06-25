@@ -131,7 +131,7 @@ final class StudentService
             ->getRepository(Students::class)
             ->find($studentId);
     }
-    
+
  public function updateStudent(Students $student, Request $request): void
 {
     $genderId = $request->request->get('gender');
@@ -154,6 +154,11 @@ final class StudentService
     $lastName = $request->request->get('lastName');
     if ($lastName !== null) {
         $student->setLastName($lastName);
+    }
+
+    $dob=$request->request->get('dob');
+    if($dob!==null){
+       $student->setDob(new \DateTimeImmutable($dob));
     }
 
     $this->entityManager->flush();

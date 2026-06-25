@@ -73,18 +73,17 @@ final class StudentController extends AbstractController
             'genders' => $gendersRepository->findAll()
         ]);
     }
+#[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
+public function update(
+    Students $student,
+    Request $request,
+    StudentService $studentService
+): JsonResponse {
 
-    #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
-    public function update(
-        Students $student,
-        Request $request,
-        StudentService $studentService
-    ): Response {
+    $studentService->updateStudent($student, $request);
 
-        $studentService->updateStudent($student, $request);
-
-        return $this->redirectToRoute('studentProfile', [
-            'studentId' => $student->getStudentId()
-        ]);
-    }
+    return $this->json([
+        'success' => true
+    ]);
+}
 }

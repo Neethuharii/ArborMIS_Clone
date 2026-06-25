@@ -293,43 +293,95 @@
 
     <div class="edit-form-wrapper">
 
-        <h2>Gender</h2>
+        <form id="editGenderForm">
 
-        <form id="editGenderForm" method="POST"
-              action="{{ path('student_update', {'id': student.studentId}) }}">
+            <input type="hidden"
+                   name="studentId"
+                   value="{{ student.studentId }}">
 
-            <input type="hidden" name="studentId" value="{{ student.studentId }}">
+            <div class="gender-row">
 
-            <div class="form-row">
-                <label>Gender</label>
+    <label for="gender">
+        Gender <span class="required">*</span>
+    </label>
 
-                <select name="gender" class="form-control">
+    <select id="gender"
+            name="gender"
+            class="gender-select">
 
-                    <option value="">Select Gender</option>
+        <option value="">Select Sex</option>
 
-                    {% for gender in genders %}
+        {% for gender in genders %}
+            <option value="{{ gender.genderId }}"
+                {% if student.gender and student.gender.genderId == gender.genderId %}
+                    selected
+                {% endif %}
+            >
+                {{ gender.genderType }}
+            </option>
+        {% endfor %}
 
-                        <option value="{{ gender.genderId }}"
-                            {% if student.gender and student.gender.genderId == gender.genderId %}
-                                selected
-                            {% endif %}
-                        >
-                            {{ gender.genderType }}
-                        </option>
+    </select>
 
-                    {% endfor %}
-
-                </select>
-
-            </div>
+</div>
 
             <div class="button-group">
 
-                <button type="button" class="cancel-btn" id="cancelEdit">
+                <button type="button"
+                        class="cancel-btn"
+                        id="cancelEdit">
                     Cancel
                 </button>
 
-                <button type="submit" class="save-btn">
+                <button type="submit"
+                        class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</template>
+
+<template id="dobEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Date of Birth</h2>
+
+        <form id="editDobForm">
+
+            <input
+                type="hidden"
+                name="studentId"
+                value="{{ student.studentId }}"
+            >
+
+            <div class="form-row">
+                <label>DOB</label>
+
+                <input
+                    type="Date"
+                    name="dob"
+                    value="{{ student.dob|date('d m') }}"
+                >
+            </div>
+            <div class="button-group">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    id="cancelEdit"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
                     Save Changes
                 </button>
 
