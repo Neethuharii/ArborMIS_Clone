@@ -92,18 +92,18 @@
              <tr class="clickable-row" 
                 data-title="Nationality" 
                 data-type="nationality"
-                data-dob="{{ student.nationality}}">
+                data-nationality-status="{{ student.nationality?.nationalityStatus ?? ''}}">
                 <th>Nationality</th>
-               <td>{{ student.nationality ?: 'Not recorded' }}</td>
+               <td>{{ student.nationality ? student.nationality.nationalityStatus: 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
 
              <tr class="clickable-row" 
                 data-title="Religion" 
                 data-type="religion"
-                data-dob="{{ student.religion}}">
+                data-religion-name="{{ student.religion?.religionName}}">
                 <th>Religion</th>
-               <td>{{ student.religion ?: 'Not recorded' }}</td>
+               <td>{{ student.religion ? student.religion.religionName : 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
             <tr class="clickable-row" 
@@ -477,6 +477,117 @@
                 {% endif %}
             >
                 {{ ethnicity.ethnicityName }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+</div>
+
+            <div class="button-group">
+
+                <button type="button"
+                        class="cancel-btn"
+                        id="cancelEdit">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</template>
+
+<template id="nationalityEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <form id="editNationalityForm">
+
+            <input type="hidden"
+                   name="studentId"
+                   value="{{ student.studentId }}">
+
+            <div class="nationality-row">
+
+    <label for="nationality">
+       Nationality <span class="required">*</span>
+    </label>
+
+    <select id="nationality"
+            name="nationality"
+            class="nationality-select">
+
+        <option value="">Select Nationality</option>
+
+        {% for nationality in nationalities %}
+            <option value="{{ nationality.nationalityId }}"
+                {% if student.nationality and student.nationality.nationalityId == nationality.nationalityId %}
+                    selected
+                {% endif %}
+            >
+                {{ nationality.nationalityStatus }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+</div>
+
+            <div class="button-group">
+
+                <button type="button"
+                        class="cancel-btn"
+                        id="cancelEdit">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="save-btn">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</template>
+<template id="religionEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <form id="editReligionForm">
+
+            <input type="hidden"
+                   name="studentId"
+                   value="{{ student.studentId }}">
+
+            <div class="religion-row">
+
+    <label for="religion">
+       Religion <span class="required">*</span>
+    </label>
+
+    <select id="religion"
+            name="religion"
+            class="religion-select">
+
+        <option value="">Select Religion</option>
+
+        {% for religion in religions %}
+            <option value="{{ religion.religionId }}"
+                {% if student.religion and student.religion.religionId == religion.religionId %}
+                    selected
+                {% endif %}
+            >
+                {{ religion.religionName }}
             </option>
         {% endfor %}
 

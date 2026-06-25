@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
              else if (type === 'ethnicity') {
-
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
@@ -79,9 +78,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            else if (type === 'nationality') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Nationality</th>
+                            <td>${row.dataset.nationalityStatus || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
 
+              else if (type === 'religion') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Religion</th>
+                            <td>${row.dataset.religionName || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else {
-
                 dynamicContent.innerHTML = `
                     <p>No information available.</p>
                 `;
@@ -148,6 +166,26 @@ else if (type === 'ethnicity') {
         document.getElementById('ethnicityEditTemplate').innerHTML;
 
     initialiseSaveForm('editEthnicityForm');
+}
+
+else if (type === 'nationality') {
+
+    slideTitle.textContent = 'Nationality';
+
+    dynamicContent.innerHTML =
+        document.getElementById('nationalityEditTemplate').innerHTML;
+
+    initialiseSaveForm('editNationalityForm');
+}
+
+else if (type === 'religion') {
+
+    slideTitle.textContent = 'Religion';
+
+    dynamicContent.innerHTML =
+        document.getElementById('religionEditTemplate').innerHTML;
+
+    initialiseSaveForm('editReligionForm');
 }
 
 

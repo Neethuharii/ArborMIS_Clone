@@ -154,6 +154,20 @@ final class StudentService
         $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
         $student->setEthnicity($ethnicity);
     }
+
+    $nationalitId = $request->request->get('nationality');
+
+    if ($nationalitId) {
+        $nationality = $this->nationalityRepository->find($nationalitId);
+        $student->setNationality($nationality);
+    }
+
+      $religionId = $request->request->get('religion');
+
+    if ($religionId) {
+        $religion = $this->religionsRepository->find($religionId);
+        $student->setReligion($religion);
+    }
     
     $firstName = $request->request->get('firstName');
     if ($firstName !== null) {
