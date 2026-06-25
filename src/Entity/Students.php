@@ -390,7 +390,6 @@ class Students
     public function removeInterventionDetail(InterventionDetail $interventionDetail): static
     {
         if ($this->interventionDetails->removeElement($interventionDetail)) {
-            // set the owning side to null (unless already changed)
             if ($interventionDetail->getStudent() === $this) {
                 $interventionDetail->setStudent(null);
             }

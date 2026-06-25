@@ -16,7 +16,7 @@ final class Version20260624112011 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE intervention_detail (
+        $this->addSql('CREATE TABLE IF NOT EXISTS intervention_detail (
             intervention_detail_id INT AUTO_INCREMENT NOT NULL, 
             behaviour_incident_id INT NOT NULL, 
             staff_id INT DEFAULT NULL, 
@@ -29,30 +29,23 @@ final class Version20260624112011 extends AbstractMigration
             INDEX IDX_C4A65DB6D4D57CD (staff_id), 
             INDEX IDX_C4A65DB68EAE3863 (intervention_id), 
             INDEX IDX_C4A65DB6CB944F1A (student_id), 
-            PRIMARY KEY (intervention_detail_id)) 
+            PRIMARY KEY (intervention_detail_id),
+            CONSTRAINT FK_INTERVENTION_DETAIL_INCIDENT
+                FOREIGN KEY (behaviour_incident_id)
+                REFERENCES behaviour_incidents (incident_id),
+            CONSTRAINT FK_INTERVENTION_DETAIL_STAFF
+                FOREIGN KEY (staff_id)
+                REFERENCES staffs (staff_id),
+            CONSTRAINT FK_INTERVENTION_DETAIL_INTERVENTION
+                FOREIGN KEY (intervention_id)
+                REFERENCES interventions (intervention_id),
+            CONSTRAINT FK_INTERVENTION_DETAIL_STUDENT
+                FOREIGN KEY (student_id)
+                REFERENCES students (student_id)
+            ) 
             DEFAULT CHARACTER SET utf8mb4');
 
-        $this->addSql('ALTER TABLE intervention_detail 
-            ADD CONSTRAINT FK_INTERVENTION_DETAIL_INCIDENT 
-                FOREIGN KEY (behaviour_incident_id) 
-                REFERENCES behaviour_incidents (incident_id)');
-        
-        $this->addSql('ALTER TABLE intervention_detail 
-            ADD CONSTRAINT FK_INTERVENTION_DETAIL_STAFF 
-                FOREIGN KEY (staff_id) 
-                REFERENCES staffs (staff_id)');
-        
-        $this->addSql('ALTER TABLE intervention_detail 
-            ADD CONSTRAINT FK_INTERVENTION_DETAIL_INTERVENTION 
-                FOREIGN KEY (intervention_id) 
-                REFERENCES interventions (intervention_id)');
-        
-        $this->addSql('ALTER TABLE intervention_detail 
-            ADD CONSTRAINT FK_INTERVENTION_DETAIL_STUDENT 
-                FOREIGN KEY (student_id) 
-                REFERENCES students (student_id)');
     }
-
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE intervention_detail');
