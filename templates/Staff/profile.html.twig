@@ -146,7 +146,7 @@
         <div class="section-card">
             <div class="section-header">
                 <h2>Current Business Roles</h2>
-                    <div id="contactAdd" style="cursor: pointer;">
+                    <div id="businessAdd" style="cursor: pointer;">
                         <p>✚ Add</p>
                     </div>
             </div>
@@ -187,9 +187,11 @@
             <div class="slideover-header">
                 <button id="closeBtn">❮❮ Back</button>
                 <h2 id="slideTitle" style="font-size: 14px; margin: 7px; font-family: sans-serif;"></h2>
-                <button id="nextBtn" data-url="{{ path('slideover') }}" href="#" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center;">Edit</a>
+                <button id="nextBtn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center;">Edit</button>
             </div>
-            <div id="slideDynamicContent" class="slideover-body">
+            <div class="slideover-body">
+                <div id="slideDynamicContent"></div>
+            </div>
             </div>
         </div>
     </div>
@@ -239,7 +241,9 @@
 </template>
 
 {% block javascripts %}
-    <script src="{{asset('js/slide.js')}}"></script>
+    <script src="{{ asset('js/formHandler.js') }}"></script>
+    <script src="{{ asset('js/slide.js') }}"></script>
+    <script src="{{ asset('js/modal.js') }}"></script>
 {% endblock %}
 
 {% endblock %}

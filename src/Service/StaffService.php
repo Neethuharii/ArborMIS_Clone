@@ -9,8 +9,9 @@ use App\Entity\Staffs;
 use App\Entity\CurrentRoles;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
-use App\Repository\CurrentRolesRepository;
 use App\Repository\BusinessrolesRepository;
+use App\Repository\CountriesRepository;
+use App\Repository\EthnicitiesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\StaffsRepository;
@@ -20,9 +21,10 @@ class StaffService
     public function __construct(
         private GendersRepository $gendersRepository,
         private TitlesRepository $titlesRepository,
-        private CurrentRolesRepository $currentRolesRepository,
         private BusinessrolesRepository $businessRolesRepository,
         private EntityManagerInterface $entityManager,
+        private EthnicitiesRepository $ethnicitiesRepository,
+        private CountriesRepository $countriesRepository,
         private StaffsRepository $staffsRepository
     ) {}
 
@@ -168,5 +170,43 @@ class StaffService
             'success' => true,
             'errors' => [],
         ];
+    }
+    public function updateStaff(Staffs $staff, Request $request): void
+    {
+        $genderId = $request->request->get('gender');
+
+        if ($genderId) {
+            $gender = $this->gendersRepository->find($genderId);
+            $staff->setGender($gender);
+        }
+
+        $ethnicityId = $request->request->get('ethnicity');
+
+        if ($ethnicityId) {
+            $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
+            $staff->setEthnicity($ethnicity);
+        }
+
+        $firstName = $request->request->get('firstName');
+        if ($firstName !== null) {
+            $staff->setFirstName($firstName);
+        }
+
+        $middleName = $request->request->get('middleName');
+        if ($middleName !== null) {
+            $staff->setMiddleName($middleName);
+        }
+
+        $lastName = $request->request->get('lastName');
+        if ($lastName !== null) {
+            $staff->setLastName($lastName);
+        }
+
+        $dob = $request->request->get('dob');
+        if ($dob !== null) {
+            $staff->setDateOfBirth(new \DateTimeImmutable($dob));
+        }
+
+        $this->entityManager->flush();
     }
 }

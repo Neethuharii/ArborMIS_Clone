@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     const container = document.getElementById('slideoverContainer');
+
+    if (!container) return;
+
     const slideTitle = document.getElementById('slideTitle');
     const dynamicContent = document.getElementById('slideDynamicContent');
     const editBtn = document.getElementById('nextBtn');
@@ -8,11 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRow = null;
 
     document.querySelectorAll('.clickable-row').forEach(row => {
+
         row.addEventListener('click', () => {
             currentRow = row;
             const type = row.dataset.type;
             slideTitle.textContent = row.dataset.title;
             editBtn.style.display = 'block';
+
             if (type === 'identity') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
@@ -112,127 +117,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     editBtn.addEventListener('click', () => {
 
-        if (!currentRow) {
-            return;
-        }
+        if (!currentRow) return;
 
         const type = currentRow.dataset.type;
 
-       if (type === 'identity') {
+        let templateId = '';
+        let formId = '';
 
-    slideTitle.textContent = 'Name';
+        switch (type) {
 
-    dynamicContent.innerHTML =
-        document.getElementById('nameEditTemplate').innerHTML;
+            case 'identity':
+                slideTitle.textContent = 'Name';
+                templateId = 'nameEditTemplate';
+                formId = 'editIdentityForm';
+                break;
 
-    initialiseSaveForm('editIdentityForm');
-}
+            case 'sex':
+                slideTitle.textContent = 'Gender';
+                templateId = 'genderEditTemplate';
+                formId = 'editGenderForm';
+                break;
 
-else if (type === 'sex') {
+            case 'dob':
+                slideTitle.textContent = 'Date of Birth';
+                templateId = 'dobEditTemplate';
+                formId = 'editDobForm';
+                break;
 
-    slideTitle.textContent = 'Gender';
+            case 'country':
+                slideTitle.textContent = 'Country';
+                templateId = 'countryEditTemplate';
+                formId = 'editCountryForm';
+                break;
 
-    dynamicContent.innerHTML =
-        document.getElementById('genderEditTemplate').innerHTML;
+            case 'ethnicity':
+                slideTitle.textContent = 'Ethnicity';
+                templateId = 'ethnicityEditTemplate';
+                formId = 'editEthnicityForm';
+                break;
 
-    initialiseSaveForm('editGenderForm');
-}
+            case 'nationality':
+                slideTitle.textContent = 'Nationality';
+                templateId = 'nationalityEditTemplate';
+                formId = 'editNationalityForm';
+                break;
 
-else if (type === 'dob') {
+            case 'religion':
+                slideTitle.textContent = 'Religion';
+                templateId = 'religionEditTemplate';
+                formId = 'editReligionForm';
+                break;
 
-    slideTitle.textContent = 'dob';
-
-    dynamicContent.innerHTML =
-        document.getElementById('dobEditTemplate').innerHTML;
-
-    initialiseSaveForm('editDobForm');
-}
-
-else if (type === 'country') {
-
-    slideTitle.textContent = 'Country';
-
-    dynamicContent.innerHTML =
-        document.getElementById('countryEditTemplate').innerHTML;
-
-    initialiseSaveForm('editCountryForm');
-}
-
-else if (type === 'ethnicity') {
-
-    slideTitle.textContent = 'Ethnicity';
-
-    dynamicContent.innerHTML =
-        document.getElementById('ethnicityEditTemplate').innerHTML;
-
-    initialiseSaveForm('editEthnicityForm');
-}
-
-else if (type === 'nationality') {
-
-    slideTitle.textContent = 'Nationality';
-
-    dynamicContent.innerHTML =
-        document.getElementById('nationalityEditTemplate').innerHTML;
-
-    initialiseSaveForm('editNationalityForm');
-}
-
-else if (type === 'religion') {
-
-    slideTitle.textContent = 'Religion';
-
-    dynamicContent.innerHTML =
-        document.getElementById('religionEditTemplate').innerHTML;
-
-    initialiseSaveForm('editReligionForm');
-}
-
-
-    });
-
-    function initialiseSaveForm(formId) {
-
-    const form = document.getElementById(formId);
-    if (!form) return;
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const studentId = form.querySelector('[name="studentId"]').value;
-
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch(`/student/${studentId}/update`, {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                location.reload();
-            }
-
-        } catch (error) {
-            console.error(error);
-            alert('Unable to save changes');
+            default:
+                return;
         }
+
+        dynamicContent.innerHTML =
+            document.getElementById(templateId).innerHTML;
+
+        initialiseSaveForm(formId, container);
+
     });
 
-    document.getElementById('cancelEdit')?.addEventListener('click', () => {
+    document.getElementById('closeBtn')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
-}
 
-    document.getElementById('closeBtn').addEventListener('click', () => {
-
-        container.classList.remove('is-open');
-    });
-
-    document.getElementById('slideoverOverlay').addEventListener('click', () => {
-
+    document.getElementById('slideoverOverlay')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
 

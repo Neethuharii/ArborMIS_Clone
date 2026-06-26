@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Staffs;
 use App\Service\StaffService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
 class StaffController extends AbstractController
 {
     #[Route('/Staff/addstaff', name: 'addstaff')]
-    public function addstaff(StaffService $addstaffService, Request $request):Response
+    public function addstaff(StaffService $addstaffService, Request $request): Response
     {
         $genders = $addstaffService->getAllGenders();
         $titles = $addstaffService->getAllTitles();
@@ -28,26 +30,32 @@ class StaffController extends AbstractController
         }
         return $this->render('Staff/addstaff.html.twig', [
             'all_genders' => $genders,
-            'all_titles' => $titles, 
+            'all_titles' => $titles,
             'all_businessRoles' => $businessRoles,
         ]);
     }
-    
-    #[Route('/Staff/browseStaff', name:'browseStaff')]
+
+    #[Route('/Staff/browseStaff', name: 'browseStaff')]
     public function list(StaffService $staffService): Response
     {
-        return $this->render('Staff/browseStaff.html.twig',['staffs'=>$staffService->getAllStaffs()]);
+        return $this->render('Staff/browseStaff.html.twig', ['staffs' => $staffService->getAllStaffs()]);
     }
 
-    #[Route('/Staff/profile/{id}', name:'staffProfile')]
-    public function profile(int $id,StaffService $staffService): Response
+    #[Route('/Staff/profile/{id}', name: 'staffProfile')]
+    public function profile(int $id, StaffService $staffService): Response
     {
-        $staff =$staffService->getStaffById($id);
-        if(!$staff)
-        {
+        $staff = $staffService->getStaffById($id);
+        if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
         }
 
-        return $this->render('Staff/profile.html.twig',['staff'=>$staff]);
+        return $this->render('Staff/profile.html.twig', ['staff' => $staff]);
+    }
+
+    #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
+    public function update(Staffs $staff, Request $request, StaffService $staffService ): JsonResponse {
+
+        $staffService->updateStaff($staff, $request);
+        return $this->json([ 'success' => true]);
     }
 }
