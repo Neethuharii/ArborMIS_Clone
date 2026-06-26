@@ -56,10 +56,10 @@
                     </tr>
 
                     <tr class="clickable-row" 
-                        data-title="Sex" 
+                        data-title="Gender" 
                         data-type="sex"
                         data-gender-type="{{ staff.gender.genderType }}">
-                        <th>Sex</th>
+                        <th>Gender</th>
                         <td>{{ staff.gender.genderType }}</td>
                         <td class="arrow">▶</td>
                     </tr>
@@ -76,27 +76,27 @@
                     <tr class="clickable-row" 
                         data-title="Ethnicity" 
                         data-type="ethnicity"
-                        data-ethnicity="{{ staff.Ethnicity.ethnicityName|default('') }} ">
+                        data-ethnicity="{{ staff.Ethnicity.ethnicityName|default('Not recorded') }} ">
                         <th>Ethnicity</th>
-                        <td>Not recorded</td>
+                        <td>{{ staff.ethnicity ? staff.ethnicity.ethnicityName : 'Not recorded' }}</td>
                         <td class="arrow">▶</td>
                     </tr>
 
                     <tr class="clickable-row" 
                         data-title="Religion" 
                         data-type="religion"
-                        data-religion="{{ staff.Religion.religionName|default('') }} ">
+                        data-religion="{{ staff.Religion.religionName|default('Not recorded') }} ">
                         <th>Religion</th>
-                        <td>Not recorded</td>
+                        <td>{{ staff.Religion.religionName|default('Not recorded') }}</td>
                         <td class="arrow">▶</td>
                     </tr>
 
                     <tr class="clickable-row" 
                         data-title="Staff Number" 
                         data-type="staffNumber"
-                        data-staffNumber="{{ staff.staffNumber|default('') }} ">
+                        data-staffNumber="{{ staff.staffNumber|default('Not recorded') }} ">
                         <th>Staff Number</th>
-                        <td>Not recorded</td>
+                        <td>{{ staff.staffNumber|default('Not recorded') }}</td>
                         <td class="arrow">▶</td>
                     </tr>
 
@@ -109,9 +109,9 @@
                     <tr class="clickable-row" 
                         data-title="Abbreviation" 
                         data-type="abbreviation"
-                        data-abbreviation="{{ staff.abbreviation|default('') }} ">
+                        data-abbreviation="{{ staff.abbreviation|default('Not recorded') }} ">
                         <th>Abbreviation</th>
-                        <td>{{ staff.abbreviation }}</td>
+                        <td>{{ staff.abbreviation|default('Not recorded') }}</td>
                         <td class="arrow">▶</td>
                     </tr>
                 </tbody>
@@ -187,15 +187,58 @@
             <div class="slideover-header">
                 <button id="closeBtn">❮❮ Back</button>
                 <h2 id="slideTitle" style="font-size: 14px; margin: 7px; font-family: sans-serif;"></h2>
-                <a id="nextBtn" data-url="{{ path('slideover') }}" href="#" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center;">Edit</a>
+                <button id="nextBtn" data-url="{{ path('slideover') }}" href="#" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; text-align: center;">Edit</a>
             </div>
             <div id="slideDynamicContent" class="slideover-body">
             </div>
         </div>
     </div>
 
+<template id="nameEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Name</h2>
+
+        <form id="editIdentityForm">
+
+            <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+
+            <div class="form-row">
+                <label>Legal first name</label>
+                <input type="text" name="firstName" value="{{ staff.firstName }}">
+            </div>
+
+            <div class="form-row">
+                <label>Preferred first name</label>
+                <input type="text" name="preferredFirstName" value="{{ staff.firstName }}">
+            </div>
+
+            <div class="form-row">
+                <label>Legal middle names</label>
+                <input type="text" name="middleName" value="{{ staff.middleName }}">
+            </div>
+
+            <div class="form-row">
+                <label>Legal last name</label>
+                <input type="text" name="lastName" value="{{ staff.lastName }}">
+            </div>
+
+            <div class="form-row">
+                <label>Preferred last name</label>
+                <input type="text" name="preferredLastName" value="{{ staff.lastName }}">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="cancelEdit"> Cancel </button>
+                <button type="submit" class="save-btn"> Save Changes </button>
+            </div>
+
+        </form>
+    </div>
+</template>
+
 {% block javascripts %}
-    <script src="{{asset('js/modal.js')}}"></script>
     <script src="{{asset('js/slide.js')}}"></script>
 {% endblock %}
 
