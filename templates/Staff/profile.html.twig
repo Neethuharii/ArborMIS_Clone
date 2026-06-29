@@ -237,6 +237,135 @@
             </div>
 
         </form>
+</template>
+
+<template id="genderEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <form id="editGenderForm">
+
+            <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+            <div class="form-row">
+                <label for="gender">Gender <span class="required"> </label>
+                <select id="gender" name="gender" class="template-select">
+                    <option value="">Select Sex</option>
+                    {% for gender in all_genders %}
+                        <option value="{{ gender.genderId }}">{{ gender.genderType }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="cancelEdit"> Cancel </button>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<template id="dobEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Date of Birth</h2>
+
+        <form id="editDobForm">
+
+            <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+
+            <div class="form-row">
+                <label>DOB</label>
+                <input type="Date" name="dob" value="{{ staff.dateOfBirth|date('d m') }}" >
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="cancelEdit" > Cancel </button>
+                <button type="submit" class="save-btn" > Save Changes </button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<template id="ethnicityEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Ethnicity</h2>
+
+        <form id="editEthnicityForm">
+
+            <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+
+            <div class="form-row">
+                <label>Ethnicity <span class="required">*</span></label>
+                <select id="ethnicity" name="ethnicity" class="template-select">
+
+                    <option value="">Select Ethnicity</option>
+                    {% for ethnicity in all_ethnicities %}
+                        <option value="{{ ethnicity.ethnicityId }}">{{ ethnicity.ethnicityName }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="cancelEdit" > Cancel </button>
+                <button type="submit" class="save-btn" > Save Changes </button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<template id="religionEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Religion</h2>
+
+        <form id="editReligionForm">
+
+            <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+
+            <div class="form-row">
+                <label>Religion</label>
+                <select id="religion" name="religion" class="template-select">
+
+                    <option value="">Select Religion</option>
+                    {% for religion in all_religions %}
+                        <option value="{{ religion.religionId }}">{{ religion.religionName }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="cancelEdit" > Cancel </button>
+                <button type="submit" class="save-btn" > Save Changes </button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<template id="abbreviationEditTemplate">
+
+    <div class="edit-form-wrapper">
+
+        <h2>Abbreviation</h2>
+
+        <form id="editAbbreviationForm">
+
+            <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+
+            <div class="form-row">
+                <label>Abbreviation</label>
+                <input type="text" name="abbreviation" value="{{ staff.abbreviation }}">
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="cancel-btn" id="cancelEdit" > Cancel </button>
+                <button type="submit" class="save-btn" > Save Changes </button>
+            </div>
+        </form>
     </div>
 </template>
 
