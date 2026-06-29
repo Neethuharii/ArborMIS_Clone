@@ -12,7 +12,9 @@
                 <h3>Add Item in: Identity</h3>
             </div>
             <ul class="item-list">
-                <li>Identification Document ▶</li>
+                <li class="open-slideover" data-type="identification">
+                    Identification Document ▶
+                </li>
                 <li>Nationality ▶</li>
                 <li>Former Name ▶</li>
                 <li>School ID Card ▶</li>
@@ -75,6 +77,27 @@
     </div>
 </div>
 
+<div id="slideoverContainer" class="slideover-container">
+    <div id="slideoverOverlay" class="slideover-overlay"></div>
+
+    <div class="slideover-drawer">
+
+        <div class="slideover-header">
+            <button id="closeBtn">← Back</button>
+
+            <h3 id="slideTitle">Details</h3>
+
+            <button id="nextBtn">Edit</button>
+        </div>
+
+        <hr>
+
+        <div class="slideover-body">
+            <div id="slideDynamicContent"></div>
+        </div>
+
+    </div>
+</div>
 {% block javascripts %}
     <script src="{{asset('js/modal.js')}}"></script>
 {% endblock %}

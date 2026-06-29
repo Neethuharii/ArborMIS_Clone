@@ -104,6 +104,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            else if (type === 'document') {
+
+    slideTitle.textContent = 'Document';
+
+    dynamicContent.innerHTML = `
+        <table class="details-table">
+            <tr>
+                <th>Document Type</th>
+                <td>${row.dataset.documentType || ''}</td>
+            </tr>
+        </table>
+    `;
+}
             else {
                 dynamicContent.innerHTML = `
                     <p>No information available.</p>
@@ -114,6 +127,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     });
+ 
+
+  document.querySelectorAll(".open-slideover").forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        const type = item.dataset.type;
+
+        let template = "";
+
+        switch (type) {
+
+            case "identification":
+                slideTitle.textContent = "Identification Document";
+                template = "identificationTemplate";
+                break;
+
+            case "nationality":
+                slideTitle.textContent = "Nationality";
+                template = "nationalityTemplate";
+                break;
+
+            case "former-name":
+                slideTitle.textContent = "Former Name";
+                template = "formerNameTemplate";
+                break;
+
+            case "school-card":
+                slideTitle.textContent = "School ID Card";
+                template = "schoolCardTemplate";
+                break;
+        }
+
+        dynamicContent.innerHTML =
+            document.getElementById(template).innerHTML;
+
+        initialiseSaveForm("identificationForm", container);
+
+        document.getElementById("identityModal").style.display = "none";
+
+        container.classList.add("is-open");
+
+    });
+
+});
+
 
     editBtn.addEventListener('click', () => {
 
@@ -188,3 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+
+
+ 
