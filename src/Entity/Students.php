@@ -95,6 +95,9 @@ class Students
     #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'studentId')]
     private Collection $interventionDetails;
 
+    #[ORM\OneToOne(mappedBy: 'student')]
+    private ?StudentPoints $studentPoints = null;
+
     public function __construct()
     {
         $this->suspensionDetails = new ArrayCollection();
@@ -394,6 +397,22 @@ class Students
                 $interventionDetail->setStudent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStudentPoints(): ?StudentPoints
+    {
+        return $this->studentPoints;
+    }
+
+    public function setStudentPoints(StudentPoints $studentPoints): static
+    {
+        if ($studentPoints->getStudent() !== $this) {
+            $studentPoints->setStudent($this);
+        }
+
+        $this->studentPoints = $studentPoints;
 
         return $this;
     }
