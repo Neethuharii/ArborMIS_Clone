@@ -1,0 +1,46 @@
+{% extends 'Attendances/base_attendance.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Attendance/AttendanceRegisters.css') }}">
+{% endblock %}
+
+{% block attendance_content %}
+
+<div class="page-title-container">
+    <h1>Registers By Date</h1>
+</div>
+
+<form class="date-selector">
+    <div class="date-input-wrapper">
+        <input type="date" id="registerDateSelector">
+        <span class="calendar-icon">📅</span>
+    </div>
+
+    <button type="button" class="change-date-btn">
+        Change Date
+    </button>
+</form>
+
+<div class="date-heading-banner">
+    <h2></h2>
+</div>
+
+<div class="arbor-table-container">
+
+    <div class="arbor-table-header">
+        <div>Class Name</div>
+        <div>Session</div>
+        <div>Staff</div>
+        <div>Opened</div>
+        <div>Complete + Valid</div>
+        <div>Marks</div>
+    </div>
+
+    <div class="arbor-table-body">
+
+    </div>
+
+</div>
+
+{% endblock %}
