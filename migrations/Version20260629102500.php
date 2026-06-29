@@ -19,7 +19,7 @@ final class Version20260629102500 extends AbstractMigration
     ): void {
 
         $this->addSql(
-            'CREATE TABLE attendance_registers (
+            'CREATE TABLE IF NOT EXISTS attendance_registers (
                 attendance_register_id INT AUTO_INCREMENT NOT NULL,
                 attendance_date DATE NOT NULL,
                 session VARCHAR(2) NOT NULL,
@@ -64,7 +64,7 @@ final class Version20260629102500 extends AbstractMigration
     ): void {
 
         $this->addSql(
-            'DROP TABLE attendance_registers'
+            'DROP TABLE IF EXISTS attendance_registers'
         );
     }
 }
