@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Students;
 use App\Repository\CountriesRepository;
+use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
@@ -67,7 +68,8 @@ final class StudentController extends AbstractController
         CountriesRepository $countriesRepository,
         EthnicitiesRepository $ethnicitiesRepository,
         NationalityRepository $nationalityRepository,
-        ReligionsRepository $religionsRepository
+        ReligionsRepository $religionsRepository,
+        DocumentTypesRepository $documentTypesRepository
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -82,7 +84,8 @@ final class StudentController extends AbstractController
             'countries'=> $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
             'nationalities'=>$nationalityRepository->findAll(),
-            'religions'=>$religionsRepository->findAll()
+            'religions'=>$religionsRepository->findAll(),
+            'documentTypes'=>$documentTypesRepository->findAll()
         ]);
     }
 #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
