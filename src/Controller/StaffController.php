@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Staffs;
+use App\Repository\GendersRepository;
+use App\Repository\EthnicitiesRepository;
+use App\Repository\ReligionsRepository;
 use App\Service\StaffService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,20 +45,25 @@ class StaffController extends AbstractController
     }
 
     #[Route('/Staff/profile/{id}', name: 'staffProfile')]
-    public function profile(int $id, StaffService $staffService): Response
+    public function profile(int $id, StaffService $staffService,GendersRepository $gendersRepository,EthnicitiesRepository $ethnicitiesRepository,ReligionsRepository $religionsRepository): Response
     {
         $staff = $staffService->getStaffById($id);
         if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
         }
 
-        return $this->render('Staff/profile.html.twig', ['staff' => $staff]);
+        return $this->render('Staff/profile.html.twig', ['staff' => $staff,
+        'all_genders' => $gendersRepository->findAll(),
+        'all_ethnicities' => $ethnicitiesRepository->findAll(),
+        'all_religions' => $religionsRepository->findAll()
+        ]);
     }
 
     #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
     public function update(Staffs $staff, Request $request, StaffService $staffService ): JsonResponse {
 
         $staffService->updateStaff($staff, $request);
+
         return $this->json([ 'success' => true]);
     }
 }

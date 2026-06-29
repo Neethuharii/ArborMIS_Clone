@@ -12,6 +12,7 @@ use App\Repository\TitlesRepository;
 use App\Repository\BusinessrolesRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\EthnicitiesRepository;
+use App\Repository\ReligionsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\StaffsRepository;
@@ -19,13 +20,14 @@ use App\Repository\StaffsRepository;
 class StaffService
 {
     public function __construct(
+        private StaffsRepository $staffsRepository,
         private GendersRepository $gendersRepository,
         private TitlesRepository $titlesRepository,
         private BusinessrolesRepository $businessRolesRepository,
         private EntityManagerInterface $entityManager,
         private EthnicitiesRepository $ethnicitiesRepository,
         private CountriesRepository $countriesRepository,
-        private StaffsRepository $staffsRepository
+        private ReligionsRepository $religionsRepository
     ) {}
 
     public function getAllGenders(): array
@@ -173,20 +175,6 @@ class StaffService
     }
     public function updateStaff(Staffs $staff, Request $request): void
     {
-        $genderId = $request->request->get('gender');
-
-        if ($genderId) {
-            $gender = $this->gendersRepository->find($genderId);
-            $staff->setGender($gender);
-        }
-
-        $ethnicityId = $request->request->get('ethnicity');
-
-        if ($ethnicityId) {
-            $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
-            $staff->setEthnicity($ethnicity);
-        }
-
         $firstName = $request->request->get('firstName');
         if ($firstName !== null) {
             $staff->setFirstName($firstName);
@@ -202,9 +190,35 @@ class StaffService
             $staff->setLastName($lastName);
         }
 
+        $genderId = $request->request->get('gender');
+
+        if ($genderId) {
+            $gender = $this->gendersRepository->find($genderId);
+            $staff->setGender($gender);
+        }
+
         $dob = $request->request->get('dob');
         if ($dob !== null) {
             $staff->setDateOfBirth(new \DateTimeImmutable($dob));
+        }
+
+        $ethnicityId = $request->request->get('ethnicity');
+
+        if ($ethnicityId) {
+            $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
+            $staff->setEthnicity($ethnicity);
+        }
+
+        $religionId = $request->request->get('religion');
+
+        if ($religionId) {
+            $religion = $this->religionsRepository->find($religionId);
+            $staff->setReligion($religion);
+        }
+
+        $abbreviation = $request->request->get('abbreviation');
+        if ($abbreviation !== null) {
+            $staff->setAbbreviation($abbreviation);
         }
 
         $this->entityManager->flush();
