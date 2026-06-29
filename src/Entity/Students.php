@@ -95,7 +95,7 @@ class Students
     #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'studentId')]
     private Collection $interventionDetails;
 
-    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: 'student')]
     private ?StudentPoints $studentPoints = null;
 
     public function __construct()
