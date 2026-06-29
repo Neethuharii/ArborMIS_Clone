@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Businessroles;
+use App\Entity\BusinessRoles;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Businessroles>
  */
-class BusinessrolesRepository extends ServiceEntityRepository
+class BusinessRolesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
