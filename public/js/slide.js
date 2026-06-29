@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-
             else if (type === 'sex') {
 
                 dynamicContent.innerHTML = `
@@ -50,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-
             else if (type === 'dob') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
@@ -72,8 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-
-             else if (type === 'ethnicity') {
+            else if (type === 'ethnicity') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
@@ -93,8 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-
-              else if (type === 'religion') {
+            else if (type === 'religion') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
@@ -117,6 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
         </table>
     `;
 }
+            else if (type === 'abbreviation') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Abbreviation</th>
+                            <td>${row.dataset.abbreviation || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else {
                 dynamicContent.innerHTML = `
                     <p>No information available.</p>
@@ -226,7 +232,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 templateId = 'religionEditTemplate';
                 formId = 'editReligionForm';
                 break;
-
+            
+            case 'abbreviation':
+                slideTitle.textContent = 'Abbreviation';
+                templateId = 'abbreviationEditTemplate';
+                formId = 'editAbbreviationForm';
+                break;
+    
             default:
                 return;
         }

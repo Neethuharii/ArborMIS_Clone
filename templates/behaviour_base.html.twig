@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="{{ asset('css/Suspension/suspension_base.css') }}">
+<link rel="stylesheet" href="{{ asset('css/behaviour_base.css') }}">
 <div class="sidebar">
     <div class="nav-container">
         <div class="nav-module-title"><b>Behaviour</b></div>
@@ -7,10 +7,10 @@
         <div class="nav-items">
             <ul>
                 <li>
-                    <a href="#" class="nav-links">▶ Incidents</a>
+                    <a href="{{ path('app_incident') }}" class="nav-links">▶ Incidents</a>
                 </li>
                 <li>
-                    <a href="#" class="nav-links">▶ Suspensions</a>
+                    <a href="{{ path('app_suspension') }}" class="nav-links">▶ Suspensions</a>
                 </li>
                 <li>
                     <a href="#" class="nav-links">▶ Point Awards</a>

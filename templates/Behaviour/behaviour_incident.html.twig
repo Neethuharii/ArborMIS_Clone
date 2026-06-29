@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+{% block title %} Behaviour Incidents {% endblock %}
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/Behaviour/behaviour_incident.css') }}">
+
+<div id="page-loader" style="display: none;">
+    <div class="loader-box">
+        <img src="{{ asset('images/arborlogo.png') }}"  class="rotating-logo">
+            <p>Loading...</p>
+    </div>
+</div>
+
+<div class="page-wrapper">
+
+    {{ include('behaviour_base.html.twig') }}
+
+    <div class="main-content">
+        {% for message in app.flashes('success') %}
+            <div class="success-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% if errors is defined and errors is not empty %}
+            <div class="error-box">
+                {% for error in errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="incident-reporting">
+            <h3>Behavioural Incidents</h3>
+            <div class="add-incident-btn">
+                <button class="add-btn" id="openDrawer">
+                    Log Incident
+                </button>
+            </div>
+        </div>
+        <div class="incident-table-container">
+            <table class="incident-table">
+                <thead>
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Severity</th>
+                        <th>Behaviour</th>
+                        <th>Students Involved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                </tbody>
+            </table>
+        </div>
+        <div id="drawer" class="drawer">
+            <div class="drawer-header">
+                <h3>Log Incident</h3>
+            </div>
+
+            <form method="POST"
+                class="incident-form"
+                id="incidentForm"
+                action="{{ path('app_incident') }}"
+                onsubmit="showLoader()">
+
+                <div class="form-group">
+                    <label>Date of Incident</label>
+                    <input type="date" name="incident_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Time of Incident</label>
+                    <input type="time" name="incident_time" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Students Involved</label>
+                    <select name="students[]" multiple required>
+                        <option value="">Select Students</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Behaviour</label>
+                    <select name="behaviour_id" required>
+                        <option value="">Select Behaviour</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Assign to Staff Member</label>
+                    <select name="assigned_staff" required>
+                        <option value="">Select Staff</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Incident Summary</label>
+                    <textarea rows="4" name="incident_summary"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Staff Involved</label>
+                    <select name="staff_involved[]" multiple>
+                        <option value="">Select Staff Members</option>
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" name="create_separate" id="createSeparate">
+                    <label for="createSeparate">Create as separate incidents</label>
+                </div>
+
+                <div class="intervention-section">
+                    <div class="section-header">
+                        <h4>Physical Intervention</h4>
+                        <button type="button" class="mini-add-btn" id="addInterventionRow">
+                            + Add Detail
+                        </button>
+                    </div>
+
+                    <div class="intervention-table-container">
+                        <table class="intervention-table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Staff Member</th>
+                                    <th>Method Used</th>
+                                </tr>
+                            </thead>
+                            <tbody id="interventionBody">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" id="cancelDrawer">
+                        Cancel
+                    </button>
+
+                    <button type="submit" class="save-btn">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="overlay" class="overlay"></div>
+
+    </div>
+
+</div>
+
+<script src="{{ asset('js/incident-reporting.js') }}"></script>
+
+{% endblock %}

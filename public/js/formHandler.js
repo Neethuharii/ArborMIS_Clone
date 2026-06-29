@@ -20,7 +20,7 @@ function initialiseSaveForm(formId, container = null) {
         if (studentField) {
             url = `/student/${studentField.value}/update`;
         } else if (staffField) {
-            url = `/staff/${staffField.value}/update`;
+            url = `/Staff/${staffField.value}/update`;
         } else {
             alert('No ID found.');
             return;
