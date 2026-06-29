@@ -31,7 +31,6 @@ final class Version20260626165826 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE student_points DROP FOREIGN KEY FK_STUDENT_POINTS');
         $this->addSql('DROP TABLE student_points');
     }
 }
