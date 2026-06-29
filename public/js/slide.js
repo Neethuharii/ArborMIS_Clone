@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </tr>
         </table>
     `;
+
 }
             else if (type === 'abbreviation') {
                 dynamicContent.innerHTML = `
@@ -123,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+
             else {
                 dynamicContent.innerHTML = `
                     <p>No information available.</p>
@@ -142,44 +144,42 @@ document.addEventListener('DOMContentLoaded', () => {
         const type = item.dataset.type;
 
         let template = "";
+        let formId = "";
 
         switch (type) {
 
             case "identification":
                 slideTitle.textContent = "Identification Document";
                 template = "identificationTemplate";
+                formId = "identificationForm";
                 break;
 
-            case "nationality":
-                slideTitle.textContent = "Nationality";
-                template = "nationalityTemplate";
-                break;
-
-            case "former-name":
-                slideTitle.textContent = "Former Name";
-                template = "formerNameTemplate";
-                break;
-
-            case "school-card":
+            case "schoolIdCard":
                 slideTitle.textContent = "School ID Card";
-                template = "schoolCardTemplate";
+                template = "studentCardTemplate";
+                formId = "schoolCardForm";
                 break;
         }
 
-        dynamicContent.innerHTML =
-            document.getElementById(template).innerHTML;
 
-        initialiseSaveForm("identificationForm", container);
+const tpl = document.getElementById(template);
 
-        document.getElementById("identityModal").style.display = "none";
+
+     
+
+        if (!tpl) {
+            console.error("Template not found:", template);
+            return;
+        }
+
+        dynamicContent.innerHTML = tpl.innerHTML;
+
+        initialiseSaveForm(formId, container);
 
         container.classList.add("is-open");
-
     });
 
 });
-
-
     editBtn.addEventListener('click', () => {
 
         if (!currentRow) return;
