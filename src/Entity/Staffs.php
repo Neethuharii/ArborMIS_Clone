@@ -60,6 +60,18 @@ class Staffs
     private ?Religions $religion = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'nationality_id', referencedColumnName: 'nationality_id', nullable: true)]
+    private ?Nationality $nationality = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'country_id', nullable: true)]
+    private ?Countries $country = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'card_id', referencedColumnName: 'card_id', nullable: true)]
+    private ?Cards $idCard = null;
+
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'document_id', nullable: true)]
     private ?Documents $identityDocument = null;
 
@@ -241,6 +253,42 @@ class Staffs
     public function setReligion(?Religions $religion): static
     {
         $this->religion = $religion;
+
+        return $this;
+    }
+
+    public function getNationality(): ?Nationality
+    {
+        return $this->nationality;
+    }
+
+    public function setNationality(?Nationality $nationality): static
+    {
+        $this->nationality = $nationality;
+
+        return $this;
+    }
+
+    public function getCountry(): ?Countries
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?Countries $country): static
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
+    public function getIdCard(): ?Cards
+    {
+        return $this->idCard;
+    }
+
+    public function setIdCard(?Cards $idCard): static{
+
+        $this->idCard = $idCard;
 
         return $this;
     }
