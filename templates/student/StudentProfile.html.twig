@@ -624,12 +624,12 @@
 
     </div>
 </template>
-<template id="identificationTemplate">
-    {% include 'Slideover/identificationDocument.html.twig' %}
-</template>
 
-<template id="studentCardTemplate">
-    {% include 'Slideover/studentIdCard.html.twig' %}
+<template id="identificationTemplate">
+    {% include 'Slideover/identificationDocument.html.twig' with {
+            entityId: student.studentId,
+            entityType: 'student'
+    } %}
 </template>
 
 {% endblock %}

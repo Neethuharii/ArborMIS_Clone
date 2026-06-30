@@ -1,4 +1,3 @@
-
 <form id="identificationForm" class="identification-form" method="POST">
 
     <input type="hidden" name="entityId" value="{{ entityId }}">
@@ -36,7 +35,7 @@
 
         <div class="form-row">
             <label>Name on document *</label>
-            <input type="text" name="documentName" value="{{ staff.firstName ?? '' }} {{ staff.lastName ?? '' }}">
+            <input type="text" name="documentName" value="{{ entity.firstName ?? '' }} {{ entity.lastName ?? '' }}">
         </div>
 
         <div class="form-row">

@@ -13,6 +13,7 @@ use App\Repository\NationalityRepository;
 use App\Repository\ReligionsRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,6 +71,7 @@ final class StudentController extends AbstractController
         NationalityRepository $nationalityRepository,
         ReligionsRepository $religionsRepository,
         DocumentTypesRepository $documentTypesRepository
+        
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -80,25 +82,41 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
+            'entityId' => $student->getStudentId(),
+            'entityType' => 'student',
             'genders' => $gendersRepository->findAll(),
             'countries'=> $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
             'nationalities'=>$nationalityRepository->findAll(),
             'religions'=>$religionsRepository->findAll(),
-            'documentTypes'=>$documentTypesRepository->findAll()
+            'documentTypes'=>$documentTypesRepository->findAll(),
+            'entity' => $student,
         ]);
     }
 #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
-public function update(
-    Students $student,
+public function update(int $id,
     Request $request,
     StudentService $studentService
 ): JsonResponse {
 
-    $studentService->updateStudent($student, $request);
+   $student = $studentService->getStudentById($id);
 
-    return $this->json([
-        'success' => true
-    ]);
+        if (!$student) {
+            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+        }
+
+        try {
+            $studentService->updateStudent($student, $request);
+            return $this->json([
+                'success' => true
+            ]);
+        } catch (Exception $e) {
+
+            return $this->json([
+                'success' => false,
+                'message' => 'Unable to save changes.'
+            ], 400);
+        }
+    
 }
 }
