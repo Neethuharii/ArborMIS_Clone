@@ -102,18 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             else if (type === 'document') {
 
-    slideTitle.textContent = 'Document';
+                slideTitle.textContent = 'Document';
 
-    dynamicContent.innerHTML = `
-        <table class="details-table">
-            <tr>
-                <th>Document Type</th>
-                <td>${row.dataset.documentType || ''}</td>
-            </tr>
-        </table>
-    `;
-
-}
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Document Type</th>
+                            <td>${row.dataset.documentType || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else if (type === 'abbreviation') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">

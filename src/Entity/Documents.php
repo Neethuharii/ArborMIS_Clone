@@ -6,6 +6,7 @@ namespace App\Entity;
 
 use App\Repository\DocumentsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: DocumentsRepository::class)]
 class Documents
@@ -19,14 +20,14 @@ class Documents
     private ?string $documentNumber = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'document_type_id', referencedColumnName: 'documentTypeId',nullable: false)]
+    #[ORM\JoinColumn(name: 'document_type_id', referencedColumnName: 'document_type_id', nullable: false)]
     private ?DocumentTypes $documentType = null;
 
-    #[ORM\Column]
-    private ?\DateTimeInterface  $issueDate = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $issueDate = null;
 
-    #[ORM\Column]
-    private ?\DateTimeInterface  $expiryDate = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    private ?\DateTimeImmutable $expiryDate = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $modifiedAt = null;
@@ -63,24 +64,24 @@ class Documents
         return $this;
     }
 
-    public function getIssueDate(): ?\DateTimeInterface 
+    public function getIssueDate(): ?\DateTimeImmutable
     {
         return $this->issueDate;
     }
 
-    public function setIssueDate(\DateTimeInterface  $issueDate): static
+    public function setIssueDate(\DateTimeImmutable  $issueDate): static
     {
         $this->issueDate = $issueDate;
 
         return $this;
     }
 
-    public function getExpiryDate(): ?\DateTimeInterface 
+    public function getExpiryDate(): ?\DateTimeImmutable
     {
         return $this->expiryDate;
     }
 
-    public function setExpiryDate(\DateTimeInterface  $expiryDate): static
+    public function setExpiryDate(\DateTimeImmutable  $expiryDate): static
     {
         $this->expiryDate = $expiryDate;
 

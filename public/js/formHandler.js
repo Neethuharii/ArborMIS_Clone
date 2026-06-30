@@ -12,22 +12,23 @@ function initialiseSaveForm(formId, container = null) {
 
         const formData = new FormData(form);
 
-        const studentField = form.querySelector('[name="studentId"]');
-        const staffField = form.querySelector('[name="staffId"]');
+        let url = form.getAttribute('action');
 
-        let url = '';
+       const entityId = form.querySelector('[name="entityId"]')?.value;
+       const entityType = form.querySelector('[name="entityType"]')?.value;
 
-        if (studentField) {
-            url = `/student/${studentField.value}/update`;
-        } else if (staffField) {
-            url = `/Staff/${staffField.value}/update`;
-        } else {
-            alert('No ID found.');
-            return;
+       if (!url || url === '') {
+            if (entityType === 'student') {
+                url = `/student/${entityId}/update`;
+            } else if (entityType === 'staff') {
+                url = `/Staff/${entityId}/update`;
+            } else {
+                alert('Invalid entity type.');
+                return;
+            }
         }
 
         try {
-
             const response = await fetch(url, {
                 method: 'POST',
                 body: formData
@@ -48,10 +49,8 @@ function initialiseSaveForm(formId, container = null) {
             }
 
         } catch (error) {
-
             console.error(error);
             alert('Unable to save changes.');
-
         }
 
     });
