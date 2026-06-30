@@ -12,7 +12,7 @@ final class DocumentTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: 'document_type_id')]
     private ?int $documentTypeId = null;
 
     #[ORM\Column(length: 255)]

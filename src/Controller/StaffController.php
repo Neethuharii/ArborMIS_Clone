@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Staffs;
+use App\Repository\CountriesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\DocumentTypesRepository;
 use App\Service\StaffService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,25 +46,43 @@ class StaffController extends AbstractController
     }
 
     #[Route('/Staff/profile/{id}', name: 'staffProfile')]
-    public function profile(int $id, StaffService $staffService,GendersRepository $gendersRepository,EthnicitiesRepository $ethnicitiesRepository,ReligionsRepository $religionsRepository): Response
+    public function profile(int $id, StaffService $staffService, GendersRepository $gendersRepository, EthnicitiesRepository $ethnicitiesRepository, ReligionsRepository $religionsRepository, DocumentTypesRepository $documentTypesRepository, CountriesRepository $countriesRepository): Response
     {
         $staff = $staffService->getStaffById($id);
         if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
         }
 
-        return $this->render('Staff/profile.html.twig', ['staff' => $staff,
-        'all_genders' => $gendersRepository->findAll(),
-        'all_ethnicities' => $ethnicitiesRepository->findAll(),
-        'all_religions' => $religionsRepository->findAll()
+        return $this->render('Staff/profile.html.twig', [
+            'staff' => $staff,
+            'all_genders' => $gendersRepository->findAll(),
+            'all_ethnicities' => $ethnicitiesRepository->findAll(),
+            'all_religions' => $religionsRepository->findAll(),
+            'documentTypes' => $documentTypesRepository->findAll(),
+            'countries' => $countriesRepository->findAll()
         ]);
     }
 
     #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
-    public function update(Staffs $staff, Request $request, StaffService $staffService ): JsonResponse {
+    public function update(int $id, Request $request, StaffService $staffService): JsonResponse
+    {
+        $staff = $staffService->getStaffById($id);
 
-        $staffService->updateStaff($staff, $request);
+        if (!$staff) {
+            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+        }
 
-        return $this->json([ 'success' => true]);
+        try {
+            $staffService->updateStaff($staff, $request);
+            return $this->json([
+                'success' => true
+            ]);
+        } catch (\Exception $e) {
+
+            return $this->json([
+                'success' => false,
+                'message' => 'Unable to save changes.'
+            ], 400);
+        }
     }
 }
