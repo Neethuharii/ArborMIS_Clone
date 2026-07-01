@@ -8,7 +8,7 @@ use App\Repository\DocumentTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DocumentTypesRepository::class)]
-final class DocumentTypes
+class DocumentTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
