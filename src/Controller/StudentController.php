@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Students;
+use App\Repository\CardsRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
@@ -13,12 +14,12 @@ use App\Repository\NationalityRepository;
 use App\Repository\ReligionsRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 final class StudentController extends AbstractController
 {
@@ -70,8 +71,9 @@ final class StudentController extends AbstractController
         EthnicitiesRepository $ethnicitiesRepository,
         NationalityRepository $nationalityRepository,
         ReligionsRepository $religionsRepository,
-        DocumentTypesRepository $documentTypesRepository
-        
+        DocumentTypesRepository $documentTypesRepository,
+        CardsRepository $cardsRepository
+
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -85,38 +87,41 @@ final class StudentController extends AbstractController
             'entityId' => $student->getStudentId(),
             'entityType' => 'student',
             'genders' => $gendersRepository->findAll(),
-            'countries'=> $countriesRepository->findAll(),
+            'countries' => $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
-            'nationalities'=>$nationalityRepository->findAll(),
-            'religions'=>$religionsRepository->findAll(),
-            'documentTypes'=>$documentTypesRepository->findAll(),
+            'nationalities' => $nationalityRepository->findAll(),
+            'religions' => $religionsRepository->findAll(),
+            'documentTypes' => $documentTypesRepository->findAll(),
             'entity' => $student,
+            'card' => $cardsRepository->findAll()
         ]);
     }
-#[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
-public function update(int $id,
-    Request $request,
-    StudentService $studentService
-): JsonResponse {
 
-   $student = $studentService->getStudentById($id);
+    #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
+    public function update(
+        int $id,
+        Request $request,
+        StudentService $studentService
+    ): JsonResponse {
+
+        $student = $studentService->getStudentById($id);
 
         if (!$student) {
-            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+            return $this->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
         }
-
         try {
             $studentService->updateStudent($student, $request);
             return $this->json([
                 'success' => true
             ]);
-        } catch (Exception $e) {
-
+        } catch (Throwable $e) {
             return $this->json([
                 'success' => false,
-                'message' => 'Unable to save changes.'
+                'message' => $e->getMessage()
             ], 400);
         }
-    
-}
+    }
 }

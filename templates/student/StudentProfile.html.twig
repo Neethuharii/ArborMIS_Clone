@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Teacher Profile{% endblock %}
-
 {% block stylesheets %}
 {{parent()}}
 <link rel="stylesheet" href="{{asset('css/student/StudentProfile.css')}}">
@@ -10,15 +9,12 @@
 {% block body %}
 {{ include('_modalbase.html.twig') }}
 <div class="profile-container">
-
     <div class="profile-header">
         <div class="profile-image">
             <img src="{{asset('images/defaultProfile.png')}}">
         </div>
-
         <div class="profile-info">
             <h1>{{ student.firstName }} {{ student.lastName }}</h1>
-
             <table class="summary-table">
                  <tr>
                     <td class="label">Date of Birth</td>
@@ -35,11 +31,10 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Identity</h2>
-             <div id="identityAdd" style="cursor: pointer;">
+            <div id="identityAdd" style="cursor: pointer;">
                     <p>✚ Add</p>
-                </div>
+            </div>
         </div>
-
         <table class="details-table">
             <tbody>
             {#<tr>
@@ -47,7 +42,6 @@
                 <td>{{ student.firstName }} {{ student.lastName }}</td>
                 <td class="arrow">▶</td>
             </tr>#}
-
             <tr class="clickable-row" 
                 data-title="Name" 
                 data-type="identity"
@@ -58,7 +52,6 @@
                 <td>{{ student.firstName }} {{ student.lastName }}</td>
                 <td class="arrow">▶</td>
             </tr>
-
             <tr class="clickable-row" 
                 data-title="Gender" 
                 data-type="sex"
@@ -67,7 +60,6 @@
                 <td>{{ student.gender.genderType }}</td>
                 <td class="arrow">▶</td>
             </tr>
-
             <tr class="clickable-row" 
                 data-title="Date of birth" 
                 data-type="dob"
@@ -102,12 +94,20 @@
                 <td class="arrow">▶</td>
             </tr>
 
-             <tr class="clickable-row" 
+            <tr class="clickable-row" 
                 data-title="Religion" 
                 data-type="religion"
                 data-religion-name="{{ student.religion?.religionName}}">
                 <th>Religion</th>
                <td>{{ student.religion ? student.religion.religionName : 'Not recorded' }}</td>
+                <td class="arrow">▶</td>
+            </tr>
+            <tr class="clickable-row" 
+                data-title="Document" 
+                data-type="documentId"
+               data-card="{{ student.document?.documentType?.documentTypeName ?? '' }}">
+                <th>Document</th>
+                <td>{{ student.document?.documentType?.documentTypeName ?? 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
             <tr class="clickable-row" 
@@ -121,9 +121,9 @@
             <tr class="clickable-row" 
                 data-title="School Card Id" 
                 data-type="cardId"
-                data-dob="{{ student.card}}">
+                data-card="{{ student.card?.cardNumber ?? ''}}">
                 <th>School Id Card</th>
-                <td>{{ student.card ?: 'Not recorded' }}</td>
+                <td>{{ student.card?.cardNumber ?: 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
             <tr class="clickable-row" 
@@ -141,11 +141,10 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Student Contact Details</h2>
-             <div id="contactAdd" style="cursor: pointer;">
-                            <p>✚ Add</p>
-                    </div>
+            <div id="contactAdd" style="cursor: pointer;">
+                <p>✚ Add</p>
+            </div>
         </div>
-
         <table class="details-table">
             <tbody>
             <tr>
@@ -153,7 +152,6 @@
                 <td>{{ student.address.emailAddress }}</td>
                 <td class="arrow">▶</td>
             </tr>
-
             <tr>
                 <th>Student Home Number</th>
                 <td>{{ student.address.phoneNumber }}</td>
@@ -162,15 +160,13 @@
             </tbody>
         </table>
     </div>
-
      <div class="section-card">
         <div class="section-header">
             <h2>Family, Guardians and Contacts</h2>
-             <div id="contactAddGuardian" style="cursor: pointer;">
-                        <p>✚ Add</p>
-                    </div>
+            <div id="contactAddGuardian" style="cursor: pointer;">
+                <p>✚ Add</p>
+            </div>
         </div>
-
         <table class="details-table">
             <tbody>
             <tr>
@@ -178,7 +174,6 @@
                 <td>{{ student.address.emailAddress }}</td>
                 <td class="arrow">▶</td>
             </tr>
-
             <tr>
                 <th>Student Home Number</th>
                 <td>{{ student.address.phoneNumber }}</td>
@@ -187,96 +182,71 @@
             </tbody>
         </table>
     </div>
-
-   <div id="slideoverContainer" class="slideover-container">
-    <div id="slideoverOverlay" class="slideover-overlay"></div>
-
-    <div class="slideover-drawer">
-
-        <div class="slideover-header">
-            <button id="closeBtn">← Back</button>
-
-            <h3 id="slideTitle">Details</h3>
-
-            <button id="nextBtn">Edit</button>
+    <div id="slideoverContainer" class="slideover-container">
+        <div id="slideoverOverlay" class="slideover-overlay"></div>
+            <div class="slideover-drawer">
+                <div class="slideover-header">
+                    <button id="closeBtn">← Back</button>
+                    <h3 id="slideTitle">Details</h3>
+                    <button id="nextBtn">Edit</button>
+                </div>
+                <hr>
+                <div class="slideover-body">
+                    <div id="slideDynamicContent"></div>
+                </div>
+            </div>
         </div>
-
-        <hr>
-
-        <div class="slideover-body">
-            <div id="slideDynamicContent"></div>
-        </div>
-
     </div>
-</div>
-
-{# Hidden template used when Edit is clicked #}
-<template id="nameEditTemplate">
-
-    <div class="edit-form-wrapper">
-
-        <h2>Name</h2>
-
-        <form id="editIdentityForm">
-
+    <template id="nameEditTemplate">
+        <div class="edit-form-wrapper">
+            <h2>Name</h2>
+            <form id="editIdentityForm">
             <input
                 type="hidden"
                 name="studentId"
                 value="{{ student.studentId }}"
             >
-
             <div class="form-row">
                 <label>Legal first name</label>
-
                 <input
                     type="text"
                     name="firstName"
                     value="{{ student.firstName }}"
                 >
             </div>
-
             <div class="form-row">
                 <label>Preferred first name</label>
-
                 <input
                     type="text"
                     name="preferredFirstName"
                     value="{{ student.firstName }}"
                 >
             </div>
-
             <div class="form-row">
                 <label>Legal middle names</label>
-
                 <input
                     type="text"
                     name="middleName"
                     value="{{ student.middleName }}"
                 >
             </div>
-
             <div class="form-row">
                 <label>Legal last name</label>
-
                 <input
                     type="text"
                     name="lastName"
                     value="{{ student.lastName }}"
                 >
             </div>
-
             <div class="form-row">
                 <label>Preferred last name</label>
-
                 <input
                     type="text"
                     name="preferredLastName"
                     value="{{ student.lastName }}"
                 >
             </div>
-
             <div class="button-group">
-
                 <button
                     type="button"
                     class="cancel-btn"
@@ -284,94 +254,66 @@
                 >
                     Cancel
                 </button>
-
                 <button
                     type="submit"
                     class="save-btn"
                 >
                     Save Changes
                 </button>
-
             </div>
-
-        </form>
-
-    </div>
-
-</template>
-<template id="genderEditTemplate">
-
-    <div class="edit-form-wrapper">
-
+            </form>
+        </div>
+    </template>
+    <template id="genderEditTemplate">
+        <div class="edit-form-wrapper">
         <form id="editGenderForm">
-
             <input type="hidden"
                    name="studentId"
                    value="{{ student.studentId }}">
-
             <div class="gender-row">
-
-    <label for="gender">
-        Gender <span class="required">*</span>
-    </label>
-
-    <select id="gender"
+        <label for="gender">
+            Gender <span class="required">*</span>
+        </label>
+        <select id="gender"
             name="gender"
             class="gender-select">
-
-        <option value="">Select Sex</option>
-
-        {% for gender in genders %}
-            <option value="{{ gender.genderId }}"
-                {% if student.gender and student.gender.genderId == gender.genderId %}
-                    selected
-                {% endif %}
-            >
+            <option value="">Select Sex</option>
+                {% for gender in genders %}
+                    <option value="{{ gender.genderId }}"
+                    {% if student.gender and student.gender.genderId == gender.genderId %}
+                        selected
+                    {% endif %}
+                    >
                 {{ gender.genderType }}
             </option>
-        {% endfor %}
-
-    </select>
-
-</div>
-
+                {% endfor %}
+        </select>
+        </div>
             <div class="button-group">
-
                 <button type="button"
                         class="cancel-btn"
                         id="cancelEdit">
                     Cancel
                 </button>
-
                 <button type="submit"
                         class="save-btn">
                     Save Changes
                 </button>
-
             </div>
-
-        </form>
-
-    </div>
-</template>
-
-<template id="dobEditTemplate">
-
-    <div class="edit-form-wrapper">
-
+            </form>
+        </div>
+    </template>
+    <template id="dobEditTemplate">
+        <div class="edit-form-wrapper">
         <h2>Date of Birth</h2>
-
         <form id="editDobForm">
-
             <input
                 type="hidden"
                 name="studentId"
                 value="{{ student.studentId }}"
             >
-
             <div class="form-row">
                 <label>DOB</label>
-
                 <input
                     type="Date"
                     name="dob"
@@ -379,7 +321,6 @@
                 >
             </div>
             <div class="button-group">
-
                 <button
                     type="button"
                     class="cancel-btn"
@@ -387,251 +328,184 @@
                 >
                     Cancel
                 </button>
-
                 <button
                     type="submit"
                     class="save-btn"
                 >
                     Save Changes
                 </button>
-
             </div>
-
         </form>
-
-    </div>
-</template>
-
-<template id="countryEditTemplate">
-
-    <div class="edit-form-wrapper">
-
+        </div>
+    </template>
+    <template id="countryEditTemplate">
+        <div class="edit-form-wrapper">
         <form id="editCountryForm">
-
             <input type="hidden"
                    name="studentId"
                    value="{{ student.studentId }}">
-
             <div class="country-row">
-
-    <label for="country">
-        Country <span class="required">*</span>
-    </label>
-
-    <select id="country"
-            name="country"
-            class="country-select">
-
-        <option value="">Select Country</option>
-
-        {% for country in countries %}
-            <option value="{{ country.countryId }}"
-                {% if student.country and student.country.countryId == country.countryId %}
-                    selected
-                {% endif %}
-            >
-                {{ country.countryName }}
-            </option>
-        {% endfor %}
-
-    </select>
-
-</div>
-
+                <label for="country">
+                    Country <span class="required">*</span>
+                </label>
+                <select id="country"
+                    name="country"
+                    class="country-select">
+                    <option value="">Select Country</option>
+                    {% for country in countries %}
+                        <option value="{{ country.countryId }}"
+                        {% if student.country and student.country.countryId == country.countryId %}
+                            selected
+                        {% endif %}
+                        >
+                    {{ country.countryName }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="button-group">
-
                 <button type="button"
                         class="cancel-btn"
                         id="cancelEdit">
                     Cancel
                 </button>
-
                 <button type="submit"
                         class="save-btn">
                     Save Changes
                 </button>
-
             </div>
-
         </form>
-
     </div>
-</template>
-
-<template id="ethnicityEditTemplate">
-
-    <div class="edit-form-wrapper">
-
+    </template>
+    <template id="ethnicityEditTemplate">
+        <div class="edit-form-wrapper">
         <form id="editEthnicityForm">
-
             <input type="hidden"
                    name="studentId"
                    value="{{ student.studentId }}">
-
             <div class="ethnicity-row">
-
-    <label for="ethnicity">
-       Ethnicity <span class="required">*</span>
-    </label>
-
-    <select id="ethnicity"
+        <label for="ethnicity">
+            Ethnicity <span class="required">*</span>
+        </label>
+        <select id="ethnicity"
             name="ethnicity"
             class="ethnicity-select">
-
-        <option value="">Select Ethnicity</option>
-
-        {% for ethnicity in ethnicities %}
-            <option value="{{ ethnicity.ethnicityId }}"
-                {% if student.ethnicity and student.ethnicity.ethnicityId == ethnicity.ethnicityId %}
-                    selected
-                {% endif %}
-            >
-                {{ ethnicity.ethnicityName }}
-            </option>
-        {% endfor %}
-
-    </select>
-
-</div>
-
+                <option value="">Select Ethnicity</option>
+                    {% for ethnicity in ethnicities %}
+                    <option value="{{ ethnicity.ethnicityId }}"
+                        {% if student.ethnicity and student.ethnicity.ethnicityId == ethnicity.ethnicityId %}
+                        selected
+                        {% endif %}
+                    >
+                    {{ ethnicity.ethnicityName }}
+                </option>
+                {% endfor %}
+        </select>
+        </div>
             <div class="button-group">
-
                 <button type="button"
                         class="cancel-btn"
                         id="cancelEdit">
                     Cancel
                 </button>
-
                 <button type="submit"
                         class="save-btn">
                     Save Changes
                 </button>
-
             </div>
-
         </form>
-
     </div>
-</template>
-
-<template id="nationalityEditTemplate">
-
-    <div class="edit-form-wrapper">
-
+    </template>
+    <template id="nationalityEditTemplate">
+        <div class="edit-form-wrapper">
         <form id="editNationalityForm">
-
             <input type="hidden"
                    name="studentId"
                    value="{{ student.studentId }}">
-
             <div class="nationality-row">
-
-    <label for="nationality">
-       Nationality <span class="required">*</span>
-    </label>
-
-    <select id="nationality"
+        <label for="nationality">
+            Nationality <span class="required">*</span>
+        </label>
+        <select id="nationality"
             name="nationality"
             class="nationality-select">
-
-        <option value="">Select Nationality</option>
-
-        {% for nationality in nationalities %}
-            <option value="{{ nationality.nationalityId }}"
-                {% if student.nationality and student.nationality.nationalityId == nationality.nationalityId %}
+            <option value="">Select Nationality</option>
+                {% for nationality in nationalities %}
+                <option value="{{ nationality.nationalityId }}"
+                    {% if student.nationality and student.nationality.nationalityId == nationality.nationalityId %}
                     selected
                 {% endif %}
             >
                 {{ nationality.nationalityStatus }}
             </option>
-        {% endfor %}
-
-    </select>
-
-</div>
-
-            <div class="button-group">
-
-                <button type="button"
-                        class="cancel-btn"
-                        id="cancelEdit">
+            {% endfor %}
+        </select>
+        </div>
+        <div class="button-group">
+            <button type="button"
+                class="cancel-btn"
+                id="cancelEdit">
                     Cancel
-                </button>
-
-                <button type="submit"
-                        class="save-btn">
-                    Save Changes
-                </button>
-
+            </button>
+            <button type="submit"
+                class="save-btn">
+                   Save Changes
+            </button>
             </div>
-
         </form>
-
-    </div>
-</template>
-<template id="religionEditTemplate">
-
-    <div class="edit-form-wrapper">
-
-        <form id="editReligionForm">
-
-            <input type="hidden"
+        </div>
+    </template>
+    <template id="religionEditTemplate">
+        <div class="edit-form-wrapper">
+            <form id="editReligionForm">
+               <input type="hidden"
                    name="studentId"
                    value="{{ student.studentId }}">
-
             <div class="religion-row">
-
-    <label for="religion">
-       Religion <span class="required">*</span>
-    </label>
-
-    <select id="religion"
+            <label for="religion">
+                Religion <span class="required">*</span>
+            </label>
+        <select id="religion"
             name="religion"
             class="religion-select">
-
-        <option value="">Select Religion</option>
-
-        {% for religion in religions %}
-            <option value="{{ religion.religionId }}"
-                {% if student.religion and student.religion.religionId == religion.religionId %}
-                    selected
-                {% endif %}
-            >
+            <option value="">Select Religion</option>
+                {% for religion in religions %}
+                <option value="{{ religion.religionId }}"
+                    {% if student.religion and student.religion.religionId == religion.religionId %}
+                        selected
+                    {% endif %}
+                >
                 {{ religion.religionName }}
-            </option>
-        {% endfor %}
-
-    </select>
-
-</div>
-
-            <div class="button-group">
-
-                <button type="button"
-                        class="cancel-btn"
-                        id="cancelEdit">
-                    Cancel
-                </button>
-
-                <button type="submit"
-                        class="save-btn">
-                    Save Changes
-                </button>
-
-            </div>
-
+                </option>
+               {% endfor %}
+         </select>
+        </div>
+        <div class="button-group">
+            <button type="button"
+                class="cancel-btn"
+                id="cancelEdit">
+                Cancel
+            </button>
+            <button type="submit"
+                class="save-btn">
+                Save Changes
+             </button>
+        </div>
         </form>
-
     </div>
-</template>
-
-<template id="identificationTemplate">
-    {% include 'Slideover/identificationDocument.html.twig' with {
+    </template>
+    <template id="identificationTemplate">
+        {% include 'Slideover/identificationDocument.html.twig' with {
             entityId: student.studentId,
             entityType: 'student'
-    } %}
-</template>
-
+        } %}
+    </template>
+    <template id="studentCardTemplate">
+        {% include 'Slideover/studentIdCard.html.twig' with {
+            entityId: student.studentId,
+            entityType: 'student'
+        } %}
+    </template>
 {% endblock %}
 
 {% block javascripts %}

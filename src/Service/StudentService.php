@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Address;
+use App\Entity\Cards;
 use App\Entity\Documents;
 use App\Entity\Students;
 use App\Repository\CountriesRepository;
@@ -15,6 +16,7 @@ use App\Repository\NationalityRepository;
 use App\Repository\ReligionsRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 final class StudentService
@@ -90,9 +92,7 @@ final class StudentService
         $address->setPhoneNumber($phoneNumber);
         $address->setCreatedAt(new \DateTimeImmutable());
         $address->setModifiedAt(new \DateTimeImmutable());
-
         $this->entityManager->persist($address);
-
         $student = new Students();
         $student->setFirstName($firstName);
         $student->setMiddleName($middleName);
@@ -190,37 +190,52 @@ final class StudentService
 
         $dob = $request->request->get('dob');
         if ($dob !== null) {
-            $student->setDob(new \DateTimeImmutable($dob));
+            $student->setDob(new DateTimeImmutable($dob));
         }
         $documentTypeId = $request->request->get('documentType');
         $documentNumber = $request->request->get('documentNumber');
-        $issueDateStr = $request->request->get('issueDate');
-        $expiryDateStr = $request->request->get('expiryDate');
-
-
         if ($documentTypeId && $documentNumber) {
+            $document = $student->getDocument();
+            if (!$document) {
+                $document = new Documents();
+            }
             $documentType = $this->documentTypesRepository->find($documentTypeId);
             if (!$documentType) {
-                throw new \InvalidArgumentException("Invalid document type selected.");
+                throw new Exception('Invalid document type.');
             }
-
-            $document = new Documents();
             $document->setDocumentNumber($documentNumber);
             $document->setDocumentType($documentType);
-            $issueDate = new \DateTimeImmutable($issueDateStr);
-            $document->setIssueDate($issueDate);
-
-            if (!empty($issueDateStr)) {
-                $document->setIssueDate(new DateTimeImmutable($issueDateStr));
+            $issueDate = $request->request->get('issueDate');
+            if ($issueDate) {
+                $document->setIssueDate(new DateTimeImmutable($issueDate));
             }
-            if (!empty($expiryDateStr)) {
-                $document->setExpiryDate(new DateTimeImmutable($expiryDateStr));
+            $expiryDate = $request->request->get('expiryDate');
+            if ($expiryDate) {
+                $document->setExpiryDate(new DateTimeImmutable($expiryDate));
             }
-
             $document->setModifiedAt(new DateTimeImmutable());
             $this->entityManager->persist($document);
-
             $student->setDocument($document);
+        }
+        $cardNumber = $request->request->get('cardNumber');
+
+        if ($cardNumber) {
+            $card = $student->getCard();
+            if (!$card) {
+                $card = new Cards();
+            }
+            $card->setCardNumber($cardNumber);
+            $card->setStatus($request->request->getBoolean('status'));
+            $issuedDate = $request->request->get('issuedDate');
+            $issuedTime = $request->request->get('issuedTime');
+            if ($issuedDate && $issuedTime) {
+                $card->setIssuedAt(
+                    new DateTimeImmutable($issuedDate . ' ' . $issuedTime)
+                );
+            }
+            $card->setModifiedAt(new DateTimeImmutable());
+            $this->entityManager->persist($card);
+            $student->setCard($card);
         }
         $student->setModifiedAt(new DateTimeImmutable());
         $this->entityManager->flush();

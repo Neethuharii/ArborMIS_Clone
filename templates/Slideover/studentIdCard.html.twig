@@ -1,105 +1,72 @@
-
-
-{% block stylesheets %}
-
-<link rel="stylesheet" href="{{asset('css/Slideover/studentIdCard.css')}}">
-{% endblock %}
-
 {% block body %}
-
 <div class="card-form-container">
-
     <h1 class="page-title">Issue New School ID Card</h1>
-
     <form
         method="POST"
-        action=""
         id="schoolCardForm"
+        class="schoolCard-form"
     >
-
-        <input type="hidden" name="studentId" value="{{ student.studentId }}">
-
+    <input type="hidden" name="entityId" value="{{ entityId }}">
+    <input type="hidden" name="entityType" value="{{ entityType }}">
         <div class="form-box">
-
             <div class="form-row">
                 <label>Student</label>
-
                 <div class="field-text">
                     {{ student.firstName }} {{ student.lastName }}
                 </div>
             </div>
-
             <div class="form-row">
                 <label>
                     Card number<span class="required">*</span>
                 </label>
-
                 <input
                     type="text"
                     name="cardNumber"
                     required
                 >
             </div>
-
             <div class="form-row checkbox-row">
-
                 <label>Active</label>
-
                 <input
                     type="checkbox"
                     name="status"
                     value="1"
                     checked
                 >
-
             </div>
-
             <div class="form-row">
-
                 <label>
                     Issued date/time
                 </label>
-
                 <div class="datetime-group">
-
                     <input
                         type="time"
                         name="issuedTime"
                         value="{{ 'now'|date('H:i') }}"
                     >
-
                     <input
                         type="date"
                         name="issuedDate"
                         value="{{ 'now'|date('Y-m-d') }}"
                     >
-
                 </div>
-
             </div>
-
         </div>
-
         <div class="button-group">
-
             <button
                 type="button"
                 class="cancel-btn"
             >
                 Cancel
             </button>
-
             <button
                 type="submit"
                 class="save-btn"
             >
                 Save Changes
             </button>
-
         </div>
-
     </form>
-
 </div>
 
 {% endblock %}
