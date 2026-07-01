@@ -1,0 +1,79 @@
+.page-container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.card {
+    background: #f4f4f4;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.card-header {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ccc;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.form-row label {
+    width: 180px;
+    font-weight: 500;
+}
+
+.form-row input,
+.form-row select {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.readonly-field {
+    padding: 6px;
+    background: #eee;
+    flex: 1;
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 20px;
+    margin-left: 180px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-primary {
+    background: #5cb85c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+}
+
+.btn-cancel {
+    background: #ccc;
+    padding: 10px 20px;
+    border: none;
+}

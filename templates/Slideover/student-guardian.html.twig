@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Guardian{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Slideover/student-guardian.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="page-container">
+
+    <h1 class="page-title">Add New Guardian</h1>
+
+    <form method="POST" action="{{ path('guardian_create') }}" class="guardian-form">
+
+        <div class="card">
+
+            <div class="card-header">
+                <h2>Guardian Details</h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-row">
+                    <label>Linked to Student</label>
+                    <div class="readonly-field">
+                        {{ student.firstName }} {{ student.lastName }}
+                    </div>
+                    <input type="hidden" name="studentId" value="{{ student.studentId }}">
+                </div>
+
+                <div class="form-row">
+                    <label>Title</label>
+                    <select name="title">
+                        <option value="">Select title</option>
+                        <option>Mr</option>
+                        <option>Mrs</option>
+                        <option>Miss</option>
+                        <option>Dr</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>First name</label>
+                    <input type="text" name="firstName">
+                </div>
+
+                <div class="form-row">
+                    <label>Last name</label>
+                    <input type="text" name="lastName" value="{{ student.lastName }}">
+                </div>
+
+                <div class="form-row">
+                    <label>Sex</label>
+                    <select name="sex">
+                        <option value="">Select sex</option>
+                        {% for gender in genders %}
+                            <option value="{{ gender.genderId }}">
+                                {{ gender.genderType }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Relationship *</label>
+                    <select name="relationship" required>
+                        <option value="">Select relationship</option>
+                        {% for relation in relationships %}
+                            <option value="{{ relation.id }}">
+                                {{ relation.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-row checkbox-group">
+                    <label><input type="checkbox" name="legalGuardian"> Legal guardian</label>
+                    <label><input type="checkbox" name="primaryGuardian"> Primary guardian</label>
+                    <label><input type="checkbox" name="authorisedToCollect"> Authorised to collect</label>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+
+            <div class="card-header">
+                <h2>Guardian Contact Details</h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-row">
+                    <label>Emergency contact</label>
+                    <select name="emergencyContact">
+                        <option value="">Select priority</option>
+                        <option value="1">1st priority emergency contact</option>
+                        <option value="2">2nd priority emergency contact</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Home number</label>
+                    <input type="text" name="homeNumber">
+                </div>
+
+                <div class="form-row">
+                    <label>Mobile number</label>
+                    <input type="text" name="mobileNumber">
+                </div>
+
+                <div class="form-row">
+                    <label>Work number</label>
+                    <input type="text" name="workNumber">
+                </div>
+
+                <div class="form-row">
+                    <label>Email address</label>
+                    <input type="email" name="email">
+                </div>
+
+                <div class="form-row">
+                    <label>Postal Address *</label>
+                    <select name="postalAddress" required>
+                        <option value="">Select address</option>
+                        {% for address in addresses %}
+                            <option value="{{ address.id }}">
+                                {{ address.fullAddress }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn-cancel">Cancel</button>
+            <button type="submit" class="btn-primary">Add Guardian</button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
