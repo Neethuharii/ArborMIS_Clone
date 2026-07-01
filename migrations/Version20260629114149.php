@@ -16,7 +16,7 @@ final class Version20260629114149 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE cards MODIFY status TINYINT(1) NOT NULL DEFAULT 1;');
+        $this->addSql('ALTER TABLE cards MODIFY status TINYINT(1) NOT NULL DEFAULT 1');
     }
 
     public function down(Schema $schema): void

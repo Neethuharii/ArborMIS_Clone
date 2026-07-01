@@ -1,17 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const container = document.getElementById('slideoverContainer');
-
     if (!container) return;
-
     const slideTitle = document.getElementById('slideTitle');
     const dynamicContent = document.getElementById('slideDynamicContent');
     const editBtn = document.getElementById('nextBtn');
-
     let currentRow = null;
-
     document.querySelectorAll('.clickable-row').forEach(row => {
-
         row.addEventListener('click', () => {
             currentRow = row;
             const type = row.dataset.type;
@@ -123,36 +117,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-
             else {
                 dynamicContent.innerHTML = `
                     <p>No information available.</p>
                 `;
             }
-
             container.classList.add('is-open');
         });
-
     });
- 
 
   document.querySelectorAll(".open-slideover").forEach(item => {
-
     item.addEventListener("click", () => {
-
         const type = item.dataset.type;
-
         let template = "";
         let formId = "";
 
         switch (type) {
-
             case "identification":
                 slideTitle.textContent = "Identification Document";
                 template = "identificationTemplate";
                 formId = "identificationForm";
                 break;
-
             case "schoolIdCard":
                 slideTitle.textContent = "School ID Card";
                 template = "studentCardTemplate";
@@ -160,36 +145,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
         }
 
-
-const tpl = document.getElementById(template);
-
-
-     
-
+    const tpl = document.getElementById(template);
         if (!tpl) {
             console.error("Template not found:", template);
             return;
         }
-
         dynamicContent.innerHTML = tpl.innerHTML;
-
         initialiseSaveForm(formId, container);
-
         container.classList.add("is-open");
     });
-
 });
     editBtn.addEventListener('click', () => {
-
         if (!currentRow) return;
-
         const type = currentRow.dataset.type;
-
         let templateId = '';
         let formId = '';
 
         switch (type) {
-
             case 'identity':
                 slideTitle.textContent = 'Name';
                 templateId = 'nameEditTemplate';
@@ -244,15 +216,11 @@ const tpl = document.getElementById(template);
 
         dynamicContent.innerHTML =
             document.getElementById(templateId).innerHTML;
-
         initialiseSaveForm(formId, container);
-
     });
-
     document.getElementById('closeBtn')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
-
     document.getElementById('slideoverOverlay')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
