@@ -128,6 +128,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            else if (type === 'email') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Email</th>
+                            <td>${row.dataset.email || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+            else if (type === 'phoneNumber') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Staff Home Number</th>
+                            <td>${row.dataset.phoneNumber || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+            else if (type === 'currentRole') {
+                const startDate = row.dataset.startDate;
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Current Role</th>
+                            <td>${row.dataset.currentRole || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date</th>
+                            <td>${row.dataset.startDate || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else {
                 dynamicContent.innerHTML = `
                     <p>No information available.</p>
