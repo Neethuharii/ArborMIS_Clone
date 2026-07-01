@@ -7,12 +7,15 @@ namespace App\Service;
 use App\Entity\Address;
 use App\Entity\Cards;
 use App\Entity\Documents;
+use App\Entity\Guardian;
+use App\Entity\StudentGuardianRelation;
 use App\Entity\Students;
 use App\Repository\CountriesRepository;
 use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
+use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +31,8 @@ final class StudentService
         private readonly EthnicitiesRepository $ethnicitiesRepository,
         private readonly NationalityRepository $nationalityRepository,
         private readonly ReligionsRepository $religionsRepository,
-        private DocumentTypesRepository $documentTypesRepository
+        private readonly DocumentTypesRepository $documentTypesRepository,
+        private readonly RelationshipTypesRepository $relationshipTypesRepository
     ) {}
 
     public function createStudent(Request $request): array
@@ -240,4 +244,46 @@ final class StudentService
         $student->setModifiedAt(new DateTimeImmutable());
         $this->entityManager->flush();
     }
+
+      public function createGuardianForStudent(array $data, Students $student): Guardian
+    {
+        $guardian = new Guardian();
+
+        $guardian->setTitle($data['title'] ?? null);
+        $guardian->setFirstName($data['firstName']);
+        $guardian->setMiddleName($data['middleName'] ?? null);
+        $guardian->setLastName($data['lastName']);
+
+        if (!empty($data['sex'])) {
+            $gender = $this->gendersRepository->find($data['sex']);
+            $guardian->setGender($gender);
+        }
+
+        $now = new DateTimeImmutable();
+        $guardian->setCreatedAt($now);
+        $guardian->setModifiedAt($now);
+
+        $this->entityManager->persist($guardian);
+
+        
+        $relation = new StudentGuardianRelation();
+
+        $relation->setStudent($student);
+        $relation->setGuardian($guardian);
+
+       
+        if (!empty($data['relationship'])) {
+            $relationshipType = $this->relationshipTypesRepository->find($data['relationship']);
+            $relation->setRelationshipType($relationshipType);
+        }
+
+        $relation->setPrimaryRelation(isset($data['primaryGuardian']));
+
+        $this->entityManager->persist($relation);
+
+        $this->entityManager->flush();
+
+        return $guardian;
+    }
+
 }

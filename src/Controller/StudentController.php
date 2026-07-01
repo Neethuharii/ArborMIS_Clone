@@ -11,7 +11,10 @@ use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
+use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\StudentsRepository;
+use App\Repository\TitlesRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -72,7 +75,9 @@ final class StudentController extends AbstractController
         NationalityRepository $nationalityRepository,
         ReligionsRepository $religionsRepository,
         DocumentTypesRepository $documentTypesRepository,
-        CardsRepository $cardsRepository
+        CardsRepository $cardsRepository,
+        TitlesRepository $titlesRepository,
+        RelationshipTypesRepository $relationshipTypesRepository
 
     ): Response {
 
@@ -87,13 +92,15 @@ final class StudentController extends AbstractController
             'entityId' => $student->getStudentId(),
             'entityType' => 'student',
             'genders' => $gendersRepository->findAll(),
+            'titles' => $titlesRepository->findAll(),
+            'relationships' => $relationshipTypesRepository->findAll(),
             'countries' => $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
             'nationalities' => $nationalityRepository->findAll(),
             'religions' => $religionsRepository->findAll(),
             'documentTypes' => $documentTypesRepository->findAll(),
-            'entity' => $student,
-            'card' => $cardsRepository->findAll()
+            'card' => $cardsRepository->findAll(),
+
         ]);
     }
 
@@ -123,5 +130,25 @@ final class StudentController extends AbstractController
                 'message' => $e->getMessage()
             ], 400);
         }
+    }
+
+    #[Route('/student/{id}/guardian/add', name: 'guardian_add', methods: ['POST'])]
+    public function add(
+        int $id,
+        Request $request,
+        StudentsRepository $studentRepository,
+        StudentService $studentService
+    ): Response {
+
+        $student = $studentRepository->find($id);
+        $data = $request->request->all();
+
+        $studentService->createGuardianForStudent($data, $student);
+
+        $this->addFlash('success', 'Guardian added successfully');
+
+        return $this->redirectToRoute('studentProfile', [
+            'studentId' => $student->getStudentId()
+        ]);
     }
 }

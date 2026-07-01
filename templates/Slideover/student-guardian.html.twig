@@ -1,9 +1,4 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Add New Guardian{% endblock %}
-
 {% block stylesheets %}
-    {{ parent() }}
     <link rel="stylesheet" href="{{ asset('css/Slideover/student-guardian.css') }}">
 {% endblock %}
 
@@ -13,7 +8,7 @@
 
     <h1 class="page-title">Add New Guardian</h1>
 
-    <form method="POST" action="{{ path('guardian_create') }}" class="guardian-form">
+    <form method="POST" action="{{ path('guardian_add', { id: student.studentId }) }}" class="guardian-form">
 
         <div class="card">
 
@@ -31,22 +26,32 @@
                     <input type="hidden" name="studentId" value="{{ student.studentId }}">
                 </div>
 
+                {# TITLE DROPDOWN #}
                 <div class="form-row">
                     <label>Title</label>
                     <select name="title">
-                        <option value="">Select title</option>
-                        <option>Mr</option>
-                        <option>Mrs</option>
-                        <option>Miss</option>
-                        <option>Dr</option>
+                        <option value="">Select Title</option>
+                        {% for title in titles %}
+                            <option value="{{ title.titleId }}">
+                                {{ title.titleName }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
+                {# FIRST NAME #}
                 <div class="form-row">
                     <label>First name</label>
                     <input type="text" name="firstName">
                 </div>
 
+                {# MIDDLE NAME (optional, but supported in service) #}
+                <div class="form-row">
+                    <label>Middle name</label>
+                    <input type="text" name="middleName">
+                </div>
+
+                {# LAST NAME #}
                 <div class="form-row">
                     <label>Last name</label>
                     <input type="text" name="lastName" value="{{ student.lastName }}">
@@ -64,22 +69,35 @@
                     </select>
                 </div>
 
+                {# RELATIONSHIP DROPDOWN (FIXED) #}
                 <div class="form-row">
                     <label>Relationship *</label>
                     <select name="relationship" required>
-                        <option value="">Select relationship</option>
-                        {% for relation in relationships %}
-                            <option value="{{ relation.id }}">
-                                {{ relation.name }}
+                        <option value="">Select Relation</option>
+                        {% for relationship in relationships %}
+                            <option value="{{ relationship.relationshipTypeId }}">
+                                {{ relationship.relationshipTypeName }}
                             </option>
                         {% endfor %}
                     </select>
                 </div>
 
+                {# CHECKBOXES #}
                 <div class="form-row checkbox-group">
-                    <label><input type="checkbox" name="legalGuardian"> Legal guardian</label>
-                    <label><input type="checkbox" name="primaryGuardian"> Primary guardian</label>
-                    <label><input type="checkbox" name="authorisedToCollect"> Authorised to collect</label>
+                    <label>
+                        <input type="checkbox" name="legalGuardian">
+                        Legal guardian
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="primaryGuardian">
+                        Primary guardian
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="authorisedToCollect">
+                        Authorised to collect
+                    </label>
                 </div>
 
             </div>
@@ -92,15 +110,6 @@
             </div>
 
             <div class="card-body">
-
-                <div class="form-row">
-                    <label>Emergency contact</label>
-                    <select name="emergencyContact">
-                        <option value="">Select priority</option>
-                        <option value="1">1st priority emergency contact</option>
-                        <option value="2">2nd priority emergency contact</option>
-                    </select>
-                </div>
 
                 <div class="form-row">
                     <label>Home number</label>
@@ -120,18 +129,6 @@
                 <div class="form-row">
                     <label>Email address</label>
                     <input type="email" name="email">
-                </div>
-
-                <div class="form-row">
-                    <label>Postal Address *</label>
-                    <select name="postalAddress" required>
-                        <option value="">Select address</option>
-                        {% for address in addresses %}
-                            <option value="{{ address.id }}">
-                                {{ address.fullAddress }}
-                            </option>
-                        {% endfor %}
-                    </select>
                 </div>
 
             </div>

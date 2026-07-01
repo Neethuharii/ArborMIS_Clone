@@ -16,7 +16,7 @@ class StudentGuardianRelation
     private ?int $relationId = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'relationship_type_id', referencedColumnName: 'relationshipTypeid', nullable: false)]
+    #[ORM\JoinColumn(name: 'relationship_type_id', referencedColumnName: 'relationship_type_id', nullable: false)]
     private ?RelationshipTypes $relationshipType = null;
 
     #[ORM\ManyToOne]

@@ -15,6 +15,9 @@ class Guardian
     #[ORM\Column]
     private ?int $guardianId = null;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $title = null;
+
     #[ORM\Column(length: 150)]
     private ?string $firstName = null;
 
@@ -24,10 +27,10 @@ class Guardian
     #[ORM\Column(length: 150)]
     private ?string $lastName = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: "genderId", referencedColumnName: "genderId", nullable: false)]
+     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'gender_id', nullable: false)]
     private ?Genders $gender = null;
-
+    
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -40,6 +43,18 @@ class Guardian
     public function getGuardianId(): ?int
     {
         return $this->guardianId;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getFirstName(): ?string

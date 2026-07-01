@@ -163,7 +163,9 @@
      <div class="section-card">
         <div class="section-header">
             <h2>Family, Guardians and Contacts</h2>
-            <div id="contactAddGuardian" style="cursor: pointer;">
+            <div id="contactAddGuardian" class="open-slideover"
+                data-type="guardian"
+                style="cursor: pointer;">
                 <p>✚ Add</p>
             </div>
         </div>
@@ -506,6 +508,10 @@
             entityType: 'student'
         } %}
     </template>
+
+     <template id="studentGuardianTemplate">
+    {% include 'Slideover/student-guardian.html.twig' %}
+</template>
 {% endblock %}
 
 {% block javascripts %}
