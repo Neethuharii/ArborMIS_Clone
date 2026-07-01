@@ -2,6 +2,7 @@
 
 <div id="identityModal" class="modal">
     <div class="modal-content">
+
         <div class="modal-header">
             <h2>What would you like to do?</h2>
             <span class="close">&times;</span>
@@ -11,20 +12,25 @@
             <div class="section-title-box">
                 <h3>Add Item in: Identity</h3>
             </div>
+
             <ul class="item-list">
                 <li class="open-slideover" data-type="identification">
                     Identification Document ▶
                 </li>
-                <li>Nationality ▶</li>
-                <li>Former Name ▶</li>
-                <li>Identification Document ▶</li>
-                <li>School ID Card ▶</li>
+
+                <li class="open-slideover" data-type="schoolIdCard">
+                    School Id Card ▶
+                </li>
             </ul>
         </div>
 
         <div class="modal-footer">
-            <button class="cancel-btn" onclick="document.getElementById('identityModal').style.display='none'">Cancel</button>
+            <button class="cancel-btn"
+                onclick="document.getElementById('identityModal').style.display='none'">
+                Cancel
+            </button>
         </div>
+
     </div>
 </div>
 

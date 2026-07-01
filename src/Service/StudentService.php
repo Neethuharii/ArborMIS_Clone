@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Address;
+use App\Entity\Cards;
+use App\Entity\Documents;
 use App\Entity\Students;
 use App\Repository\CountriesRepository;
+use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\ReligionsRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 final class StudentService
@@ -23,6 +28,7 @@ final class StudentService
         private readonly EthnicitiesRepository $ethnicitiesRepository,
         private readonly NationalityRepository $nationalityRepository,
         private readonly ReligionsRepository $religionsRepository,
+        private DocumentTypesRepository $documentTypesRepository
     ) {}
 
     public function createStudent(Request $request): array
@@ -86,9 +92,7 @@ final class StudentService
         $address->setPhoneNumber($phoneNumber);
         $address->setCreatedAt(new \DateTimeImmutable());
         $address->setModifiedAt(new \DateTimeImmutable());
-
         $this->entityManager->persist($address);
-
         $student = new Students();
         $student->setFirstName($firstName);
         $student->setMiddleName($middleName);
@@ -132,63 +136,108 @@ final class StudentService
             ->find($studentId);
     }
 
- public function updateStudent(Students $student, Request $request): void
-{
-    $genderId = $request->request->get('gender');
+    public function updateStudent(Students $student, Request $request): void
+    {
+        $genderId = $request->request->get('gender');
 
-    if ($genderId) {
-        $gender = $this->gendersRepository->find($genderId);
-        $student->setGender($gender);
+        if ($genderId) {
+            $gender = $this->gendersRepository->find($genderId);
+            $student->setGender($gender);
+        }
+
+        $countryId = $request->request->get('country');
+
+        if ($countryId) {
+            $country = $this->countriesRepository->find($countryId);
+            $student->setCountry($country);
+        }
+
+        $ethnicityId = $request->request->get('ethnicity');
+
+        if ($ethnicityId) {
+            $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
+            $student->setEthnicity($ethnicity);
+        }
+
+        $nationalitId = $request->request->get('nationality');
+
+        if ($nationalitId) {
+            $nationality = $this->nationalityRepository->find($nationalitId);
+            $student->setNationality($nationality);
+        }
+
+        $religionId = $request->request->get('religion');
+
+        if ($religionId) {
+            $religion = $this->religionsRepository->find($religionId);
+            $student->setReligion($religion);
+        }
+
+        $firstName = $request->request->get('firstName');
+        if ($firstName !== null) {
+            $student->setFirstName($firstName);
+        }
+
+        $middleName = $request->request->get('middleName');
+        if ($middleName !== null) {
+            $student->setMiddleName($middleName);
+        }
+
+        $lastName = $request->request->get('lastName');
+        if ($lastName !== null) {
+            $student->setLastName($lastName);
+        }
+
+        $dob = $request->request->get('dob');
+        if ($dob !== null) {
+            $student->setDob(new DateTimeImmutable($dob));
+        }
+        $documentTypeId = $request->request->get('documentType');
+        $documentNumber = $request->request->get('documentNumber');
+        if ($documentTypeId && $documentNumber) {
+            $document = $student->getDocument();
+            if (!$document) {
+                $document = new Documents();
+            }
+            $documentType = $this->documentTypesRepository->find($documentTypeId);
+            if (!$documentType) {
+                throw new Exception('Invalid document type.');
+            }
+            $document->setDocumentNumber($documentNumber);
+            $document->setDocumentType($documentType);
+            $issueDate = $request->request->get('issueDate');
+            if ($issueDate) {
+                $document->setIssueDate(new DateTimeImmutable($issueDate));
+            }
+            $expiryDate = $request->request->get('expiryDate');
+            if ($expiryDate) {
+                $document->setExpiryDate(new DateTimeImmutable($expiryDate));
+            }
+            $document->setModifiedAt(new DateTimeImmutable());
+            $this->entityManager->persist($document);
+            $student->setDocument($document);
+        }
+        $cardNumber = $request->request->get('cardNumber');
+
+        if ($cardNumber) {
+            $card = $student->getCard();
+            if (!$card) {
+                $card = new Cards();
+            }
+            $card->setCardNumber($cardNumber);
+            $card->setStatus($request->request->getBoolean('status'));
+            $issuedDate = $request->request->get('issuedDate');
+            $issuedTime = $request->request->get('issuedTime');
+            if ($issuedDate && $issuedTime) {
+                $card->setIssuedAt(
+                    new DateTimeImmutable($issuedDate . ' ' . $issuedTime)
+                );
+            }
+            $card->setModifiedAt(new DateTimeImmutable());
+            $this->entityManager->persist($card);
+            $student->setCard($card);
+        }
+        $student->setModifiedAt(new DateTimeImmutable());
+        $this->entityManager->flush();
     }
-    
-    $countryId = $request->request->get('country');
-
-    if ($countryId) {
-        $country = $this->countriesRepository->find($countryId);
-        $student->setCountry($country);
-    }
-
-    $ethnicityId = $request->request->get('ethnicity');
-
-    if ($ethnicityId) {
-        $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
-        $student->setEthnicity($ethnicity);
-    }
-
-    $nationalitId = $request->request->get('nationality');
-
-    if ($nationalitId) {
-        $nationality = $this->nationalityRepository->find($nationalitId);
-        $student->setNationality($nationality);
-    }
-
-      $religionId = $request->request->get('religion');
-
-    if ($religionId) {
-        $religion = $this->religionsRepository->find($religionId);
-        $student->setReligion($religion);
-    }
-    
-    $firstName = $request->request->get('firstName');
-    if ($firstName !== null) {
-        $student->setFirstName($firstName);
-    }
-
-    $middleName = $request->request->get('middleName');
-    if ($middleName !== null) {
-        $student->setMiddleName($middleName);
-    }
-
-    $lastName = $request->request->get('lastName');
-    if ($lastName !== null) {
-        $student->setLastName($lastName);
-    }
-
-    $dob=$request->request->get('dob');
-    if($dob!==null){
-       $student->setDob(new \DateTimeImmutable($dob));
-    }
-
-    $this->entityManager->flush();
-}
 }

@@ -15,11 +15,11 @@ class Cards
     #[ORM\Column]
     private ?int $cardId = null;
 
-    #[ORM\Column(length: 150,unique: true)]
+    #[ORM\Column(length: 150, unique: true)]
     private ?string $cardNumber = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $status = null;
+    #[ORM\Column(type: 'boolean')]
+    private bool $status = true;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $issuedAt = null;
@@ -47,12 +47,12 @@ class Cards
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function isStatus(): bool
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(bool $status): static
     {
         $this->status = $status;
 
