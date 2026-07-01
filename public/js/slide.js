@@ -53,23 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-            else if (type === 'country') {
-
-                dynamicContent.innerHTML = `
-                    <table class="details-table">
-                        <tr>
-                            <th>Country</th>
-                            <td>${row.dataset.countryName || ''}</td>
-                        </tr>
-                    </table>
-                `;
-            }
             else if (type === 'ethnicity') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
                             <th>Ethnicity</th>
-                            <td>${row.dataset.ethnicityName || ''}</td>
+                            <td>${row.dataset.ethnicity || ''}</td>
                         </tr>
                     </table>
                 `;
@@ -78,9 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
-                            <th>Nationality</th>
-                            <td>${row.dataset.nationalityStatus || ''}</td>
+                            <th>Country</th>
+                            <td>${row.dataset.country || ''}</td>
                         </tr>
+                        <tr>
+                            <th>Nationality</th>
+                            <td>${row.dataset.nationality || ''}</td>
+                        </tr>
+                        
                     </table>
                 `;
             }
@@ -89,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <table class="details-table">
                         <tr>
                             <th>Religion</th>
-                            <td>${row.dataset.religionName || ''}</td>
+                            <td>${row.dataset.religion || ''}</td>
                         </tr>
                     </table>
                 `;
@@ -103,6 +97,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr>
                             <th>Document Type</th>
                             <td>${row.dataset.documentType || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+            else if (type === 'idcard') {
+                const issueDate = row.dataset.issueddate;
+                const issueTime = row.dataset.issuedtime;
+                const dateTimeDisplay = (issueDate && issueTime) ? `${issueDate} ${issueTime}` : 'N/A';
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Card Number</th>
+                            <td>${row.dataset.idcard || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Issued date/time</th>
+                            <td>${dateTimeDisplay}</td>
                         </tr>
                     </table>
                 `;

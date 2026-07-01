@@ -8,12 +8,15 @@ use App\Entity\Address;
 use App\Entity\Staffs;
 use App\Entity\CurrentRoles;
 use App\Entity\Documents;
+use App\Entity\Cards;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
 use App\Repository\BusinessRolesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\ReligionsRepository;
 use App\Repository\DocumentTypesRepository;
+use App\Repository\NationalityRepository;
+use App\Repository\CountriesRepository;
 use App\Repository\StaffsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +31,9 @@ class StaffService
         private EntityManagerInterface $entityManager,
         private EthnicitiesRepository $ethnicitiesRepository,
         private ReligionsRepository $religionsRepository,
-        private DocumentTypesRepository $documentTypesRepository
+        private DocumentTypesRepository $documentTypesRepository,
+        private NationalityRepository $nationalityRepository,
+        private CountriesRepository $countriesRepository
     ) {}
 
     public function getAllGenders(): array
@@ -207,6 +212,18 @@ class StaffService
             $staff->setEthnicity($ethnicity);
         }
 
+        $nationalityId = $request->request->get('nationality');
+        if ($nationalityId) {
+            $nationality = $this->nationalityRepository->find($nationalityId);
+            $staff->setNationality($nationality);
+        }
+
+        $countryId = $request->request->get('country');
+        if ($countryId) {
+            $country = $this->countriesRepository->find($countryId);
+            $staff->setCountry($country);
+        }
+
         $religionId = $request->request->get('religion');
         if ($religionId) {
             $religion = $this->religionsRepository->find($religionId);
@@ -250,6 +267,31 @@ class StaffService
         }
         $staff->setModifiedAt(new \DateTimeImmutable());
 
+        $cardno = $request->request->get('cardNumber');
+        if ($cardno) {
+            $card = $staff->getIdCard(); 
+            if (!$card) {
+                $card = new Cards();
+            }
+            $card->setCardNumber($cardno);
+
+            $cardstatus = $request->request->has('status');
+            $card->setStatus($cardstatus);
+
+            $issuetime = $request->request->get('issuedTime');
+            $issuedate = $request->request->get('issuedDate');
+            if ($issuedate && $issuetime) {
+                $card->setIssuedAt(
+                    new \DateTimeImmutable($issuedate . ' ' . $issuetime)
+                );
+            }
+
+            $card->setModifiedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($card);
+
+            $staff->setIdCard($card);
+        }
+        $staff->setModifiedAt(new \DateTimeImmutable());
         $this->entityManager->flush();
     }
 }

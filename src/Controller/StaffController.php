@@ -9,6 +9,8 @@ use App\Repository\GendersRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\ReligionsRepository;
 use App\Repository\DocumentTypesRepository;
+use App\Repository\NationalityRepository;
+use App\Repository\StaffsRepository;
 use App\Service\StaffService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,8 +48,16 @@ class StaffController extends AbstractController
     }
 
     #[Route('/Staff/profile/{id}', name: 'staffProfile')]
-    public function profile(int $id, StaffService $staffService, GendersRepository $gendersRepository, EthnicitiesRepository $ethnicitiesRepository, ReligionsRepository $religionsRepository, DocumentTypesRepository $documentTypesRepository, CountriesRepository $countriesRepository): Response
-    {
+    public function profile(
+        int $id, 
+        StaffService $staffService, 
+        GendersRepository $gendersRepository, 
+        EthnicitiesRepository $ethnicitiesRepository, 
+        ReligionsRepository $religionsRepository, 
+        DocumentTypesRepository $documentTypesRepository, 
+        CountriesRepository $countriesRepository, 
+        NationalityRepository $nationalityRepository
+    ): Response {
         $staff = $staffService->getStaffById($id);
         if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
@@ -55,34 +65,45 @@ class StaffController extends AbstractController
 
         return $this->render('Staff/profile.html.twig', [
             'staff' => $staff,
-            'all_genders' => $gendersRepository->findAll(),
-            'all_ethnicities' => $ethnicitiesRepository->findAll(),
-            'all_religions' => $religionsRepository->findAll(),
-            'documentTypes' => $documentTypesRepository->findAll(),
-            'countries' => $countriesRepository->findAll()
+            'entity'            => $staff,                    
+            'entityId'          => $staff->getStaffId(),      
+            'entityType'        => 'staff',                   
+            'all_genders'       => $gendersRepository->findAll(),
+            'all_ethnicities'   => $ethnicitiesRepository->findAll(),
+            'all_religions'     => $religionsRepository->findAll(),
+            'documentTypes'     => $documentTypesRepository->findAll(),
+            'countries'         => $countriesRepository->findAll(),
+            'all_nationalities' => $nationalityRepository->findAll()
         ]);
     }
 
-    #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
-    public function update(int $id, Request $request, StaffService $staffService): JsonResponse
-    {
-        $staff = $staffService->getStaffById($id);
+   #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
+    public function update($id,  Request $request,StaffsRepository $staffRepository,  StaffService $staffService ): Response {
+    $id = (int) $id;
 
-        if (!$staff) {
-            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
-        }
-
-        try {
-            $staffService->updateStaff($staff, $request);
-            return $this->json([
-                'success' => true
-            ]);
-        } catch (\Exception $e) {
-
-            return $this->json([
-                'success' => false,
-                'message' => 'Unable to save changes.'
-            ], 400);
-        }
+    if ($id === 0) {
+        return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
     }
+
+    $staff = $staffRepository->find($id);
+
+    if (!$staff) {
+        return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+    }
+
+    try {
+        $staffService->updateStaff($staff, $request);
+        
+        return $this->json([
+            'success' => true
+        ]);
+    } catch (\Exception $e) {
+        error_log($e->getMessage()); 
+
+        return $this->json([
+            'success' => false,
+            'message' => 'Unable to save changes. Error: ' . $e->getMessage()
+        ], 400);
+    }
+}
 }
