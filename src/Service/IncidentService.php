@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace App\Service;
+
 use DateTime;
 use DateTimeImmutable;
 use App\Entity\BehaviourIncidents;
@@ -16,7 +17,7 @@ use App\Repository\InterventionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
-class IncidentService 
+class IncidentService
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -24,11 +25,10 @@ class IncidentService
         private readonly StaffsRepository $staffsRepo,
         private readonly BehavioursRepository $behaviourRepo,
         private readonly InterventionRepository $interventionRepo
-    )
-    {
+    ) {
     }
-    
-    public function createIncident(Request $request):array
+
+    public function createIncident(Request $request): array
     {
         $incidentDate = $request->request->get('incident_date');
         $incidentTime = $request->request->get('incident_time');
@@ -43,38 +43,42 @@ class IncidentService
 
         $errors = [];
 
-        if (empty($incidentDate)){
+        if (empty($incidentDate)) {
             $errors['incident_date'] = 'incident date is required';
         }
 
-        if(empty($incidentTime)){
+        if (empty($incidentTime)) {
             $errors['incident_time'] = 'incident time is required';
         }
 
-        if(empty($studentsInvolvedId)){
+        if (empty($studentsInvolvedId)) {
             $errors['students_involved'] = 'students cannot be empty';
         }
 
-        if(empty($behaviourId)){
+        if (empty($behaviourId)) {
             $errors['behaviour'] = 'select a behaviour for the incident';
         }
 
-        if(empty($assignedStaffId)){
+        if (empty($assignedStaffId)) {
             $errors['assigned_staff'] = 'please select a staff';
         }
 
-        if(!empty($interventionStudentId)){
-            foreach($interventionStudentId as $student){
-                if(!in_array($student,$studentsInvolvedId)){
-                    $errors['intervention_student'] = 'student selected in intervention should be present in student involved';
-                    break;                   
+        if (!empty($interventionStudentId)) {
+            foreach ($interventionStudentId as $student) {
+                if (!in_array($student, $studentsInvolvedId)) {
+                    $errors['intervention_student'] =
+                        'student selected in intervention should be present in student involved';
+                    break;
                 }
             }
         }
 
-        if(!empty($errors)){
-            return ['success' => false, 'errors' => $errors];
-        }        
+        if (!empty($errors)) {
+            return [
+                'success' => false,
+                'errors' => $errors
+            ];
+        }
 
         $studentsInvolved = $this->studentRepo->findBy([
             'studentId' => $studentsInvolvedId
@@ -83,38 +87,47 @@ class IncidentService
         /** @var Behaviours|null $behaviour */
         $behaviour = $this->behaviourRepo->find($behaviourId);
 
-        if(!$behaviour){
+        if (!$behaviour) {
             return [
-                'success'=>false,
-                'errors'=>[
-                    'behaviour'=>'invalid behaviour selected'
+                'success' => false,
+                'errors' => [
+                    'behaviour' => 'invalid behaviour selected'
                 ]
             ];
         }
+
         $assignedStaff = $this->staffsRepo->find($assignedStaffId);
-        if(!$assignedStaff){
+
+        if (!$assignedStaff) {
             return [
-                'success'=>false,
-                'errors'=>[
-                    'assigned_staff'=>'selected invalid staff'
+                'success' => false,
+                'errors' => [
+                    'assigned_staff' => 'selected invalid staff'
                 ]
             ];
         }
+
         $involvedStaff = $this->staffsRepo->findBy([
             'staffId' => $involvedStaffId
         ]);
+
         $interventionStudent = $this->studentRepo->findBy([
             'studentId' => $interventionStudentId
         ]);
+
         $interventionStaff = $this->staffsRepo->findBy([
-            'staffId' =>  $interventionStaffId
+            'staffId' => $interventionStaffId
         ]);
+
         $interventionMethod = $this->interventionRepo->findBy([
             'interventionId' => $interventionMethodId
         ]);
 
+        $createdIncident = null;
+
+        // Create separate incidents
         if ($request->request->has('create_separate')) {
-            
+
             foreach ($studentsInvolved as $student) {
 
                 $behaviourIncident = new BehaviourIncidents();
@@ -135,9 +148,8 @@ class IncidentService
                 if (!empty($interventionStudent)) {
                     foreach ($interventionStudent as $index => $interventionStd) {
                         if ($interventionStd->getStudentId() == $student->getStudentId()) {
-                            
-                            $interventionDetail = new InterventionDetail();
 
+                            $interventionDetail = new InterventionDetail();
                             $interventionDetail->setBehaviourIncident($behaviourIncident);
                             $interventionDetail->setStudent($interventionStd);
                             $interventionDetail->setStaff($interventionStaff[$index]);
@@ -147,30 +159,37 @@ class IncidentService
                         }
                     }
                 }
+
+                // Keep last created one for AJAX return
+                $createdIncident = $behaviourIncident;
             }
-        }
-        else{
-            
+
+        } else {
+
+            // Single incident
             $behaviourIncidents = new BehaviourIncidents();
             $behaviourIncidents->setIncidentDate(new DateTime($incidentDate));
             $behaviourIncidents->setIncidentTime(new DateTime($incidentTime));
-            foreach($studentsInvolved as $student){
+
+            foreach ($studentsInvolved as $student) {
                 $behaviourIncidents->addStudentInvolved($student);
             }
+
             $behaviourIncidents->setBehaviour($behaviour);
             $behaviourIncidents->setAssignedStaff($assignedStaff);
             $behaviourIncidents->setIncidentSummary($summary);
             $behaviourIncidents->setCreatedAt(new DateTimeImmutable());
+
             foreach ($involvedStaff as $staff) {
                 $behaviourIncidents->addStaffInvolved($staff);
             }
-            
+
             $this->entityManager->persist($behaviourIncidents);
 
             if (!empty($interventionStudent)) {
                 foreach ($interventionStudent as $index => $student) {
-                    $interventionDetail = new InterventionDetail();
 
+                    $interventionDetail = new InterventionDetail();
                     $interventionDetail->setBehaviourIncident($behaviourIncidents);
                     $interventionDetail->setStudent($student);
                     $interventionDetail->setStaff($interventionStaff[$index]);
@@ -180,17 +199,22 @@ class IncidentService
                 }
             }
 
+            $createdIncident = $behaviourIncidents;
         }
 
-        foreach($studentsInvolved as $student){
+        // Student points update
+        foreach ($studentsInvolved as $student) {
+
             $studentPoint = $student->getStudentPoints();
-            if(!$studentPoint){
+
+            if (!$studentPoint) {
                 $studentPoint = new StudentPoints();
                 $studentPoint->setStudent($student);
                 $studentPoint->setTotalPoints(0);
             }
 
-            $newPoint = $studentPoint->getTotalPoints() + $behaviour->getCategory()->getCategoryPoints();
+            $newPoint = $studentPoint->getTotalPoints()
+                + $behaviour->getCategory()->getCategoryPoints();
 
             $studentPoint->setTotalPoints($newPoint);
             $studentPoint->setUpdatedAt(new DateTimeImmutable());
@@ -201,9 +225,17 @@ class IncidentService
         $this->entityManager->flush();
 
         return [
-            'success' => true
-        ];       
+            'success' => true,
+            'incident' => [
+                'incidentDate' => $createdIncident->getIncidentDate()->format('Y-m-d'),
+                'incidentTime' => $createdIncident->getIncidentTime()->format('H:i'),
+                'severity' => $createdIncident->getBehaviour()->getCategory()->getCategoryName(),
+                'behaviour' => $createdIncident->getBehaviour()->getBehaviourName(),
+                'students' => array_map(
+                    fn($student) => $student->getFirstName() . ' ' . $student->getLastName(),
+                    $createdIncident->getStudentInvolved()->toArray()
+                )
+            ]
+        ];
     }
 }
-
-

@@ -18,30 +18,28 @@ use App\Service\IncidentService;
 
 final class IncidentController extends AbstractController
 {
-    #[Route('/incident',name:'app_incident')]
-    public function index(Request $request, 
-                    StudentsRepository $studentRepo, 
-                    BehavioursRepository $behaviourRepo, 
-                    StaffsRepository $staffsRepo,
-                    InterventionRepository $interventionRepo,
-                    BehaviourIncidentsRepository $IncidentRepo,
-                    IncidentService $incidentService
-                    ):Response
-    {
-        if($request->isMethod('POST'))
-        {
+    #[Route('/incident', name: 'app_incident')]
+    public function index(
+        Request $request,
+        StudentsRepository $studentRepo,
+        BehavioursRepository $behaviourRepo,
+        StaffsRepository $staffsRepo,
+        InterventionRepository $interventionRepo,
+        BehaviourIncidentsRepository $incidentRepo,
+        IncidentService $incidentService
+    ): Response {
+        if ($request->isMethod('POST')) {
             $result = $incidentService->createIncident($request);
-            return new JsonResponse(
-                $result
-            );
+
+            return new JsonResponse($result);
         }
-        
-        return $this->render('Behaviour/behaviour_incident.html.twig',[
-            'students'=> $studentRepo->findAll(),
-            'behaviours'=> $behaviourRepo->findAll(),
-            'staffs'=>$staffsRepo->findAll(),
-            'interventionMethods'=>$interventionRepo->findAll(),
-            'incidents'=>$IncidentRepo->findAll()
+
+        return $this->render('Behaviour/behaviour_incident.html.twig', [
+            'students' => $studentRepo->findAll(),
+            'behaviours' => $behaviourRepo->findAll(),
+            'staffs' => $staffsRepo->findAll(),
+            'interventionMethods' => $interventionRepo->findAll(),
+            'incidents' => $incidentRepo->findAll()
         ]);
     }
 }
