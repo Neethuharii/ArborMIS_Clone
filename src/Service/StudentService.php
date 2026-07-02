@@ -248,7 +248,7 @@ final class StudentService
     public function createGuardianForStudent(array $data, Students $student, Request $request): Guardian
     {
         if (empty($data['firstName']) || empty($data['lastName'])) {
-            throw new \Exception("First name and last name are required");
+            throw new Exception("First name and last name are required");
         }
 
         $email =  $request->request->get('email', '');
