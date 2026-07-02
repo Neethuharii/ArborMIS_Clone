@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Students;
+use App\Repository\CardsRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Throwable;
 
 final class StudentController extends AbstractController
 {
@@ -69,7 +71,9 @@ final class StudentController extends AbstractController
         EthnicitiesRepository $ethnicitiesRepository,
         NationalityRepository $nationalityRepository,
         ReligionsRepository $religionsRepository,
-        DocumentTypesRepository $documentTypesRepository
+        DocumentTypesRepository $documentTypesRepository,
+        CardsRepository $cardsRepository
+
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -80,25 +84,44 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
+            'entityId' => $student->getStudentId(),
+            'entityType' => 'student',
             'genders' => $gendersRepository->findAll(),
-            'countries'=> $countriesRepository->findAll(),
+            'countries' => $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
-            'nationalities'=>$nationalityRepository->findAll(),
-            'religions'=>$religionsRepository->findAll(),
-            'documentTypes'=>$documentTypesRepository->findAll()
+            'nationalities' => $nationalityRepository->findAll(),
+            'religions' => $religionsRepository->findAll(),
+            'documentTypes' => $documentTypesRepository->findAll(),
+            'entity' => $student,
+            'card' => $cardsRepository->findAll()
         ]);
     }
-#[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
-public function update(
-    Students $student,
-    Request $request,
-    StudentService $studentService
-): JsonResponse {
 
-    $studentService->updateStudent($student, $request);
+    #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
+    public function update(
+        int $id,
+        Request $request,
+        StudentService $studentService
+    ): JsonResponse {
 
-    return $this->json([
-        'success' => true
-    ]);
-}
+        $student = $studentService->getStudentById($id);
+
+        if (!$student) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Student not found.'
+            ], 404);
+        }
+        try {
+            $studentService->updateStudent($student, $request);
+            return $this->json([
+                'success' => true
+            ]);
+        } catch (Throwable $e) {
+            return $this->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
 }

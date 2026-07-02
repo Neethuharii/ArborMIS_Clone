@@ -7,15 +7,16 @@ namespace App\Service;
 use App\Entity\Address;
 use App\Entity\Staffs;
 use App\Entity\CurrentRoles;
+use App\Entity\Documents;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
 use App\Repository\BusinessRolesRepository;
-use App\Repository\CountriesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\DocumentTypesRepository;
+use App\Repository\StaffsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use App\Repository\StaffsRepository;
 
 class StaffService
 {
@@ -26,8 +27,8 @@ class StaffService
         private BusinessRolesRepository $businessRolesRepository,
         private EntityManagerInterface $entityManager,
         private EthnicitiesRepository $ethnicitiesRepository,
-        private CountriesRepository $countriesRepository,
-        private ReligionsRepository $religionsRepository
+        private ReligionsRepository $religionsRepository,
+        private DocumentTypesRepository $documentTypesRepository
     ) {}
 
     public function getAllGenders(): array
@@ -49,7 +50,6 @@ class StaffService
     {
         return $this->staffsRepository->findAll();
     }
-
 
     public function getStaffById(int $id): ?Staffs
     {
@@ -191,7 +191,6 @@ class StaffService
         }
 
         $genderId = $request->request->get('gender');
-
         if ($genderId) {
             $gender = $this->gendersRepository->find($genderId);
             $staff->setGender($gender);
@@ -203,14 +202,12 @@ class StaffService
         }
 
         $ethnicityId = $request->request->get('ethnicity');
-
         if ($ethnicityId) {
             $ethnicity = $this->ethnicitiesRepository->find($ethnicityId);
             $staff->setEthnicity($ethnicity);
         }
 
         $religionId = $request->request->get('religion');
-
         if ($religionId) {
             $religion = $this->religionsRepository->find($religionId);
             $staff->setReligion($religion);
@@ -220,6 +217,38 @@ class StaffService
         if ($abbreviation !== null) {
             $staff->setAbbreviation($abbreviation);
         }
+
+        $documentTypeId = $request->request->get('documentType');
+        $documentNumber = $request->request->get('documentNumber');
+        $issueDateStr = $request->request->get('issueDate');
+        $expiryDateStr = $request->request->get('expiryDate');
+
+
+        if ($documentTypeId && $documentNumber) {
+            $documentType = $this->documentTypesRepository->find($documentTypeId);
+            if (!$documentType) {
+                throw new \InvalidArgumentException("Invalid document type selected.");
+            }
+
+            $document = new Documents();
+            $document->setDocumentNumber($documentNumber);
+            $document->setDocumentType($documentType);
+            $issueDate = new \DateTimeImmutable($issueDateStr);
+            $document->setIssueDate($issueDate);
+
+            if (!empty($issueDateStr)) {
+                $document->setIssueDate(new \DateTimeImmutable($issueDateStr));
+            }
+            if (!empty($expiryDateStr)) {
+                $document->setExpiryDate(new \DateTimeImmutable($expiryDateStr));
+            }
+
+            $document->setModifiedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($document);
+
+            $staff->setIdentityDocument($document);
+        }
+        $staff->setModifiedAt(new \DateTimeImmutable());
 
         $this->entityManager->flush();
     }

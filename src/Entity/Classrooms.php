@@ -47,10 +47,17 @@ class Classrooms
     #[ORM\OneToMany(targetEntity: BehaviourIncidents::class, mappedBy: 'room')]
     private Collection $behaviourIncidents;
 
+    /**
+     * @var Collection<int, AttendanceRegisters>
+     */
+    #[ORM\OneToMany(targetEntity: AttendanceRegisters::class, mappedBy: 'classroom')]
+    private Collection $attendanceRegisters;
+
     public function __construct()
     {
         $this->studentEnrollments = new ArrayCollection();
         $this->behaviourIncidents = new ArrayCollection();
+        $this->attendanceRegisters = new ArrayCollection();
     }
 
     public function getClassroomId(): ?int
@@ -158,6 +165,35 @@ class Classrooms
         if ($this->behaviourIncidents->removeElement($behaviourIncident)) {
             if ($behaviourIncident->getRoom() === $this) {
                 $behaviourIncident->setRoom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AttendanceRegisters>
+     */
+    public function getAttendanceRegisters(): Collection
+    {
+        return $this->attendanceRegisters;
+    }
+
+    public function addAttendanceRegister(AttendanceRegisters $attendanceRegister): static
+    {
+        if (!$this->attendanceRegisters->contains($attendanceRegister)) {
+            $this->attendanceRegisters->add($attendanceRegister);
+            $attendanceRegister->setClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttendanceRegister(AttendanceRegisters $attendanceRegister): static
+    {
+        if ($this->attendanceRegisters->removeElement($attendanceRegister)) {
+            if ($attendanceRegister->getClassroom() === $this) {
+                $attendanceRegister->setClassroom(null);
             }
         }
 

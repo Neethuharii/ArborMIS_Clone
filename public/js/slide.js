@@ -1,17 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const container = document.getElementById('slideoverContainer');
-
     if (!container) return;
-
     const slideTitle = document.getElementById('slideTitle');
     const dynamicContent = document.getElementById('slideDynamicContent');
     const editBtn = document.getElementById('nextBtn');
-
     let currentRow = null;
-
     document.querySelectorAll('.clickable-row').forEach(row => {
-
         row.addEventListener('click', () => {
             currentRow = row;
             const type = row.dataset.type;
@@ -102,17 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             else if (type === 'document') {
 
-    slideTitle.textContent = 'Document';
+                slideTitle.textContent = 'Document';
 
-    dynamicContent.innerHTML = `
-        <table class="details-table">
-            <tr>
-                <th>Document Type</th>
-                <td>${row.dataset.documentType || ''}</td>
-            </tr>
-        </table>
-    `;
-}
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Document Type</th>
+                            <td>${row.dataset.documentType || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else if (type === 'abbreviation') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
@@ -128,69 +122,46 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p>No information available.</p>
                 `;
             }
-
             container.classList.add('is-open');
         });
-
     });
- 
 
   document.querySelectorAll(".open-slideover").forEach(item => {
-
     item.addEventListener("click", () => {
-
         const type = item.dataset.type;
-
         let template = "";
+        let formId = "";
 
         switch (type) {
-
             case "identification":
                 slideTitle.textContent = "Identification Document";
                 template = "identificationTemplate";
+                formId = "identificationForm";
                 break;
-
-            case "nationality":
-                slideTitle.textContent = "Nationality";
-                template = "nationalityTemplate";
-                break;
-
-            case "former-name":
-                slideTitle.textContent = "Former Name";
-                template = "formerNameTemplate";
-                break;
-
-            case "school-card":
+            case "schoolIdCard":
                 slideTitle.textContent = "School ID Card";
-                template = "schoolCardTemplate";
+                template = "studentCardTemplate";
+                formId = "schoolCardForm";
                 break;
         }
 
-        dynamicContent.innerHTML =
-            document.getElementById(template).innerHTML;
-
-        initialiseSaveForm("identificationForm", container);
-
-        document.getElementById("identityModal").style.display = "none";
-
+    const tpl = document.getElementById(template);
+        if (!tpl) {
+            console.error("Template not found:", template);
+            return;
+        }
+        dynamicContent.innerHTML = tpl.innerHTML;
+        initialiseSaveForm(formId, container);
         container.classList.add("is-open");
-
     });
-
 });
-
-
     editBtn.addEventListener('click', () => {
-
         if (!currentRow) return;
-
         const type = currentRow.dataset.type;
-
         let templateId = '';
         let formId = '';
 
         switch (type) {
-
             case 'identity':
                 slideTitle.textContent = 'Name';
                 templateId = 'nameEditTemplate';
@@ -245,15 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         dynamicContent.innerHTML =
             document.getElementById(templateId).innerHTML;
-
         initialiseSaveForm(formId, container);
-
     });
-
     document.getElementById('closeBtn')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
-
     document.getElementById('slideoverOverlay')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });

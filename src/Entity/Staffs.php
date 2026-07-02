@@ -112,12 +112,19 @@ class Staffs
     #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'staffId')]
     private Collection $interventionDetails;
 
+    /**
+     * @var Collection<int, AttendanceRegisters>
+     */
+    #[ORM\OneToMany(targetEntity: AttendanceRegisters::class, mappedBy: 'staff')]
+    private Collection $attendanceRegisters;
+
     public function __construct()
     {
         $this->behaviourIncidents = new ArrayCollection();
         $this->staffInvolvedIncidents = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
         $this->interventionDetails = new ArrayCollection();
+        $this->attendanceRegisters = new ArrayCollection();
     }
 
     public function getStaffId(): ?int
@@ -461,6 +468,35 @@ class Staffs
         if ($this->interventionDetails->removeElement($interventionDetail)) {
             if ($interventionDetail->getStaff() === $this) {
                 $interventionDetail->setStaff(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AttendanceRegisters>
+     */
+    public function getAttendanceRegisters(): Collection
+    {
+        return $this->attendanceRegisters;
+    }
+
+    public function addAttendanceRegister(AttendanceRegisters $attendanceRegister): static
+    {
+        if (!$this->attendanceRegisters->contains($attendanceRegister)) {
+            $this->attendanceRegisters->add($attendanceRegister);
+            $attendanceRegister->setStaff($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttendanceRegister(AttendanceRegisters $attendanceRegister): static
+    {
+        if ($this->attendanceRegisters->removeElement($attendanceRegister)) {
+            if ($attendanceRegister->getStaff() === $this) {
+                $attendanceRegister->setStaff(null);
             }
         }
 
