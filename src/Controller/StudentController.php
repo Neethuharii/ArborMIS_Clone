@@ -65,7 +65,7 @@ final class StudentController extends AbstractController
             'search' => $search,
         ]);
     }
-#[Route('/student/{studentId}', name: 'studentProfile')]
+    #[Route('/student/{studentId}', name: 'studentProfile')]
     public function studentProfile(
         int $studentId,
         StudentService $studentService,
@@ -97,8 +97,8 @@ final class StudentController extends AbstractController
             'religions' => $religionsRepository->findAll(),
             'relationships' => $relationshipTypesRepository->findAll(),
             'card' => $cardsRepository->findAll(),
-            'documentTypes' =>$documentTypesRepository->findAll(),
-            'titles'=>$titlesRepository->findAll()
+            'documentTypes' => $documentTypesRepository->findAll(),
+            'titles' => $titlesRepository->findAll()
         ]);
     }
 
@@ -149,6 +149,30 @@ final class StudentController extends AbstractController
 
         return $this->redirectToRoute('studentProfile', [
             'studentId' => $studentId
+        ]);
+    }
+    #[Route(
+        '/student/{id}/upn/delete',
+        name: 'student_delete_upn',
+        methods: ['POST']
+    )]
+    public function deleteUpn(
+        int $id,
+        StudentService $studentService
+    ): JsonResponse {
+        $student = $studentService->getStudentById($id);
+
+        if (!$student) {
+
+            return $this->json([
+                'success' => false
+            ], 404);
+        }
+
+        $studentService->deleteUpn($student);
+
+        return $this->json([
+            'success' => true
         ]);
     }
 }

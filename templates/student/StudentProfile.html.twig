@@ -116,7 +116,6 @@
                 data-dob="{{ student.studentId}}">
                 <th>Arbor Student Id</th>
                 <td>{{ student.studentId ?: 'Not recorded' }}</td>
-                <td class="arrow">▶</td>
             </tr>
             <tr class="clickable-row" 
                 data-title="School Card Id" 
@@ -126,10 +125,10 @@
                 <td>{{ student.card?.cardNumber ?: 'Not recorded' }}</td>
                 <td class="arrow">▶</td>
             </tr>
-            <tr class="clickable-row" 
-                data-title="UPN" 
+            <tr class="clickable-row"
+                data-title="UPN"
                 data-type="upn"
-                data-dob="{{ student.upn}}">
+                data-upn="{{ student.upn ?? '' }}">
                 <th>UPN</th>
                 <td>{{ student.upn ?: 'Not Assigned' }}</td>
                 <td class="arrow">▶</td>
@@ -558,6 +557,19 @@
 
      <template id="studentGuardianTemplate">
     {% include 'Slideover/student-guardian.html.twig' %}
+</template>
+
+<template id="assignUpnTemplate">
+    {% include 'Slideover/assign-upn.html.twig' with {
+        student: student
+    } %}
+</template>
+
+<template id="upnEditTemplate">
+    {% include 'Slideover/delete-upn.html.twig' with {
+        student: student
+    } %}
+
 </template>
 {% endblock %}
 

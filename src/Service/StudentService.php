@@ -317,4 +317,13 @@ final class StudentService
 
         return $guardian;
     }
+
+    public function deleteUpn(Students $student): void
+    {
+        $student->setUpn(null);
+
+        $student->setModifiedAt(new DateTimeImmutable());
+
+        $this->entityManager->flush();
+    }
 }

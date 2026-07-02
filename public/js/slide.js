@@ -92,6 +92,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            else if (type === 'upn') {
+
+    const upn = (row.dataset.upn || '').trim();
+
+    container.classList.add('is-open');
+
+    if (upn === '') {
+
+        slideTitle.textContent = "Assign UPN";
+
+        const tpl = document.getElementById("assignUpnTemplate");
+        if (!tpl) {
+            console.error("assignUpnTemplate not found");
+            return;
+        }
+
+        dynamicContent.innerHTML = tpl.innerHTML;
+
+        initialiseSaveForm("assignUpnForm", container);
+        
+        setSlideoverButtons({
+            showEdit: false,
+            showBack: true
+        });
+        return;
+    }
+
+    slideTitle.textContent = "UPN";
+
+    dynamicContent.innerHTML = `
+        <table class="details-table">
+            <tr>
+                <th>UPN</th>
+                <td>${upn}</td>
+            </tr>
+        </table>
+    `;
+
+    setSlideoverButtons({
+        showEdit: true,
+        showBack: true
+    });
+
+    return;
+}
             else {
                 dynamicContent.innerHTML = `<p>No information available.</p>`;
             }
@@ -148,6 +193,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     templateId = "studentCardTemplate";
                     formId = "schoolCardForm";
                     break;
+
+                case 'upn':
+                    if ((currentRow.dataset.upn || '').trim() === '') {
+                    slideTitle.textContent = 'Assign UPN';
+                    templateId = 'assignUpnTemplate';
+                    formId = 'assignUpnForm';
+                } else {
+                    slideTitle.textContent = 'Delete Current UPN';
+                    templateId = 'deleteUpnTemplate';
+                    formId = 'deleteUpnForm';
+    }
+
+    break;
 
                 default:
                     console.warn("Unknown type:", type);
@@ -227,6 +285,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 templateId = 'abbreviationEditTemplate';
                 formId = 'editAbbreviationForm';
                 break;
+
+            case 'upn':
+                templateId = 'upnEditTemplate';
+                formId = 'editUpnForm';
+                break;
+
 
             default:
                 return;

@@ -1,0 +1,53 @@
+<div class="page-container">
+
+    <h1 class="page-title">Delete Current UPN</h1>
+
+    <div class="card">
+
+        <div class="card-header">
+            <h2>Please note!</h2>
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                Deleting this UPN will permanently remove it from this student.
+            </p>
+
+            <p>
+                Existing UPN:
+                <strong>{{ student.upn }}</strong>
+            </p>
+
+            <p>
+                After deleting it you can assign another UPN.
+            </p>
+
+        </div>
+
+    </div>
+
+    <form id="deleteUpnForm"
+          method="post"
+          action="{{ path('student_delete_upn', {
+                id: student.studentId
+          }) }}">
+
+        <div class="form-actions">
+
+            <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="document.getElementById('closeBtn').click()">
+
+                Cancel
+            </button>
+            <button
+                    type="submit"
+                    class="btn-danger">
+                Delete UPN
+            </button>
+        </div>
+    </form>
+
+</div>
