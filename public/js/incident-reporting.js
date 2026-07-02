@@ -98,8 +98,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 addIncidentToTable(result.incident);
                 form.reset();
                 closeDrawer();
-            } else {
-                console.log(result.errors);
             }
 
         } catch (error) {
