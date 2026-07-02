@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } catch (error) {
             hideLoader();
-            console.error(error);
         }
     });
 
