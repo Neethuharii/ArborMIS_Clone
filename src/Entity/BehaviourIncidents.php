@@ -28,7 +28,7 @@ class BehaviourIncidents
     #[ORM\ManyToMany(targetEntity: Students::class, inversedBy: 'behaviourIncidents')]
     #[ORM\JoinTable(name: 'behaviour_incidents_students')]
     #[ORM\JoinColumn(name: 'incident_id', referencedColumnName: 'incident_id')]
-    #[ORM\InverseJoinColumn(name: 'student_id', referencedColumnName: 'studentId')]
+    #[ORM\InverseJoinColumn(name: 'student_id', referencedColumnName: 'student_id')]
     private Collection $studentInvolved;
 
     #[ORM\ManyToOne(inversedBy: 'behaviourIncidents')]
@@ -48,7 +48,7 @@ class BehaviourIncidents
     #[ORM\ManyToMany(targetEntity: Staffs::class, inversedBy: 'staffInvolvedIncidents')]
     #[ORM\JoinTable(name:'behaviour_incidents_staffs')]
     #[ORM\JoinColumn(name:'incident_id', referencedColumnName: 'incident_id')]
-    #[ORM\InverseJoinColumn(name: 'staff_id', referencedColumnName: 'staffId')]
+    #[ORM\InverseJoinColumn(name: 'staff_id', referencedColumnName: 'staff_id')]
     private Collection $staffInvolved;
 
     #[ORM\ManyToOne(inversedBy: 'behaviourIncidents')]
@@ -67,7 +67,7 @@ class BehaviourIncidents
     /**
      * @var Collection<int, InterventionDetail>
      */
-    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'behaviourLogId')]
+    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'behaviourIncident')]
     private Collection $interventionDetails;
 
     public function __construct()
