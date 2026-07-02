@@ -1,10 +1,9 @@
 {% block body %}
 
 <div class="identification-wrapper">
-    <form id="identificationForm" class="identification-form" method="POST">
+    <form id="identificationForm" class="identification-form" action="{{ path('staff_document', {'id': staff.staffId}) }}" method="POST">
         <input type="hidden" name="entityId" value="{{ entityId }}">
         <input type="hidden" name="entityType" value="{{ entityType }}">
-        <h2 class="form-title">Add Identification Document</h2>
         <div class="form-container">
             <div class="form-row">
                 <label>

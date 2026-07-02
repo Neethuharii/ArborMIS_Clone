@@ -8,12 +8,15 @@ use App\Entity\Address;
 use App\Entity\Staffs;
 use App\Entity\CurrentRoles;
 use App\Entity\Documents;
+use App\Entity\Cards;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
 use App\Repository\BusinessRolesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\ReligionsRepository;
 use App\Repository\DocumentTypesRepository;
+use App\Repository\NationalityRepository;
+use App\Repository\CountriesRepository;
 use App\Repository\StaffsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +31,9 @@ class StaffService
         private EntityManagerInterface $entityManager,
         private EthnicitiesRepository $ethnicitiesRepository,
         private ReligionsRepository $religionsRepository,
-        private DocumentTypesRepository $documentTypesRepository
+        private DocumentTypesRepository $documentTypesRepository,
+        private NationalityRepository $nationalityRepository,
+        private CountriesRepository $countriesRepository
     ) {}
 
     public function getAllGenders(): array
@@ -51,6 +56,21 @@ class StaffService
         return $this->staffsRepository->findAll();
     }
 
+    public function getAllEthnicities(): array
+    {
+        return $this->ethnicitiesRepository->findAll();
+    }
+
+    public function getAllReligions(): array
+    {
+        return $this->religionsRepository->findAll();
+    }
+
+    public function getAllNationalities(): array
+    {
+        return $this->nationalityRepository->findAll();
+    }
+            
     public function getStaffById(int $id): ?Staffs
     {
         return $this->staffsRepository->find($id);
@@ -207,6 +227,18 @@ class StaffService
             $staff->setEthnicity($ethnicity);
         }
 
+        $nationalityId = $request->request->get('nationality');
+        if ($nationalityId) {
+            $nationality = $this->nationalityRepository->find($nationalityId);
+            $staff->setNationality($nationality);
+        }
+
+        $countryId = $request->request->get('country');
+        if ($countryId) {
+            $country = $this->countriesRepository->find($countryId);
+            $staff->setCountry($country);
+        }
+
         $religionId = $request->request->get('religion');
         if ($religionId) {
             $religion = $this->religionsRepository->find($religionId);
@@ -218,6 +250,24 @@ class StaffService
             $staff->setAbbreviation($abbreviation);
         }
 
+        $email = $request->request->get('email');
+        if ($email) {
+            $address = $staff->getAddress();
+            if (!$address) {
+                $address = new Address();
+            }
+            $address->setEmailAddress($email);
+            $address->setModifiedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($address);
+
+            $staff->setAddress($address);
+        }
+        $staff->setModifiedAt(new \DateTimeImmutable());
+
+        $this->entityManager->flush();
+    }
+    public function updateStaffDocuments(Staffs $staff, Request $request): void
+    {
         $documentTypeId = $request->request->get('documentType');
         $documentNumber = $request->request->get('documentNumber');
         $issueDateStr = $request->request->get('issueDate');
@@ -226,6 +276,7 @@ class StaffService
 
         if ($documentTypeId && $documentNumber) {
             $documentType = $this->documentTypesRepository->find($documentTypeId);
+
             if (!$documentType) {
                 throw new \InvalidArgumentException("Invalid document type selected.");
             }
@@ -247,9 +298,36 @@ class StaffService
             $this->entityManager->persist($document);
 
             $staff->setIdentityDocument($document);
+            $this->entityManager->flush();
+        }
+    }
+    public function updateStaffCard(Staffs $staff, Request $request): void
+    {
+        $cardno = $request->request->get('cardNumber');
+        if ($cardno) {
+            $card = $staff->getIdCard();
+            if (!$card) {
+                $card = new Cards();
+            }
+            $card->setCardNumber($cardno);
+
+            $cardstatus = $request->request->has('status');
+            $card->setStatus($cardstatus);
+
+            $issuetime = $request->request->get('issuedTime');
+            $issuedate = $request->request->get('issuedDate');
+            if ($issuedate && $issuetime) {
+                $card->setIssuedAt(
+                    new \DateTimeImmutable($issuedate . ' ' . $issuetime)
+                );
+            }
+
+            $card->setModifiedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($card);
+
+            $staff->setIdCard($card);
         }
         $staff->setModifiedAt(new \DateTimeImmutable());
-
         $this->entityManager->flush();
     }
 }

@@ -1,0 +1,134 @@
+.edit-form-wrapper,
+.card-form-container,
+.identification-wrapper,
+.form-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background-color: #ffffff !important;
+    box-sizing: border-box;
+    width: 100% !important;
+}
+
+
+.form-row {
+    margin-bottom: 20px !important;
+    display: grid !important;
+    grid-template-columns: 40% 60% !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.form-row label {
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #4a4a4a !important;
+    padding-right: 12px !important;
+    margin: 0 !important;
+    white-space: normal !important;     
+    word-break: break-word !important;   
+    line-height: 1.3 !important;
+    box-sizing: border-box !important;
+}
+
+.required {
+    color: #d9534f !important;
+    margin-left: 3px !important;
+}
+
+.form-row input[type="text"],
+.form-row input[type="date"],
+.form-row input[type="time"],
+.form-row select,
+.field-text {
+    width: 100% !important;
+    padding: 10px 14px !important;
+    font-size: 14px !important;
+    border: 1px solid #cccccc !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    height: 42px !important;            
+    outline: none !important;
+    transition: border-color 0.2s ease;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+    border-color: #72be44 !important;
+}
+
+.field-text {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 10px 0 !important;
+    font-weight: normal !important;
+    height: auto !important;
+}
+
+.datetime-group {
+    display: flex !important;
+    gap: 10px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.datetime-group input {
+    flex: 1 !important;
+    min-width: 0 !important; 
+}
+
+.form-row.checkbox-row input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    justify-self: start !important; 
+}
+
+.form-row select {
+    padding-right: 32px !important;
+    cursor: pointer !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    background-size: 15px !important;
+}
+
+.button-group {
+    margin-top: 28px !important;
+    text-align: right !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.button-group button {
+    padding: 12px 22px !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    border: none !important;
+    margin-left: 12px !important;
+    display: inline-block !important;
+}
+
+.cancel-btn {
+    background-color: #e5e5e5 !important;
+    color: #333333 !important;
+}
+
+.cancel-btn:hover {
+    background-color: #d8d8d8 !important;
+}
+
+.save-btn, .identification-wrapper .save-btn {
+    background-color: #72be44 !important; 
+    color: #ffffff !important;
+}
+
+.save-btn:hover {
+    background-color: #61a637 !important;
+}
