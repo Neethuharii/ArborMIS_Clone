@@ -3,12 +3,11 @@
 {% endblock %}
 
 {% block body %}
+{% set card_route = (entityType|lower == 'staff') ? 'staff_idcard' : 'student_idcard' %}
 <div class="card-form-container">
-    <form method="POST" id="schoolCardForm" class="schoolCard-form" action="{{ path('staff_idcard', { 'id':staff.staffId })}}">
-
+        <form id="schoolCardForm" class="schoolCard-form" action="{{ path(card_route, {'id': entityId}) }}" method="POST">
         <input type="hidden" name="entityId" value="{{ entityId }}">
         <input type="hidden" name="entityType" value="{{ entityType }}">
-        
         <div class="form-box">
             <div class="form-row">
                 <label>{{ entityType|capitalize }} Name</label> 
