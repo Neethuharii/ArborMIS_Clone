@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let formId = "";
             if (type === "guardian") {
 
-                slideTitle.textContent = "Add Guardian / Contact";
+                slideTitle.textContent = "Add Guardian";
 
                 setSlideoverButtons({
                     showEdit: false,

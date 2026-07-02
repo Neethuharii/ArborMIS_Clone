@@ -466,10 +466,6 @@ body {
     background-color: #f9f9f9;
 }
 
-.arrow {
-    color: #aaa;
-    font-size: 14px;
-}
 
 .item-list li:first-child .arrow {
     border: 1px solid #00c0f0; 
@@ -604,3 +600,4 @@ body {
     text-align: center;
     color: #888;
 }
+

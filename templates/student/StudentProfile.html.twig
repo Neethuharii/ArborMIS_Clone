@@ -202,19 +202,17 @@
                             {{ relation.relationshipType.relationshipTypeName }}
                         </div>
                         <div class="guardian-role">
-                            {{relation.guardian.address.emailAddress }}
+                           {{ relation.guardian.address ? relation.guardian.address.emailAddress : 'Not recorded' }}
                         </div>
                         <div class="guardian-role">
-                            {{relation.guardian.address.phoneNumber  }}
+                             {{ relation.guardian.address ? relation.guardian.address.phoneNumber : 'Not recorded' }}
                         </div>
 
                         <div class="guardian-flags">
                             
-
                             {% if relation.primaryRelation %}
                                 <div>Primary guardian</div>
                             {% endif %}
-
                         </div>
                     </div>
 
