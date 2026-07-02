@@ -44,8 +44,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     if (addInterventionBtn && interventionBody) {
-
         addInterventionBtn.addEventListener('click', () => {
+
+            const studentOptions = studentsData.map(student =>
+                `<option value="${student.studentId}">
+                    ${student.firstName} ${student.lastName}
+                </option>`
+            ).join('');
+
+            const staffOptions = staffsData.map(staff =>
+                `<option value="${staff.staffId}">
+                    ${staff.firstName} ${staff.lastName}
+                </option>`
+            ).join('');
+
+            const methodOptions = interventionMethodsData.map(method =>
+                `<option value="${method.interventionId}">
+                    ${method.interventionMethod}
+                </option>`
+            ).join('');
 
             const row = document.createElement('tr');
 
@@ -53,16 +70,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 <td>
                     <select name="intervention_student[]" required>
                         <option value="">Select Student</option>
+                        ${studentOptions}
                     </select>
                 </td>
                 <td>
                     <select name="intervention_staff[]" required>
                         <option value="">Select Staff</option>
+                        ${staffOptions}
                     </select>
                 </td>
                 <td>
                     <select name="intervention_method[]" required>
                         <option value="">Select Method</option>
+                        ${methodOptions}
                     </select>
                 </td>
             `;

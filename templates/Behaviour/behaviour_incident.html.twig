@@ -49,7 +49,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                
+                    {% for incident in incidents %}
+                        <tr>
+                            <td>
+                                {{ incident.incidentDate|date('Y-m-d') }} {{ incident.incidentTime|date('H:i') }}
+                            </td>
+                            <td>
+                                {{ incident.behaviour.category.categoryName }}
+                            </td>
+                            <td>
+                                {{ incident.behaviour.behaviourName }}
+                            </td>
+                            <td>
+                                {% for student in incident.studentInvolved %}
+                                    {{ student.firstName }} {{ student.lastName }}
+                                    {% if not loop.last %} and {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -77,21 +95,33 @@
                 <div class="form-group">
                     <label>Students Involved</label>
                     <select name="students[]" multiple required>
-                        <option value="">Select Students</option>
+                        {% for student in students %}
+                            <option value="{{ student.studentId }}">
+                                {{ student.firstName }} {{ student.lastName }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Behaviour</label>
                     <select name="behaviour_id" required>
-                        <option value="">Select Behaviour</option>
+                        {% for behaviour in behaviours %}
+                            <option value="{{ behaviour.behaviourId}}">
+                                {{ behaviour.behaviourName }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>Assign to Staff Member</label>
                     <select name="assigned_staff" required>
-                        <option value="">Select Staff</option>
+                        {% for staff in staffs %}
+                            <option value="{{ staff.staffId }}">
+                                {{ staff.firstName }} {{ staff.lastName }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -103,7 +133,11 @@
                 <div class="form-group">
                     <label>Staff Involved</label>
                     <select name="staff_involved[]" multiple>
-                        <option value="">Select Staff Members</option>
+                        {% for staff in staffs %}
+                            <option value="{{ staff.staffId }}">
+                                {{ staff.firstName }} {{ staff.lastName }}
+                            </option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -153,7 +187,36 @@
     </div>
 
 </div>
+<script>
+    const studentsData = [
+        {% for student in students %}
+        {
+            studentId: {{ student.studentId }},
+            firstName: "{{ student.firstName|e('js') }}",
+            lastName: "{{ student.lastName|e('js') }}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
 
+    const staffsData = [
+        {% for staff in staffs %}
+        {
+            staffId: {{ staff.staffId }},
+            firstName: "{{ staff.firstName|e('js') }}",
+            lastName: "{{ staff.lastName|e('js') }}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    const interventionMethodsData = [
+        {% for method in interventionMethods %}
+        {
+            interventionId: {{ method.interventionId }},
+            interventionMethod: "{{ method.interventionMethod|e('js') }}"
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+    ];
+</script>
 <script src="{{ asset('js/incident-reporting.js') }}"></script>
 
 {% endblock %}

@@ -9,7 +9,7 @@ use App\Entity\Staffs;
 use App\Entity\CurrentRoles;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
-use App\Repository\BusinessrolesRepository;
+use App\Repository\BusinessRolesRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\ReligionsRepository;
@@ -23,7 +23,7 @@ class StaffService
         private StaffsRepository $staffsRepository,
         private GendersRepository $gendersRepository,
         private TitlesRepository $titlesRepository,
-        private BusinessrolesRepository $businessRolesRepository,
+        private BusinessRolesRepository $businessRolesRepository,
         private EntityManagerInterface $entityManager,
         private EthnicitiesRepository $ethnicitiesRepository,
         private CountriesRepository $countriesRepository,
