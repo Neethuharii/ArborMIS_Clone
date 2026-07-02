@@ -11,7 +11,11 @@ use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
+use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\StudentGuardianRelationRepository;
+use App\Repository\StudentsRepository;
+use App\Repository\TitlesRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -61,8 +65,7 @@ final class StudentController extends AbstractController
             'search' => $search,
         ]);
     }
-
-    #[Route('/student/{studentId}', name: 'studentProfile')]
+#[Route('/student/{studentId}', name: 'studentProfile')]
     public function studentProfile(
         int $studentId,
         StudentService $studentService,
@@ -71,9 +74,11 @@ final class StudentController extends AbstractController
         EthnicitiesRepository $ethnicitiesRepository,
         NationalityRepository $nationalityRepository,
         ReligionsRepository $religionsRepository,
+        RelationshipTypesRepository $relationshipTypesRepository,
+        StudentGuardianRelationRepository $studentGuardianRelationRepository,
+        CardsRepository $cardsRepository,
         DocumentTypesRepository $documentTypesRepository,
-        CardsRepository $cardsRepository
-
+        TitlesRepository $titlesRepository
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -84,16 +89,16 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
-            'entityId' => $student->getStudentId(),
-            'entityType' => 'student',
+            'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
             'genders' => $gendersRepository->findAll(),
             'countries' => $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
             'nationalities' => $nationalityRepository->findAll(),
             'religions' => $religionsRepository->findAll(),
-            'documentTypes' => $documentTypesRepository->findAll(),
-            'entity' => $student,
-            'card' => $cardsRepository->findAll()
+            'relationships' => $relationshipTypesRepository->findAll(),
+            'card' => $cardsRepository->findAll(),
+            'documentTypes' =>$documentTypesRepository->findAll(),
+            'titles'=>$titlesRepository->findAll()
         ]);
     }
 
@@ -123,5 +128,27 @@ final class StudentController extends AbstractController
                 'message' => $e->getMessage()
             ], 400);
         }
+    }
+
+    #[Route('/student/{studentId}/guardian/add', name: 'guardian_add', methods: ['POST'])]
+    public function addGuardian(
+        int $studentId,
+        Request $request,
+        StudentService $studentService
+    ): Response {
+
+        $student = $studentService->getStudentById($studentId);
+
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found');
+        }
+
+        $studentService->createGuardianForStudent($request->request->all(), $student, $request);
+
+        $this->addFlash('success', 'Guardian added successfully');
+
+        return $this->redirectToRoute('studentProfile', [
+            'studentId' => $studentId
+        ]);
     }
 }

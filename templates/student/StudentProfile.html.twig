@@ -31,8 +31,8 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Identity</h2>
-            <div id="identityAdd" style="cursor: pointer;">
-                    <p>✚ Add</p>
+            <div id="identityAdd"  class="section-add" style="cursor: pointer;">
+                    <span class="add-icon">+</span> Add
             </div>
         </div>
         <table class="details-table">
@@ -141,9 +141,10 @@
     <div class="section-card">
         <div class="section-header">
             <h2>Student Contact Details</h2>
-            <div id="contactAdd" style="cursor: pointer;">
-                <p>✚ Add</p>
+            <div id="contactAdd" class="section-add" style="cursor: pointer;">
+                <span class="add-icon">+</span> Add
             </div>
+
         </div>
         <table class="details-table">
             <tbody>
@@ -160,28 +161,76 @@
             </tbody>
         </table>
     </div>
-     <div class="section-card">
-        <div class="section-header">
-            <h2>Family, Guardians and Contacts</h2>
-            <div id="contactAddGuardian" style="cursor: pointer;">
-                <p>✚ Add</p>
-            </div>
+  <div class="section-card">
+    <div class="section-header">
+        <h2>Family, Guardians and Contacts</h2>
+
+        <div id="contactAddGuardian"
+        class="open-slideover"
+             
+             data-type="guardian"
+             style="cursor:pointer;">
+            <span class="add-icon">+</span> Add
         </div>
-        <table class="details-table">
-            <tbody>
-            <tr>
-                <th>Work Email</th>
-                <td>{{ student.address.emailAddress }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            <tr>
-                <th>Student Home Number</th>
-                <td>{{ student.address.phoneNumber }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            </tbody>
-        </table>
     </div>
+
+    <div class="guardian-list">
+
+        {% if guardianRelations is not empty %}
+
+            {% for relation in guardianRelations %}
+
+                <div class="guardian-row clickable-guardian-row {% if relation.primaryRelation %}primary{% endif %}"
+                     data-title="Guardian Details"
+                     data-type="guardian"
+                     data-first-name="{{ relation.guardian.firstName }}"
+                     data-last-name="{{ relation.guardian.lastName }}"
+                     data-relationship="{{ relation.relationshipType.relationshipTypeName }}"
+                     data-email="{{ relation.guardian.address.emailAddress ?? '' }}"
+                     data-phone="{{ relation.guardian.address.phoneNumber ?? '' }}">
+
+                    <div class="guardian-left">
+                        <div class="guardian-name">
+                            {{ relation.guardian.firstName }} {{ relation.guardian.lastName }}
+                        </div>
+                        
+                    </div>
+
+                    <div class="guardian-middle">
+                        <div class="guardian-role">
+                            {{ relation.relationshipType.relationshipTypeName }}
+                        </div>
+                        <div class="guardian-role">
+                           {{ relation.guardian.address ? relation.guardian.address.emailAddress : 'Not recorded' }}
+                        </div>
+                        <div class="guardian-role">
+                             {{ relation.guardian.address ? relation.guardian.address.phoneNumber : 'Not recorded' }}
+                        </div>
+
+                        <div class="guardian-flags">
+                            
+                            {% if relation.primaryRelation %}
+                                <div>Primary guardian</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="guardian-right">
+                        ▶
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+            <div class="guardian-empty">
+                No guardians added.
+            </div>
+        {% endif %}
+
+    </div>
+</div>
     <div id="slideoverContainer" class="slideover-container">
         <div id="slideoverOverlay" class="slideover-overlay"></div>
             <div class="slideover-drawer">
@@ -506,6 +555,10 @@
             entityType: 'student'
         } %}
     </template>
+
+     <template id="studentGuardianTemplate">
+    {% include 'Slideover/student-guardian.html.twig' %}
+</template>
 {% endblock %}
 
 {% block javascripts %}

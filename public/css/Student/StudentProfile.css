@@ -466,10 +466,6 @@ body {
     background-color: #f9f9f9;
 }
 
-.arrow {
-    color: #aaa;
-    font-size: 14px;
-}
 
 .item-list li:first-child .arrow {
     border: 1px solid #00c0f0; 
@@ -500,3 +496,108 @@ body {
 .cancel-btn:hover {
     background-color: #d4d4d4;
 }
+.section-add{
+    cursor:pointer;
+    color:#67a000;
+    font-weight:600;
+}
+
+.section-add:hover{
+    color:#4b7800;
+}
+
+.guardian-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.open-slideover{
+    color: #67a000;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.guardian-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 30px;
+    padding: 14px 16px;
+    border-top: 1px solid #e3e3e3;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    background: #fff;
+}
+
+.guardian-row:hover {
+    background: #d9f4ff;
+}
+
+.guardian-row.primary {
+    background: #e2f3fa;
+}
+
+.guardian-left {
+    display: flex;
+    align-items: flex-start;
+}
+
+.guardian-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+
+.guardian-middle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.guardian-role {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.guardian-flags {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.guardian-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #7aa7c7;
+    font-size: 16px;
+}
+.open-slideover{
+     color: #67a000;
+}
+
+.section-add {
+    color: #67a000;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.section-add:hover {
+    color: #4b7800;
+}
+
+.add-icon {
+    font-size: 18px;
+}
+
+.guardian-empty {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+}
+
