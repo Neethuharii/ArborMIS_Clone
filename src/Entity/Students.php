@@ -92,7 +92,7 @@ class Students
     /**
      * @var Collection<int, InterventionDetail>
      */
-    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'studentId')]
+    #[ORM\OneToMany(targetEntity: InterventionDetail::class, mappedBy: 'student')]
     private Collection $interventionDetails;
 
     #[ORM\OneToOne(mappedBy: 'student')]
