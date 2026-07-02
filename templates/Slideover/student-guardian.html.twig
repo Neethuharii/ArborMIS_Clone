@@ -1,0 +1,112 @@
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/Slideover/student-guardian.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="page-container">
+
+    <h1 class="page-title">Add New Guardian</h1>
+
+    <form method="POST"
+          action="{{ path('guardian_add', {studentId: student.studentId}) }}"
+          class="guardian-form">
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Guardian Details</h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-row">
+                    <label>Linked to Student</label>
+                    <div class="readonly-field">
+                        {{ student.firstName }} {{ student.lastName }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label>Title</label>
+                    <select name="title">
+                        <option value="">Select Title</option>
+                        {% for title in titles %}
+                            <option value="{{ title.titleId }}">
+                                {{ title.titleName }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>First name</label>
+                    <input type="text" name="firstName" required>
+                </div>
+
+                <div class="form-row">
+                    <label>Last name</label>
+                    <input type="text" name="lastName" required>
+                </div>
+
+                <div class="form-row">
+                    <label>Sex</label>
+                    <select name="sex">
+                        <option value="">Select sex</option>
+                        {% for gender in genders %}
+                            <option value="{{ gender.genderId }}">
+                                {{ gender.genderType }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label>Relationship *</label>
+                    <select name="relationship">
+                        <option value="">Select relationship</option>
+                        {% for relationship in relationships %}
+                            <option value="{{ relationship.relationshipTypeId }}">
+                                {{ relationship.relationshipTypeName }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-row checkbox-group">
+                    
+                    <label><input type="checkbox" name="primaryGuardian"> Primary guardian</label>
+                    
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Contact Details</h2>
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-row">
+                    <label>Mobile number</label>
+                    <input type="text" name="mobileNumber">
+                </div>
+
+                <div class="form-row">
+                    <label>Email</label>
+                    <input type="email" name="email">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Add Guardian</button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

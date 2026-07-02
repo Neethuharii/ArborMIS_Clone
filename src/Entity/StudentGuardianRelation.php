@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\StudentGuardianRepository;
+use App\Repository\StudentGuardianRelationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: StudentGuardianRepository::class)]
+#[ORM\Table(name: 'student_guardian_relation')]
+#[ORM\Entity(repositoryClass: StudentGuardianRelationRepository::class)]
 class StudentGuardianRelation
 {
     #[ORM\Id]
@@ -16,7 +17,7 @@ class StudentGuardianRelation
     private ?int $relationId = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'relationship_type_id', referencedColumnName: 'relationshipTypeid', nullable: false)]
+    #[ORM\JoinColumn(name: 'relationship_type_id', referencedColumnName: 'relationship_type_id', nullable: false)]
     private ?RelationshipTypes $relationshipType = null;
 
     #[ORM\ManyToOne]
