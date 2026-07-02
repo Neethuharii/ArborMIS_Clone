@@ -445,24 +445,21 @@
             {% include 'Slideover/studentIdCard.html.twig'%}
         </template>
 
-        <template id="emailEditTemplate">
-
+       <template id="emailEditTemplate">
             <div class="edit-form-wrapper">
-
                 <h2>Email</h2>
-
                 <form id="editEmailForm">
-
-                    <input type="hidden" name="staffId" value="{{ staff.staffId }}" >
+                    
+                    <input type="hidden" name="staffId" value="{{ staff.staffId }}">
 
                     <div class="form-row">
                         <label>Email</label>
-                        <input type="email" name="email" value="{{ staff.address.emailAddress }}">
+                        <input type="email" name="email" value="{{ staff.address ? staff.address.emailAddress : '' }}">
                     </div>
 
                     <div class="button-group">
-                        <button type="button" class="cancel-btn" id="cancelEdit" > Cancel </button>
-                        <button type="submit" class="save-btn" > Save Changes </button>
+                        <button type="button" class="cancel-btn" id="cancelEdit"> Cancel </button>
+                        <button type="submit" class="save-btn"> Save Changes </button>
                     </div>
                 </form>
             </div>

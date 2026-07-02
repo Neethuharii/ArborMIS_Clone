@@ -255,6 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 templateId = 'abbreviationEditTemplate';
                 formId = 'editAbbreviationForm';
                 break;
+
+            case 'email':
+                slideTitle.textContent = 'Email';
+                templateId = 'emailEditTemplate';
+                formId = 'editEmailForm';
+                break;
     
             default:
                 return;

@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="card-form-container">
-    <form method="POST" id="schoolCardForm" class="schoolCard-form">
+    <form method="POST" id="schoolCardForm" class="schoolCard-form" action="{{ path('staff_idcard', { 'id':staff.staffId })}}">
 
         <input type="hidden" name="entityId" value="{{ entityId }}">
         <input type="hidden" name="entityType" value="{{ entityType }}">

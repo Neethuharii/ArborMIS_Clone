@@ -56,6 +56,21 @@ class StaffService
         return $this->staffsRepository->findAll();
     }
 
+    public function getAllEthnicities(): array
+    {
+        return $this->ethnicitiesRepository->findAll();
+    }
+
+    public function getAllReligions(): array
+    {
+        return $this->religionsRepository->findAll();
+    }
+
+    public function getAllNationalities(): array
+    {
+        return $this->nationalityRepository->findAll();
+    }
+            
     public function getStaffById(int $id): ?Staffs
     {
         return $this->staffsRepository->find($id);
@@ -235,6 +250,24 @@ class StaffService
             $staff->setAbbreviation($abbreviation);
         }
 
+        $email = $request->request->get('email');
+        if ($email) {
+            $address = $staff->getAddress();
+            if (!$address) {
+                $address = new Address();
+            }
+            $address->setEmailAddress($email);
+            $address->setModifiedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($address);
+
+            $staff->setAddress($address);
+        }
+        $staff->setModifiedAt(new \DateTimeImmutable());
+
+        $this->entityManager->flush();
+    }
+    public function updateStaffDocuments(Staffs $staff, Request $request): void
+    {
         $documentTypeId = $request->request->get('documentType');
         $documentNumber = $request->request->get('documentNumber');
         $issueDateStr = $request->request->get('issueDate');
@@ -243,6 +276,7 @@ class StaffService
 
         if ($documentTypeId && $documentNumber) {
             $documentType = $this->documentTypesRepository->find($documentTypeId);
+
             if (!$documentType) {
                 throw new \InvalidArgumentException("Invalid document type selected.");
             }
@@ -264,12 +298,14 @@ class StaffService
             $this->entityManager->persist($document);
 
             $staff->setIdentityDocument($document);
+            $this->entityManager->flush();
         }
-        $staff->setModifiedAt(new \DateTimeImmutable());
-
+    }
+    public function updateStaffCard(Staffs $staff, Request $request): void
+    {
         $cardno = $request->request->get('cardNumber');
         if ($cardno) {
-            $card = $staff->getIdCard(); 
+            $card = $staff->getIdCard();
             if (!$card) {
                 $card = new Cards();
             }

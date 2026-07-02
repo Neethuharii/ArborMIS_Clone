@@ -48,16 +48,7 @@ class StaffController extends AbstractController
     }
 
     #[Route('/Staff/profile/{id}', name: 'staffProfile')]
-    public function profile(
-        int $id, 
-        StaffService $staffService, 
-        GendersRepository $gendersRepository, 
-        EthnicitiesRepository $ethnicitiesRepository, 
-        ReligionsRepository $religionsRepository, 
-        DocumentTypesRepository $documentTypesRepository, 
-        CountriesRepository $countriesRepository, 
-        NationalityRepository $nationalityRepository
-    ): Response {
+    public function profile(int $id, StaffService $staffService, GendersRepository $gendersRepository, EthnicitiesRepository $ethnicitiesRepository, ReligionsRepository $religionsRepository,  DocumentTypesRepository $documentTypesRepository,  CountriesRepository $countriesRepository, NationalityRepository $nationalityRepository): Response {
         $staff = $staffService->getStaffById($id);
         if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
@@ -77,33 +68,65 @@ class StaffController extends AbstractController
         ]);
     }
 
-   #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
-    public function update($id,  Request $request,StaffsRepository $staffRepository,  StaffService $staffService ): Response {
-    $id = (int) $id;
+    #[Route('/Staff/{id}/update', name: 'staff_update', methods: ['POST'])]
+    public function update(int $id,  Request $request, StaffsRepository $staffRepository,  StaffService $staffService): Response
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        }
 
-    if ($id === 0) {
-        return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        $staff = $staffRepository->find($id);
+
+        if (!$staff) {
+            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+        }
+
+        try {
+            $staffService->updateStaff($staff, $request);
+            return $this->json(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->json(['success' => false, 'message' => 'Unable to save changes']);
+        }
     }
 
-    $staff = $staffRepository->find($id);
+    #[Route('/Staff/{id}/document', name: 'staff_document', methods: ['POST'])]
+    public function uploadDocument(int $id, Request $request, StaffsRepository $staffRepository, StaffService $staffService): Response
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        }
 
-    if (!$staff) {
-        return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+        $staff = $staffRepository->find($id);
+
+        if (!$staff) {
+            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+        }
+
+        try {
+            $staffService->updateStaffDocuments($staff, $request);
+            return $this->json(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->json(['success' => false, 'message' => 'Unable to upload document']);
+        }
     }
 
-    try {
-        $staffService->updateStaff($staff, $request);
-        
-        return $this->json([
-            'success' => true
-        ]);
-    } catch (\Exception $e) {
-        error_log($e->getMessage()); 
+    #[Route('/Staff/{id}/idcard',name:'staff_idcard', methods:['POST'])]
+    public function uploadIdCard(int $id,Request $request,StaffService $staffService,StaffsRepository $staffRepository):Response
+    {    
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        }
+        $staff = $staffRepository->find($id);
 
-        return $this->json([
-            'success' => false,
-            'message' => 'Unable to save changes. Error: ' . $e->getMessage()
-        ], 400);
+        if (!$staff) {
+            return $this->json(['success' => false, 'message' => 'Staff member not found.'], 404);
+        }
+
+        try {
+            $staffService->updateStaffCard($staff,$request);
+            return $this->json(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->json(['success' => false, 'message' => 'Unable to upload Id card']);
+        }
     }
-}
 }
