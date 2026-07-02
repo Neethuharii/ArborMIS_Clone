@@ -125,7 +125,6 @@ class IncidentService
 
         $createdIncident = null;
 
-        // Create separate incidents
         if ($request->request->has('create_separate')) {
 
             foreach ($studentsInvolved as $student) {
@@ -160,13 +159,11 @@ class IncidentService
                     }
                 }
 
-                // Keep last created one for AJAX return
                 $createdIncident = $behaviourIncident;
             }
 
         } else {
 
-            // Single incident
             $behaviourIncidents = new BehaviourIncidents();
             $behaviourIncidents->setIncidentDate(new DateTime($incidentDate));
             $behaviourIncidents->setIncidentTime(new DateTime($incidentTime));
@@ -201,8 +198,7 @@ class IncidentService
 
             $createdIncident = $behaviourIncidents;
         }
-
-        // Student points update
+        
         foreach ($studentsInvolved as $student) {
 
             $studentPoint = $student->getStudentPoints();
