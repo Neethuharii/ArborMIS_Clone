@@ -146,7 +146,7 @@ final class StudentController extends AbstractController
             throw $this->createNotFoundException('Student not found');
         }
 
-        $studentService->createGuardianForStudent($request->request->all(), $student);
+        $studentService->createGuardianForStudent($request->request->all(), $student, $request);
 
         $this->addFlash('success', 'Guardian added successfully');
 

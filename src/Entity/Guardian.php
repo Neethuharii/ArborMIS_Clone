@@ -31,6 +31,11 @@ class Guardian
     #[ORM\JoinColumn(name: 'gender_id', referencedColumnName: 'gender_id', nullable: false)]
     private ?Genders $gender = null;
     
+    
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'address_id', nullable: false)]
+    private ?Address $address = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -93,6 +98,18 @@ class Guardian
         return $this;
     }
 
+      public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): static
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+    
     public function getGender(): ?genders
     {
         return $this->gender;

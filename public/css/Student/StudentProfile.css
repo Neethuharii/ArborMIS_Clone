@@ -510,65 +510,99 @@ body {
     color:#4b7800;
 }
 
-.guardian-list{
-    display:flex;
-    flex-direction:column;
+.guardian-list {
+    display: flex;
+    flex-direction: column;
 }
 
-.guardian-item{
-    display:grid;
-    grid-template-columns:220px 1fr 24px;
-    align-items:flex-start;
-    padding:18px 22px;
-    border-top:1px solid #e5e5e5;
-    cursor:pointer;
-    transition:background .2s ease;
+.open-slideover{
+    color: #67a000;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.guardian-item:first-child{
-    border-top:none;
+.guardian-row {
+    display: grid;
+    grid-template-columns: 180px 1fr 30px;
+    padding: 14px 16px;
+    border-top: 1px solid #e3e3e3;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    background: #fff;
 }
 
-.guardian-item:hover{
-    background:#fafafa;
+
+.guardian-row:hover {
+    background: #d9f4ff;
 }
 
-.guardian-name{
-    font-size:16px;
-    font-weight:600;
-    color:#555;
+.guardian-row.primary {
+    background: #e2f3fa;
 }
 
-.guardian-details{
-    display:flex;
-    flex-direction:column;
+.guardian-left {
+    display: flex;
+    align-items: flex-start;
 }
 
-.guardian-details strong{
-    font-size:18px;
-    color:#333;
-    margin-bottom:8px;
+.guardian-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
 }
 
-.guardian-flags{
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-    font-size:15px;
-    color:#555;
-    line-height:1.5;
+.guardian-middle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.guardian-arrow{
-    display:flex;
-    justify-content:flex-end;
-    align-items:center;
-    color:#999;
-    font-size:18px;
+.guardian-role {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
 }
 
-.guardian-empty{
-    padding:24px;
-    text-align:center;
-    color:#888;
+.guardian-flags {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.6;
+}
+
+
+.guardian-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #7aa7c7;
+    font-size: 16px;
+}
+.open-slideover{
+     color: #67a000;
+}
+
+.section-add {
+    color: #67a000;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.section-add:hover {
+    color: #4b7800;
+}
+
+.add-icon {
+    font-size: 18px;
+}
+
+.guardian-empty {
+    padding: 20px;
+    text-align: center;
+    color: #888;
 }

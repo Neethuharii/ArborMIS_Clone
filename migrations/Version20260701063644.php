@@ -11,12 +11,13 @@ final class Version20260701063644 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Added a new column title';
+        return 'Added a new column title and address';
     }
 
     public function up(Schema $schema): void
     {
        $this->addSql('ALTER TABLE guardian ADD title VARCHAR(10) DEFAULT NULL AFTER guardian_id');
+       $this->addSql('ALTER TABLE guardian ADD address_id INT DEFAULT NULL AFTER last_name;');
     }
 
     public function down(Schema $schema): void
