@@ -500,3 +500,75 @@ body {
 .cancel-btn:hover {
     background-color: #d4d4d4;
 }
+.section-add{
+    cursor:pointer;
+    color:#67a000;
+    font-weight:600;
+}
+
+.section-add:hover{
+    color:#4b7800;
+}
+
+.guardian-list{
+    display:flex;
+    flex-direction:column;
+}
+
+.guardian-item{
+    display:grid;
+    grid-template-columns:220px 1fr 24px;
+    align-items:flex-start;
+    padding:18px 22px;
+    border-top:1px solid #e5e5e5;
+    cursor:pointer;
+    transition:background .2s ease;
+}
+
+.guardian-item:first-child{
+    border-top:none;
+}
+
+.guardian-item:hover{
+    background:#fafafa;
+}
+
+.guardian-name{
+    font-size:16px;
+    font-weight:600;
+    color:#555;
+}
+
+.guardian-details{
+    display:flex;
+    flex-direction:column;
+}
+
+.guardian-details strong{
+    font-size:18px;
+    color:#333;
+    margin-bottom:8px;
+}
+
+.guardian-flags{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    font-size:15px;
+    color:#555;
+    line-height:1.5;
+}
+
+.guardian-arrow{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    color:#999;
+    font-size:18px;
+}
+
+.guardian-empty{
+    padding:24px;
+    text-align:center;
+    color:#888;
+}

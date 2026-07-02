@@ -8,7 +8,7 @@ use App\Repository\RelationshipTypesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RelationshipTypesRepository::class)]
-final class RelationshipTypes
+ class RelationshipTypes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

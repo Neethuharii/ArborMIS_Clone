@@ -245,45 +245,46 @@ final class StudentService
         $this->entityManager->flush();
     }
 
-      public function createGuardianForStudent(array $data, Students $student): Guardian
-    {
-        $guardian = new Guardian();
-
-        $guardian->setTitle($data['title'] ?? null);
-        $guardian->setFirstName($data['firstName']);
-        $guardian->setMiddleName($data['middleName'] ?? null);
-        $guardian->setLastName($data['lastName']);
-
-        if (!empty($data['sex'])) {
-            $gender = $this->gendersRepository->find($data['sex']);
-            $guardian->setGender($gender);
-        }
-
-        $now = new DateTimeImmutable();
-        $guardian->setCreatedAt($now);
-        $guardian->setModifiedAt($now);
-
-        $this->entityManager->persist($guardian);
-
-        
-        $relation = new StudentGuardianRelation();
-
-        $relation->setStudent($student);
-        $relation->setGuardian($guardian);
-
-       
-        if (!empty($data['relationship'])) {
-            $relationshipType = $this->relationshipTypesRepository->find($data['relationship']);
-            $relation->setRelationshipType($relationshipType);
-        }
-
-        $relation->setPrimaryRelation(isset($data['primaryGuardian']));
-
-        $this->entityManager->persist($relation);
-
-        $this->entityManager->flush();
-
-        return $guardian;
+    public function createGuardianForStudent(array $data, Students $student): Guardian
+{
+    if (empty($data['firstName']) || empty($data['lastName'])) {
+        throw new \Exception("First name and last name are required");
     }
+
+    $guardian = new Guardian();
+    $guardian->setTitle($data['title'] ?? null);
+    $guardian->setFirstName($data['firstName']);
+    $guardian->setMiddleName($data['middleName'] ?? null);
+    $guardian->setLastName($data['lastName']);
+
+    if (!empty($data['sex'])) {
+        $gender = $this->gendersRepository->find($data['sex']);
+        $guardian->setGender($gender);
+    }
+
+    $now = new \DateTimeImmutable();
+    $guardian->setCreatedAt($now);
+    $guardian->setModifiedAt($now);
+
+    $this->entityManager->persist($guardian);
+
+    // Relationship mapping
+    $relation = new StudentGuardianRelation();
+    $relation->setStudent($student);
+    $relation->setGuardian($guardian);
+
+    if (!empty($data['relationship'])) {
+        $relationshipType = $this->relationshipTypesRepository->find($data['relationship']);
+        $relation->setRelationshipType($relationshipType);
+    }
+
+    $relation->setPrimaryRelation(isset($data['primaryGuardian']));
+
+    $this->entityManager->persist($relation);
+
+    $this->entityManager->flush();
+
+    return $guardian;
+}
 
 }

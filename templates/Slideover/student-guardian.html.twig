@@ -1,5 +1,5 @@
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/Slideover/student-guardian.css') }}">
+<link rel="stylesheet" href="{{ asset('css/Slideover/student-guardian.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -8,10 +8,11 @@
 
     <h1 class="page-title">Add New Guardian</h1>
 
-    <form method="POST" action="{{ path('guardian_add', { id: student.studentId }) }}" class="guardian-form">
+    <form method="POST"
+          action="{{ path('guardian_add', {studentId: student.studentId}) }}"
+          class="guardian-form">
 
         <div class="card">
-
             <div class="card-header">
                 <h2>Guardian Details</h2>
             </div>
@@ -23,10 +24,8 @@
                     <div class="readonly-field">
                         {{ student.firstName }} {{ student.lastName }}
                     </div>
-                    <input type="hidden" name="studentId" value="{{ student.studentId }}">
                 </div>
 
-                {# TITLE DROPDOWN #}
                 <div class="form-row">
                     <label>Title</label>
                     <select name="title">
@@ -39,22 +38,14 @@
                     </select>
                 </div>
 
-                {# FIRST NAME #}
                 <div class="form-row">
                     <label>First name</label>
-                    <input type="text" name="firstName">
+                    <input type="text" name="firstName" required>
                 </div>
 
-                {# MIDDLE NAME (optional, but supported in service) #}
-                <div class="form-row">
-                    <label>Middle name</label>
-                    <input type="text" name="middleName">
-                </div>
-
-                {# LAST NAME #}
                 <div class="form-row">
                     <label>Last name</label>
-                    <input type="text" name="lastName" value="{{ student.lastName }}">
+                    <input type="text" name="lastName" required>
                 </div>
 
                 <div class="form-row">
@@ -69,11 +60,10 @@
                     </select>
                 </div>
 
-                {# RELATIONSHIP DROPDOWN (FIXED) #}
                 <div class="form-row">
                     <label>Relationship *</label>
-                    <select name="relationship" required>
-                        <option value="">Select Relation</option>
+                    <select name="relationship">
+                        <option value="">Select relationship</option>
                         {% for relationship in relationships %}
                             <option value="{{ relationship.relationshipTypeId }}">
                                 {{ relationship.relationshipTypeName }}
@@ -82,31 +72,18 @@
                     </select>
                 </div>
 
-                {# CHECKBOXES #}
                 <div class="form-row checkbox-group">
-                    <label>
-                        <input type="checkbox" name="legalGuardian">
-                        Legal guardian
-                    </label>
-
-                    <label>
-                        <input type="checkbox" name="primaryGuardian">
-                        Primary guardian
-                    </label>
-
-                    <label>
-                        <input type="checkbox" name="authorisedToCollect">
-                        Authorised to collect
-                    </label>
+                    <label><input type="checkbox" name="legalGuardian"> Legal guardian</label>
+                    <label><input type="checkbox" name="primaryGuardian"> Primary guardian</label>
+                    <label><input type="checkbox" name="authorisedToCollect"> Authorised to collect</label>
                 </div>
 
             </div>
         </div>
 
         <div class="card">
-
             <div class="card-header">
-                <h2>Guardian Contact Details</h2>
+                <h2>Contact Details</h2>
             </div>
 
             <div class="card-body">
@@ -127,7 +104,7 @@
                 </div>
 
                 <div class="form-row">
-                    <label>Email address</label>
+                    <label>Email</label>
                     <input type="email" name="email">
                 </div>
 
@@ -135,7 +112,6 @@
         </div>
 
         <div class="form-actions">
-            <button type="button" class="btn-cancel">Cancel</button>
             <button type="submit" class="btn-primary">Add Guardian</button>
         </div>
 

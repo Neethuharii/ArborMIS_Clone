@@ -160,30 +160,71 @@
             </tbody>
         </table>
     </div>
-     <div class="section-card">
-        <div class="section-header">
-            <h2>Family, Guardians and Contacts</h2>
-            <div id="contactAddGuardian" class="open-slideover"
-                data-type="guardian"
-                style="cursor: pointer;">
-                <p>✚ Add</p>
-            </div>
+    <div class="section-card">
+    <div class="section-header">
+        <h2>Family, Guardians and Contacts</h2>
+
+        <div id="contactAddGuardian"
+             class="open-slideover"
+             data-type="guardian"
+             style="cursor:pointer;">
+            <p>✚ Add</p>
         </div>
-        <table class="details-table">
-            <tbody>
-            <tr>
-                <th>Work Email</th>
-                <td>{{ student.address.emailAddress }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            <tr>
-                <th>Student Home Number</th>
-                <td>{{ student.address.phoneNumber }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            </tbody>
-        </table>
     </div>
+
+    <table class="details-table">
+
+
+
+
+    
+        <thead>
+            <tr>
+                <th>Guardian</th>
+                <th>Relationship</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+      {% if guardianRelations is not empty %}
+
+    {% for relation in guardianRelations %}
+        <tr>
+            <td>
+                {{ relation.guardian.firstName }}
+                {{ relation.guardian.lastName }}
+            </td>
+
+            <td>
+                {{ relation.relationshipType.relationshipTypeName }}
+            </td>
+
+            <td>
+                {{ relation.guardian.email ?? 'Not recorded' }}
+            </td>
+
+            <td>
+                {{ relation.guardian.mobileNumber ?? relation.guardian.homeNumber ?? 'Not recorded' }}
+            </td>
+
+            <td class="arrow">▶</td>
+        </tr>
+    {% endfor %}
+
+{% else %}
+    <tr>
+        <td colspan="5" style="text-align:center;">
+            No guardians added.
+        </td>
+    </tr>
+{% endif %}
+        </tbody>
+    </table>
+</div>
     <div id="slideoverContainer" class="slideover-container">
         <div id="slideoverOverlay" class="slideover-overlay"></div>
             <div class="slideover-drawer">

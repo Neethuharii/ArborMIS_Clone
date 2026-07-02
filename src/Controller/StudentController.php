@@ -13,6 +13,7 @@ use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\StudentGuardianRelationRepository;
 use App\Repository\StudentsRepository;
 use App\Repository\TitlesRepository;
 use App\Service\StudentService;
@@ -64,8 +65,7 @@ final class StudentController extends AbstractController
             'search' => $search,
         ]);
     }
-
-    #[Route('/student/{studentId}', name: 'studentProfile')]
+#[Route('/student/{studentId}', name: 'studentProfile')]
     public function studentProfile(
         int $studentId,
         StudentService $studentService,
@@ -74,11 +74,12 @@ final class StudentController extends AbstractController
         EthnicitiesRepository $ethnicitiesRepository,
         NationalityRepository $nationalityRepository,
         ReligionsRepository $religionsRepository,
-        DocumentTypesRepository $documentTypesRepository,
+        RelationshipTypesRepository $relationshipTypesRepository,
+        StudentGuardianRelationRepository $studentGuardianRelationRepository,
         CardsRepository $cardsRepository,
-        TitlesRepository $titlesRepository,
-        RelationshipTypesRepository $relationshipTypesRepository
-
+          DocumentTypesRepository $documentTypesRepository,
+    
+        TitlesRepository $titlesRepository
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -89,20 +90,20 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
-            'entityId' => $student->getStudentId(),
-            'entityType' => 'student',
+            'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
+
             'genders' => $gendersRepository->findAll(),
-            'titles' => $titlesRepository->findAll(),
-            'relationships' => $relationshipTypesRepository->findAll(),
             'countries' => $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
             'nationalities' => $nationalityRepository->findAll(),
             'religions' => $religionsRepository->findAll(),
-            'documentTypes' => $documentTypesRepository->findAll(),
+            'relationships' => $relationshipTypesRepository->findAll(),
             'card' => $cardsRepository->findAll(),
-
+            'documentTypes' =>$documentTypesRepository->findAll(),
+            'titles'=>$titlesRepository->findAll()
         ]);
     }
+
 
     #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
     public function update(
@@ -132,23 +133,25 @@ final class StudentController extends AbstractController
         }
     }
 
-    #[Route('/student/{id}/guardian/add', name: 'guardian_add', methods: ['POST'])]
-    public function add(
-        int $id,
+    #[Route('/student/{studentId}/guardian/add', name: 'guardian_add', methods: ['POST'])]
+    public function addGuardian(
+        int $studentId,
         Request $request,
-        StudentsRepository $studentRepository,
         StudentService $studentService
     ): Response {
 
-        $student = $studentRepository->find($id);
-        $data = $request->request->all();
+        $student = $studentService->getStudentById($studentId);
 
-        $studentService->createGuardianForStudent($data, $student);
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found');
+        }
+
+        $studentService->createGuardianForStudent($request->request->all(), $student);
 
         $this->addFlash('success', 'Guardian added successfully');
 
         return $this->redirectToRoute('studentProfile', [
-            'studentId' => $student->getStudentId()
+            'studentId' => $studentId
         ]);
     }
 }
