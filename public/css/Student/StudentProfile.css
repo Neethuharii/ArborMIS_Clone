@@ -534,7 +534,6 @@ body {
     background: #fff;
 }
 
-
 .guardian-row:hover {
     background: #d9f4ff;
 }
@@ -571,7 +570,6 @@ body {
     color: #555;
     line-height: 1.6;
 }
-
 
 .guardian-right {
     display: flex;

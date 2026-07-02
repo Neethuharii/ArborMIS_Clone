@@ -77,8 +77,7 @@ final class StudentController extends AbstractController
         RelationshipTypesRepository $relationshipTypesRepository,
         StudentGuardianRelationRepository $studentGuardianRelationRepository,
         CardsRepository $cardsRepository,
-          DocumentTypesRepository $documentTypesRepository,
-    
+        DocumentTypesRepository $documentTypesRepository,
         TitlesRepository $titlesRepository
     ): Response {
 
@@ -91,7 +90,6 @@ final class StudentController extends AbstractController
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
             'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
-
             'genders' => $gendersRepository->findAll(),
             'countries' => $countriesRepository->findAll(),
             'ethnicities' => $ethnicitiesRepository->findAll(),
@@ -103,7 +101,6 @@ final class StudentController extends AbstractController
             'titles'=>$titlesRepository->findAll()
         ]);
     }
-
 
     #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
     public function update(

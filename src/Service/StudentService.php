@@ -257,8 +257,8 @@ final class StudentService
 
         $address->setEmailAddress($email);
         $address->setPhoneNumber($phoneNumber);
-        $address->setCreatedAt(new \DateTimeImmutable());
-        $address->setModifiedAt(new \DateTimeImmutable());
+        $address->setCreatedAt(new DateTimeImmutable());
+        $address->setModifiedAt(new DateTimeImmutable());
 
         $this->entityManager->persist($address);
 
@@ -276,7 +276,7 @@ final class StudentService
 
         $guardian->setAddress($address);
 
-        $now = new \DateTimeImmutable();
+        $now = new DateTimeImmutable();
         $guardian->setCreatedAt($now);
         $guardian->setModifiedAt($now);
 
@@ -295,19 +295,19 @@ final class StudentService
 
         $isPrimary = isset($data['primaryGuardian']);
 
-if ($isPrimary) {
+        if ($isPrimary) {
 
-    $existingPrimary = $this->entityManager
-        ->getRepository(StudentGuardianRelation::class)
-        ->findOneBy([
-            'student' => $student,
-            'primaryRelation' => true
-        ]);
+            $existingPrimary = $this->entityManager
+                ->getRepository(StudentGuardianRelation::class)
+                ->findOneBy([
+                    'student' => $student,
+                    'primaryRelation' => true
+                ]);
 
-    if ($existingPrimary) {
-        throw new \Exception("This student already has a primary guardian. Please remove or update existing primary guardian first.");
-    }
-}
+            if ($existingPrimary) {
+                throw new Exception("This student already has a primary guardian. Please remove or update existing primary guardian first.");
+            }
+        }
 
         $relation->setPrimaryRelation($isPrimary);
 
