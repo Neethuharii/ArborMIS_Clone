@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+{% block title %} Total Points {% endblock %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/Points/total-points.css') }}">
+
+<div class="page-wrapper">
+
+    {{ include('behaviour_base.html.twig') }}
+
+    <div class="main-content">
+
+        <div class="page-header">
+            <h3>Total Points</h3>
+        </div>
+
+        <div class="point-table-container">
+            <table class="point-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Total Points</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% if totals is not empty %}
+                        {% for total in totals %}
+                            <tr>
+                                <td>
+                                    {{ total.student.firstName }} {{ total.student.lastName }}
+                                </td>
+                                <td>
+                                    {{ total.totalPoints}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td>
+                                No Records Found
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -4,18 +4,52 @@
         <div class="nav-module-title"><b>Behaviour</b></div>
         <br>
         <hr>
+
         <div class="nav-items">
             <ul>
                 <li>
-                    <a href="{{ path('app_incident') }}" class="nav-links">▶ Incidents</a>
+                    <a href="{{ path('app_incident') }}" class="nav-links">
+                        ▶ Incidents
+                    </a>
                 </li>
+
                 <li>
-                    <a href="{{ path('app_suspension') }}" class="nav-links">▶ Suspensions</a>
+                    <a href="{{ path('app_suspension') }}" class="nav-links">
+                        ▶ Suspensions
+                    </a>
                 </li>
+
                 <li>
-                    <a href="#" class="nav-links">▶ Point Awards</a>
+                    <a href="javascript:void(0)" class="nav-links" id="point-award-toggle">
+                        ▶ Point Awards
+                    </a>
+
+                    <ul class="sub-links" id="point-award-menu">
+                        <li>
+                            <a href="{{ path('app_points_total') }}" class="sub-link">
+                                Total Points
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ path('app_points_recent') }}" class="sub-link">
+                                Recent Points
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.getElementById("point-award-toggle");
+    const menu = document.getElementById("point-award-menu");
+
+    toggle.addEventListener("click", function () {
+        menu.classList.toggle("show");
+    });
+});
+</script>

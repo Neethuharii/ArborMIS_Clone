@@ -17,9 +17,11 @@ use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\StudentsRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 final class StudentService
@@ -32,7 +34,8 @@ final class StudentService
         private readonly NationalityRepository $nationalityRepository,
         private readonly ReligionsRepository $religionsRepository,
         private readonly DocumentTypesRepository $documentTypesRepository,
-        private readonly RelationshipTypesRepository $relationshipTypesRepository
+        private readonly RelationshipTypesRepository $relationshipTypesRepository,
+        private readonly StudentsRepository $studentsRepository
     ) {}
 
     public function createStudent(Request $request): array
@@ -196,52 +199,84 @@ final class StudentService
         if ($dob !== null) {
             $student->setDob(new DateTimeImmutable($dob));
         }
+        $email = $request->request->get('email');
+        if ($email) {
+            $address = $student->getAddress();
+            if (!$address) {
+                $address = new Address();
+            }
+            $address->setEmailAddress($email);
+            $address->setModifiedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($address);
+
+            $student->setAddress($address);
+        }
+        $student->setModifiedAt(new DateTimeImmutable());
+        $this->entityManager->flush();
+    }
+
+     public function updateStudentDocuments(Students $student, Request $request): void
+    {
         $documentTypeId = $request->request->get('documentType');
         $documentNumber = $request->request->get('documentNumber');
+        $issueDateStr = $request->request->get('issueDate');
+        $expiryDateStr = $request->request->get('expiryDate');
+
+
         if ($documentTypeId && $documentNumber) {
-            $document = $student->getDocument();
-            if (!$document) {
-                $document = new Documents();
-            }
             $documentType = $this->documentTypesRepository->find($documentTypeId);
+
             if (!$documentType) {
-                throw new Exception('Invalid document type.');
+                throw new InvalidArgumentException("Invalid document type selected.");
             }
+
+            $document = new Documents();
             $document->setDocumentNumber($documentNumber);
             $document->setDocumentType($documentType);
-            $issueDate = $request->request->get('issueDate');
-            if ($issueDate) {
-                $document->setIssueDate(new DateTimeImmutable($issueDate));
+            $issueDate = new DateTimeImmutable($issueDateStr);
+            $document->setIssueDate($issueDate);
+
+            if (!empty($issueDateStr)) {
+                $document->setIssueDate(new DateTimeImmutable($issueDateStr));
             }
-            $expiryDate = $request->request->get('expiryDate');
-            if ($expiryDate) {
-                $document->setExpiryDate(new DateTimeImmutable($expiryDate));
+            if (!empty($expiryDateStr)) {
+                $document->setExpiryDate(new DateTimeImmutable($expiryDateStr));
             }
+
             $document->setModifiedAt(new DateTimeImmutable());
             $this->entityManager->persist($document);
-            $student->setDocument($document);
-        }
-        $cardNumber = $request->request->get('cardNumber');
 
-        if ($cardNumber) {
+            $student->setDocument($document);
+            $this->entityManager->flush();
+        }
+    }
+    public function updateStudentCard(Students $student, Request $request): void
+    {
+        $cardno = $request->request->get('cardNumber');
+        if ($cardno) {
             $card = $student->getCard();
             if (!$card) {
                 $card = new Cards();
             }
-            $card->setCardNumber($cardNumber);
-            $card->setStatus($request->request->getBoolean('status'));
-            $issuedDate = $request->request->get('issuedDate');
-            $issuedTime = $request->request->get('issuedTime');
-            if ($issuedDate && $issuedTime) {
+            $card->setCardNumber($cardno);
+
+            $cardstatus = $request->request->has('status');
+            $card->setStatus($cardstatus);
+
+            $issuetime = $request->request->get('issuedTime');
+            $issuedate = $request->request->get('issuedDate');
+            if ($issuedate && $issuetime) {
                 $card->setIssuedAt(
-                    new DateTimeImmutable($issuedDate . ' ' . $issuedTime)
+                    new DateTimeImmutable($issuedate . ' ' . $issuetime)
                 );
             }
+
             $card->setModifiedAt(new DateTimeImmutable());
             $this->entityManager->persist($card);
+
             $student->setCard($card);
         }
-        $student->setModifiedAt(new DateTimeImmutable());
+        $student->setModifiedAt(new \DateTimeImmutable());
         $this->entityManager->flush();
     }
 
@@ -317,4 +352,25 @@ final class StudentService
 
         return $guardian;
     }
+
+    public function deleteUpn(Students $student): void
+    {
+        $student->setUpn(null);
+
+        $student->setModifiedAt(new DateTimeImmutable());
+
+        $this->entityManager->flush();
+    }
+
+    public function generateUpn(): string
+    {
+        do {
+            $upn = chr(rand(65, 90)) . str_pad((string) random_int(0, 9999999999), 10, '0', STR_PAD_LEFT);
+            $exists = $this->studentsRepository->findOneBy([
+                'upn' => $upn
+            ]);
+        } while ($exists);
+        return $upn;
+    }
+    
 }

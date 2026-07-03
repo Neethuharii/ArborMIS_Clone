@@ -1,0 +1,50 @@
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/Slideover/assign-upn.css') }}">
+{% endblock %}
+
+{% block body%}
+
+<div class="page-container">
+    <h1 class="page-title">Assign UPN</h1>
+    <div class="card">
+        <div class="card-header">
+            <h2>UPN Assignment</h2>
+        </div>
+        <div class="card-body">
+            <div class="info-box">
+                <p><strong>Student:</strong> {{ student.firstName }} {{ student.lastName }}</p>
+                <p>
+                    <strong>Current UPN:</strong>
+                    {{ student.upn ? student.upn : 'None recorded' }}
+                </p>
+            </div>
+        </div>
+    </div>
+    <form id="assignUpnForm"
+          method="post"
+          action="{{ path('student_assign_upn', { id: student.studentId }) }}">
+        <div class="form-group">
+            <label for="existingUpn">
+                Existing UPN (optional)
+            </label>
+            <input type="text"
+                   id="existingUpn"
+                   name="existingUpn"
+                   placeholder="Leave blank to assign UPN automatically">
+        </div>
+    
+        <div class="form-actions">
+            <button type="button"
+                    class="btn-cancel"
+                    onclick="document.getElementById('closeBtn').click()">
+                Cancel
+            </button>
+            <button type="submit"
+                    class="btn-primary">
+                Assign UPN
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
