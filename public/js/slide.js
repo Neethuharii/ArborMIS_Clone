@@ -85,6 +85,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            else if (type === 'idcard') {
+                const issueDate = row.dataset.issueddate;
+                const issueTime = row.dataset.issuedtime;
+                const dateTimeDisplay = (issueDate && issueTime) ? `${issueDate} ${issueTime}` : 'N/A';
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Card Number</th>
+                            <td>${row.dataset.idcard || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Issued date/time</th>
+                            <td>${dateTimeDisplay}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else if (type === 'abbreviation') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
@@ -137,6 +154,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return;
 }
+            else if (type === 'email') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Email</th>
+                            <td>${row.dataset.email || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+            else if (type === 'phoneNumber') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Staff Home Number</th>
+                            <td>${row.dataset.phoneNumber || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+            else if (type === 'currentRole') {
+                const startDate = row.dataset.startDate;
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Current Role</th>
+                            <td>${row.dataset.currentRole || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Start Date</th>
+                            <td>${row.dataset.startDate || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else {
                 dynamicContent.innerHTML = `<p>No information available.</p>`;
             }
@@ -292,6 +344,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
 
+            case 'email':
+                slideTitle.textContent = 'Email';
+                templateId = 'emailEditTemplate';
+                formId = 'editEmailForm';
+                break;
+    
             default:
                 return;
         }

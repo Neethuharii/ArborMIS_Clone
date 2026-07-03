@@ -14,8 +14,22 @@ function initialiseSaveForm(formId, container = null) {
 
         let url = form.getAttribute('action');
 
-       const entityId = form.querySelector('[name="entityId"]')?.value;
-       const entityType = form.querySelector('[name="entityType"]')?.value;
+        let entityId = form.querySelector('[name="entityId"]')?.value;
+        let entityType = form.querySelector('[name="entityType"]')?.value;
+
+        if (!entityId) {
+            const staffId = form.querySelector('[name="staffId"]')?.value;
+            if (staffId) {
+                entityId = staffId;
+                entityType = 'staff';
+            }
+
+            const studentId = form.querySelector('[name="studentId"]')?.value;
+            if (studentId) {
+                entityId = studentId;
+                entityType = 'student';
+            }
+        }
 
        if (!url || url === '') {
             if (entityType === 'student') {

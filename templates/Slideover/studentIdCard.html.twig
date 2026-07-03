@@ -1,18 +1,18 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/Slideover.css') }}">
+{% endblock %}
+
 {% block body %}
+{% set card_route = (entityType|lower == 'staff') ? 'staff_idcard' : 'student_idcard' %}
 <div class="card-form-container">
-    <h1 class="page-title">Issue New School ID Card</h1>
-    <form
-        method="POST"
-        id="schoolCardForm"
-        class="schoolCard-form"
-    >
-    <input type="hidden" name="entityId" value="{{ entityId }}">
-    <input type="hidden" name="entityType" value="{{ entityType }}">
+        <form id="schoolCardForm" class="schoolCard-form" action="{{ path(card_route, {'id': entityId}) }}" method="POST">
+        <input type="hidden" name="entityId" value="{{ entityId }}">
+        <input type="hidden" name="entityType" value="{{ entityType }}">
         <div class="form-box">
             <div class="form-row">
-                <label>Student</label>
+                <label>{{ entityType|capitalize }} Name</label> 
                 <div class="field-text">
-                    {{ student.firstName }} {{ student.lastName }}
+                    {{ entity.firstName }} {{ entity.lastName }}
                 </div>
             </div>
             <div class="form-row">
