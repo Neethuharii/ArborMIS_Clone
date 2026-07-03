@@ -2,14 +2,28 @@
 
 {% block attendance_content %}
 
+{% if isWeekend %}
+
+<div class="page-header">
+    <h1>Daily Attendance</h1>
+</div>
+
+<div class="weekend-message">
+    <h2>Attendance cannot be taken on Saturdays or Sundays.</h2>
+</div>
+
+{% else %}
+
 <input type="hidden" id="saveAttendanceUrl" value="{{ path('attendance_save') }}">
+<input type="hidden" id="attendanceDate" value="{{ registerDate|default('now'|date('Y-m-d')) }}">
+<input type="hidden" id="attendanceSession" value="{{ currentSession }}">
 
 <div class="page-header">
     <h1>
         Take Register:
         {{ students|first.classroom ?? 'Class' }}
         -
-        {{ "now"|date("D, d M Y") }}
+        {{ (registerDate)|default('now')|date("D, d M Y") }}
         -
         {{ currentSession }}
     </h1>
@@ -83,6 +97,12 @@
             Skip
         </button>
 
+    </div>
+
+{% else %}
+
+    <div class="no-students">
+        No students found.
     </div>
 
 {% endfor %}
@@ -216,5 +236,7 @@
 </div>
 
 <script src="{{ asset('js/DailyAttendances.js') }}"></script>
+
+{% endif %}
 
 {% endblock %}

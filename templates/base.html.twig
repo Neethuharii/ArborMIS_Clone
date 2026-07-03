@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} | Arbor MIS</title>
+
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {% endblock %}
+
     {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
+
     {% if frankenphpHotReload %}
         <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
         <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
     {% endif %}
 </head>
+
 <body>
+
 <nav>
-    <ul>   
-    <li class="students">
+
+    <ul>
+
+        <li class="students">
             My Items ▼
             <ul class="menu">
                 <li>
@@ -25,68 +32,126 @@
                         <li>
                             <a href="#">
                                 Enroll Student
+                            </a>
                         </li>
+
                         <li>
                             <a href="#">
                                 Assign Staff
                             </a>
                         </li>
-                    </ul> 
+                    </ul>
                 </li>
             </ul>
-        </li> 
+        </li>
+
         <li class="students">
             Students ▼
+
             <ul class="menu">
+
                 <li>
                     All Students ▶
+
                     <ul class="submenu">
+
                         <li>
                             <a href="{{ path('studentsList') }}">
                                 Browse Students
+                            </a>
                         </li>
+
                         <li>
                             <a href="{{ path('newstudent') }}">
                                 Add New Student
                             </a>
                         </li>
-                    </ul> 
+
+                    </ul>
                 </li>
+
                 <li>
                     Behaviour ▶
+
                     <ul class="submenu">
+
                         <li>
-                            <a href="{{ path('app_incident') }}"> 
+                            <a href="{{ path('app_incident') }}">
                                 Incidents
                             </a>
                         </li>
+
                         <li>
                             <a href="{{ path('app_suspension') }}">
                                 Suspensions
                             </a>
                         </li>
+
                     </ul>
                 </li>
-                <li>Attendance</li>
+
+                <li>
+                    Attendance ▶
+
+                    <ul class="submenu">
+
+                        <li>
+                            <a href="{{ path('daily_attendance') }}">
+                                Daily Attendance
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ path('attendance_register') }}">
+                                Registers By Date
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
             </ul>
         </li>
+
         <li class="school">
             School ▼
+
             <ul class="menu">
+
                 <li>
                     All Staff ▶
+
                     <ul class="submenu">
-                        <li><a href="{{ path('browseStaff') }}">Browse Staff </a></li>
-                        <li><a href="{{ path('addstaff') }}">Add New Staff </a></li>
-                  </ul>
+
+                        <li>
+                            <a href="{{ path('browseStaff') }}">
+                                Browse Staff
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ path('addstaff') }}">
+                                Add New Staff
+                            </a>
+                        </li>
+
+                    </ul>
+
                 </li>
+
             </ul>
         </li>
+
         <li>Reporting</li>
         <li>System</li>
+
     </ul>
+
 </nav>
+
 {% block body %}{% endblock %}
+
 {% block javascripts %}{% endblock %}
+
 </body>
 </html>

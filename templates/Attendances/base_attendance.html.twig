@@ -24,7 +24,10 @@
                 Daily Attendance
             </a>
 
-            <a>
+            <a
+                href="{{ path('attendance_register') }}"
+                class="{{ app.request.attributes.get('_route') == 'attendance_register' ? 'active' : '' }}"
+            >
                 Registers By Date
             </a>
 

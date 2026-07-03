@@ -5,11 +5,17 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Attendances;
+use App\Entity\Staffs;
+use App\Repository\StaffsRepository;
+use App\Entity\AttendanceRegisters;
+use App\Entity\Classrooms;
 use App\Repository\AcademicyearsRepository;
 use App\Repository\AttendanceCodesRepository;
 use App\Repository\AttendancesRepository;
+use App\Repository\AttendanceRegistersRepository;
 use App\Repository\StudentEnrollmentsRepository;
 use DateTime;
+use DateTimeInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,62 +26,17 @@ final class AttendanceService
         private readonly AcademicyearsRepository $academicyearsRepository,
         private readonly AttendanceCodesRepository $attendanceCodesRepository,
         private readonly AttendancesRepository $attendancesRepository,
+        private readonly AttendanceRegistersRepository $attendanceRegistersRepository,
         private readonly StudentEnrollmentsRepository $studentEnrollmentsRepository
     ) {}
 
-    public function getAttendanceDates(): array
+    public function isAttendanceDay(): bool
     {
-        $dates = [];
+        $date = new DateTime();
 
-        $academicYear =
-            $this->academicyearsRepository
-            ->findCurrentAcademicYear();
-
-        if (!$academicYear) {
-            return [];
-        }
-
-        $startDate = DateTime::createFromImmutable(
-            $academicYear->getStartDate()
-        );
-
-        $currentDate = new DateTime();
-        $today = new DateTime();
-
-        while ($currentDate >= $startDate) {
-
-            $day = (int) $currentDate->format('N');
-
-            if ($day !== 6 && $day !== 7) {
-
-                $formattedDate =
-                    $currentDate->format('D, d M Y');
-
-                if (
-                    $currentDate->format('Y-m-d')
-                    !==
-                    $today->format('Y-m-d')
-                ) {
-
-                    $dates[] = $formattedDate . ' AM';
-                    $dates[] = $formattedDate . ' PM';
-                } else {
-
-                    if ((int) $today->format('G') >= 9) {
-                        $dates[] = $formattedDate . ' AM';
-                    }
-
-                    if ((int) $today->format('G') >= 13) {
-                        $dates[] = $formattedDate . ' PM';
-                    }
-                }
-            }
-
-            $currentDate->modify('-1 day');
-        }
-
-        return $dates;
+        return (int) $date->format('N') < 6;
     }
+
 
     public function getCurrentAttendanceSession(): string
     {
@@ -86,108 +47,35 @@ final class AttendanceService
             : 'AM';
     }
 
-    public function getStaffStudents($staff): array
-    {
-        $students = [];
+public function getStaffStudents($staff): array
+{
+    $academicYear = $this->academicyearsRepository->findCurrentAcademicYear();
 
-        $academicYear =
-            $this->academicyearsRepository
-            ->findCurrentAcademicYear();
-
-        if (!$academicYear) {
-            return [];
-        }
-
-        $session = $this->getCurrentAttendanceSession();
-
-        foreach ($staff->getClassrooms() as $classroom) {
-
-            foreach ($classroom->getStudentEnrollments() as $enrollment) {
-
-                $enrollmentAcademicYear =
-                    $enrollment->getAcademicYear();
-
-                if (
-                    !$enrollmentAcademicYear ||
-                    $enrollmentAcademicYear->getAcademicYearId()
-                    !==
-                    $academicYear->getAcademicYearId()
-                ) {
-                    continue;
-                }
-
-                $student =
-                    $enrollment->getStudent();
-
-                if (!$student) {
-                    continue;
-                }
-
-                $attendance =
-                    $this->attendancesRepository
-                    ->findAttendance(
-                        $enrollment,
-                        new DateTime(),
-                        $session
-                    );
-
-                $attendanceStatus = 'Not Marked';
-                $attendanceClass = '';
-
-                if ($attendance) {
-
-                    $attendanceStatus =
-                        $attendance->getAttendanceCode()->getCode()
-                        . ' - '
-                        . $attendance->getAttendanceCode()->getDescription();
-
-                    $code =
-                        strtoupper(
-                            $attendance
-                                ->getAttendanceCode()
-                                ->getCode()
-                        );
-
-                    if ($code === 'P') {
-                        $attendanceClass = 'row-present';
-                    } elseif (
-                        $code === 'L' ||
-                        $code === 'LT'
-                    ) {
-                        $attendanceClass = 'row-late';
-                    } else {
-                        $attendanceClass = 'row-absent';
-                    }
-                }
-
-                $students[] = [
-                    'enrollmentId' =>
-                    $enrollment->getStudentEnrollmentId(),
-
-                    'studentId' =>
-                    $student->getStudentId(),
-
-                    'firstName' =>
-                    $student->getFirstName(),
-
-                    'lastName' =>
-                    $student->getLastName(),
-
-                    'classroom' =>
-                    $classroom->getClassName(),
-
-                    'attendanceStatus' =>
-                    $attendanceStatus,
-
-                    'attendanceClass' =>
-                    $attendanceClass,
-                ];
-            }
-        }
-
-        return $students;
+    if (!$academicYear) {
+        return [];
     }
-    
+
+    $session = $this->getCurrentAttendanceSession();
+    $today = new DateTime();
+    $students = [];
+
+    foreach ($staff->getClassrooms() as $classroom) {
+
+        if (
+            !$classroom->getAcademicYear() ||
+            $classroom->getAcademicYear()->getAcademicyearId() !== $academicYear->getAcademicyearId()
+        ) {
+            continue;
+        }
+
+        $students = array_merge(
+            $students,
+            $this->getStudentsForRegister($classroom, $today, $session)
+        );
+    }
+
+    return $students;
+}
     public function getAbsenceCodes(): array
     {
         $academicYear =
@@ -252,6 +140,51 @@ final class AttendanceService
         );
     }
 
+    public function getStudentsForRegister(Classrooms $classroom, DateTime $date, string $session): array
+{
+    $students = [];
+
+    foreach ($classroom->getStudentEnrollments() as $enrollment) {
+
+        $student = $enrollment->getStudent();
+
+        if (!$student) {
+            continue;
+        }
+
+        $attendance = $this->attendancesRepository->findAttendance($enrollment, $date, $session);
+
+        $attendanceStatus = 'Not Marked';
+        $attendanceClass = '';
+
+        if ($attendance) {
+            $attendanceStatus = $attendance->getAttendanceCode()->getCode()
+                . ' - ' . $attendance->getAttendanceCode()->getDescription();
+
+            $code = strtoupper($attendance->getAttendanceCode()->getCode());
+
+            $attendanceClass = match (true) {
+                $code === '/' || $code === '\\' => 'row-present',
+                $code === 'L' => 'row-late',
+                default => 'row-absent',
+            };
+        }
+
+        $students[] = [
+            'enrollmentId' => $enrollment->getStudentEnrollmentId(),
+            'studentId' => $student->getStudentId(),
+            'firstName' => $student->getFirstName(),
+            'lastName' => $student->getLastName(),
+            'classroom' => $classroom->getClassName(),
+            'attendanceStatus' => $attendanceStatus,
+            'attendanceClass' => $attendanceClass,
+        ];
+    }
+
+    return $students;
+}
+
+    
     public function getPresentAttendanceCodeId(
         string $session
     ): ?int {
@@ -279,6 +212,7 @@ final class AttendanceService
         int $attendanceCodeId,
         string $session,
         int $staffId,
+        string $attendanceDateString,
         ?int $lateMinutes = null,
         ?string $note = null
     ): void {
@@ -299,13 +233,13 @@ final class AttendanceService
             return;
         }
 
-        $today = new DateTime();
+        $attendanceDate = new DateTime($attendanceDateString);
 
         $attendance =
             $this->attendancesRepository
             ->findAttendance(
                 $enrollment,
-                $today,
+                $attendanceDate,
                 $session
             );
 
@@ -318,7 +252,7 @@ final class AttendanceService
             );
 
             $attendance->setAttendanceDate(
-                $today
+                $attendanceDate
             );
 
             $attendance->setSession(
@@ -359,5 +293,100 @@ final class AttendanceService
         );
 
         $this->entityManager->flush();
+
+        $this->completeRegisterIfFullyMarked(
+            $enrollment->getClassroom(),
+            $attendanceDate,
+            $session
+        );
+    }
+
+    public function getRegisterByDate(Staffs $staff, string $selectedDate): array
+    {
+        $academicYear = $this->academicyearsRepository
+            ->findAcademicYearByDate(new DateTimeImmutable($selectedDate));
+
+        if (!$academicYear) {
+            return [];
+        }
+
+        $date = new DateTime($selectedDate);
+        $registers = [];
+
+        foreach ($staff->getClassrooms() as $classroom) {
+            if ($classroom->getAcademicYear()->getAcademicyearId() !== $academicYear->getAcademicyearId()) {
+                continue;
+            }
+
+            foreach (['AM', 'PM'] as $session) {
+                $register = $this->attendanceRegistersRepository
+                    ->findByClassroomDateSession($classroom, $date, $session);
+
+                $registers[] = [
+                    'classroom' => $classroom,
+                    'session' => $session,
+                    'staff' => $register?->getStaff() ?? $classroom->getStaff(),
+                    'opened' => $register?->getOpenedAt(),
+                    'completedValid' => $register?->getCompletedAt() !== null,
+                    'status' => $register === null
+                        ? 'Attendance register not opened yet'
+                        : ($register->getCompletedAt() ? 'Attendance register complete' : 'Attendance register opened'),
+                    'registerId' => $register?->getattendanceRegisterId(),
+                ];
+            }
+        }
+
+        return $registers;
+    }
+
+    public function openRegister(
+        Classrooms $classroom,
+        DateTimeInterface $date,
+        string $session,
+        Staffs $staff
+    ): AttendanceRegisters {
+
+        $register = $this->attendanceRegistersRepository
+            ->findByClassroomDateSession($classroom, $date, $session);
+
+        if ($register) {
+            return $register;
+        }
+
+        $register = new AttendanceRegisters();
+        $register->setClassroom($classroom);
+        $register->setAttendanceDate($date);
+        $register->setSession($session);
+        $register->setStaff($staff);
+        $register->setOpenedAt(new DateTimeImmutable());
+
+        $this->entityManager->persist($register);
+        $this->entityManager->flush();
+
+        return $register;
+    }
+
+    public function completeRegisterIfFullyMarked(
+        Classrooms $classroom,
+        DateTime $date,
+        string $session
+    ): void {
+
+        $register = $this->attendanceRegistersRepository
+            ->findByClassroomDateSession($classroom, $date, $session);
+
+        if (!$register || $register->isCompleted()) {
+            return;
+        }
+
+        $totalStudents = count($classroom->getStudentEnrollments());
+
+        $markedCount = $this->attendancesRepository
+            ->countMarkedForClassroomDateSession($classroom, $date, $session);
+
+        if ($markedCount >= $totalStudents) {
+            $register->setCompletedAt(new DateTimeImmutable());
+            $this->entityManager->flush();
+        }
     }
 }

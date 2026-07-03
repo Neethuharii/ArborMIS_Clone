@@ -1,8 +1,6 @@
 let currentStudent = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Attendance DOM Loaded");
-
     document.querySelectorAll('.absent').forEach(button => {
         button.addEventListener('click', () => {
             currentStudent = button.dataset.student;
@@ -66,7 +64,9 @@ function markPresent(studentId) {
         },
         body: JSON.stringify({
             studentId: studentId,
-            attendanceType: 'present'
+            attendanceType: 'present',
+            date: document.getElementById('attendanceDate').value,
+            session: document.getElementById('attendanceSession').value
         })
     })
     .then(response => response.json())
@@ -98,7 +98,9 @@ function saveAbsent() {
         studentId: currentStudent,
         attendanceType: 'absent',
         attendanceCodeId: document.getElementById('absenceCode').value,
-        note: document.getElementById('attendanceNote').value
+        note: document.getElementById('attendanceNote').value,
+        date: document.getElementById('attendanceDate').value,
+        session: document.getElementById('attendanceSession').value
     });
 }
 
@@ -108,7 +110,9 @@ function saveLate() {
         attendanceType: 'late',
         attendanceCodeId: document.getElementById('lateCode').value,
         lateMinutes: document.getElementById('lateMinutes').value,
-        note: document.getElementById('attendanceNote').value
+        note: document.getElementById('attendanceNote').value,
+        date: document.getElementById('attendanceDate').value,
+        session: document.getElementById('attendanceSession').value
     });
 }
 
