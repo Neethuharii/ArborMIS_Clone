@@ -47,9 +47,8 @@ function initialiseSaveForm(formId, container = null) {
                 method: 'POST',
                 body: formData
             });
-
-            const result = await response.json();
-
+    const text = await response.text();
+    const result = JSON.parse(text);
             if (result.success) {
 
                 if (container) {
