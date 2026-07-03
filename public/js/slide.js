@@ -189,6 +189,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+            else if (type === 'address') {
+                const startDate = row.dataset.startDate;
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Address</th>
+                            <td>${row.dataset.address1 || ''} ${row.dataset.address2 || ''} ${row.dataset.address3 || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td>${row.dataset.city || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>County</th>
+                            <td>${row.dataset.county || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Post Code</th>
+                            <td>${row.dataset.postCode || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
             else {
                 dynamicContent.innerHTML = `<p>No information available.</p>`;
             }
@@ -246,6 +269,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     formId = "schoolCardForm";
                     break;
 
+                case "postalAddress":
+                    slideTitle.textContent = "Postal Address";
+                    templateId = "postalAddressTemplate";
+                    formId = "postalAddressForm";
+                    break;
                 case 'upn':
                     if ((currentRow.dataset.upn || '').trim() === '') {
                     slideTitle.textContent = 'Assign UPN';
