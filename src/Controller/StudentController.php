@@ -18,8 +18,10 @@ use App\Repository\StudentsRepository;
 use App\Repository\TitlesRepository;
 use App\Service\StudentService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -89,6 +91,8 @@ final class StudentController extends AbstractController
 
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
+            'entity'            => $student,
+            'entityId'          => $student->getStudentId(),
             'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
             'genders' => $gendersRepository->findAll(),
             'countries' => $countriesRepository->findAll(),
@@ -106,27 +110,69 @@ final class StudentController extends AbstractController
     public function update(
         int $id,
         Request $request,
-        StudentService $studentService
-    ): JsonResponse {
+        StudentService $studentService,
+        StudentsRepository $studentsRepository
+    ): Response {
 
-        $student = $studentService->getStudentById($id);
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Student ID provided.'], 400);
+        }
+
+        $student = $studentsRepository->find($id);
 
         if (!$student) {
-            return $this->json([
-                'success' => false,
-                'message' => 'Student not found.'
-            ], 404);
+            return $this->json(['success' => false, 'message' => 'Student member not found.'], 404);
         }
+
         try {
             $studentService->updateStudent($student, $request);
-            return $this->json([
-                'success' => true
-            ]);
+            return $this->json(['success' => true]);
+        } catch (\Exception $e) {
+            return $this->json(['success' => false, 'message' => 'Unable to save changes']);
+        }
+    }
+
+    #[Route('/student/{id}/document', name: 'student_document', methods: ['POST'])]
+    public function uploadDocument(int $id, Request $request, StudentsRepository $studentsRepository, StudentService $studentService): Response
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Student ID provided.'], 400);
+        }
+
+        $student = $studentsRepository->find($id);
+
+        if (!$student) {
+            return $this->json(['success' => false, 'message' => 'Student member not found.'], 404);
+        }
+
+        try {
+            $studentService->updateStudentDocuments($student, $request);
+            return $this->json(['success' => true]);
+        } catch (Exception $e) {
+            return $this->json(['success' => false, 'message' => 'Unable to upload document']);
+        }
+    }
+
+    #[Route('/student/{id}/idcard', name: 'student_idcard', methods: ['POST'])]
+    public function uploadIdCard(int $id, Request $request, StudentService $studentService, StudentsRepository $studentsRepository): Response
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Student ID provided.'], 400);
+        }
+        $student = $studentsRepository->find($id);
+
+        if (!$student) {
+            return $this->json(['success' => false, 'message' => 'Student member not found.'], 404);
+        }
+
+        try {
+            $studentService->updateStudentCard($student, $request);
+            return $this->json(['success' => true]);
         } catch (Throwable $e) {
             return $this->json([
                 'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+                'message' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -156,61 +202,59 @@ final class StudentController extends AbstractController
         name: 'student_delete_upn',
         methods: ['POST']
     )]
-    public function deleteUpn(
-        int $id,
-        StudentService $studentService
-    ): JsonResponse {
-        $student = $studentService->getStudentById($id);
-
-        if (!$student) {
-
-            return $this->json([
-                'success' => false
-            ], 404);
-        }
-
-        $studentService->deleteUpn($student);
-
-        return $this->json([
-            'success' => true
-        ]);
-    }
-
-   #[Route('/student/{id}/assign-upn', name: 'student_assign_upn', methods: ['POST'])]
-public function assignUpn(
-    Students $student,
-    Request $request,
-    EntityManagerInterface $em,
+ #[Route('/student/{id}/upn/delete', name: 'student_delete_upn', methods: ['POST'])]
+public function deleteUpn(
+    int $id,
     StudentService $studentService
-): JsonResponse {
+): RedirectResponse {
+    $student = $studentService->getStudentById($id);
 
-    $existingUpn = trim($request->request->get('existingUpn'));
-
-    if ($existingUpn !== '') {
-
-        $alreadyExists = $em->getRepository(Students::class)
-            ->findOneBy(['upn' => $existingUpn]);
-
-        if ($alreadyExists) {
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'This UPN already exists.'
-            ]);
-        }
-
-        $student->setUpn($existingUpn);
-
-    } else {
-
-        $student->setUpn($studentService->generateUpn());
-
+    if (!$student) {
+        throw $this->createNotFoundException('Student not found.');
     }
 
-    $em->flush();
+    $studentService->deleteUpn($student);
 
-    return new JsonResponse([
-        'success' => true,
-        'message' => 'UPN assigned successfully.'
+    $this->addFlash('success', 'UPN deleted successfully.');
+
+    return $this->redirectToRoute('studentProfile', [
+        'studentId' => $student->getStudentId(),
     ]);
 }
+
+    #[Route('/student/{id}/assign-upn', name: 'student_assign_upn', methods: ['POST'])]
+    public function assignUpn(
+        Students $student,
+        Request $request,
+        EntityManagerInterface $em,
+        StudentService $studentService
+    ): JsonResponse {
+
+        $existingUpn = trim($request->request->get('existingUpn'));
+
+        if ($existingUpn !== '') {
+
+            $alreadyExists = $em->getRepository(Students::class)
+                ->findOneBy(['upn' => $existingUpn]);
+
+            if ($alreadyExists) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'This UPN already exists.'
+                ]);
+            }
+
+            $student->setUpn($existingUpn);
+        } else {
+
+            $student->setUpn($studentService->generateUpn());
+        }
+
+        $em->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'UPN assigned successfully.'
+        ]);
+    }
 }
