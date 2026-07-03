@@ -175,4 +175,42 @@ final class StudentController extends AbstractController
             'success' => true
         ]);
     }
+
+   #[Route('/student/{id}/assign-upn', name: 'student_assign_upn', methods: ['POST'])]
+public function assignUpn(
+    Students $student,
+    Request $request,
+    EntityManagerInterface $em,
+    StudentService $studentService
+): JsonResponse {
+
+    $existingUpn = trim($request->request->get('existingUpn'));
+
+    if ($existingUpn !== '') {
+
+        $alreadyExists = $em->getRepository(Students::class)
+            ->findOneBy(['upn' => $existingUpn]);
+
+        if ($alreadyExists) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'This UPN already exists.'
+            ]);
+        }
+
+        $student->setUpn($existingUpn);
+
+    } else {
+
+        $student->setUpn($studentService->generateUpn());
+
+    }
+
+    $em->flush();
+
+    return new JsonResponse([
+        'success' => true,
+        'message' => 'UPN assigned successfully.'
+    ]);
+}
 }

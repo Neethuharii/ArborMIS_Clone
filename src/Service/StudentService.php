@@ -17,6 +17,7 @@ use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
+use App\Repository\StudentsRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -32,7 +33,8 @@ final class StudentService
         private readonly NationalityRepository $nationalityRepository,
         private readonly ReligionsRepository $religionsRepository,
         private readonly DocumentTypesRepository $documentTypesRepository,
-        private readonly RelationshipTypesRepository $relationshipTypesRepository
+        private readonly RelationshipTypesRepository $relationshipTypesRepository,
+        private readonly StudentsRepository $studentsRepository
     ) {}
 
     public function createStudent(Request $request): array
@@ -326,4 +328,16 @@ final class StudentService
 
         $this->entityManager->flush();
     }
+
+    public function generateUpn(): string
+    {
+        do {
+            $upn = chr(rand(65, 90)) . str_pad((string) random_int(0, 9999999999), 10, '0', STR_PAD_LEFT);
+            $exists = $this->studentsRepository->findOneBy([
+                'upn' => $upn
+            ]);
+        } while ($exists);
+        return $upn;
+    }
+    
 }
