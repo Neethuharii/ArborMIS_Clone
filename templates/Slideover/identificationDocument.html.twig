@@ -1,14 +1,12 @@
 {% block body %}
-
+{% set doc_route = (entityType|lower == 'staff') ? 'staff_document' : 'student_document' %}
 <div class="identification-wrapper">
-    <form id="identificationForm" class="identification-form" action="{{ path('staff_document', {'id': staff.staffId}) }}" method="POST">
+    <form id="identificationForm" class="identification-form" action="{{ path(doc_route, {'id': entityId}) }}" method="POST">
         <input type="hidden" name="entityId" value="{{ entityId }}">
         <input type="hidden" name="entityType" value="{{ entityType }}">
         <div class="form-container">
-            <div class="form-row">
-                <label>
-                    Type <span class="required">*</span>
-                </label>
+        <div class="form-row">
+                <label>Type <span class="required">*</span></label>
                 <select name="documentType" required>
                     <option value="">Select document type</option>
                     {% for documentType in documentTypes %}
