@@ -127,7 +127,7 @@ final class StudentController extends AbstractController
         try {
             $studentService->updateStudent($student, $request);
             return $this->json(['success' => true]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->json(['success' => false, 'message' => 'Unable to save changes']);
         }
     }
