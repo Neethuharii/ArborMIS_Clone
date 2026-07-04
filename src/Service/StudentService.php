@@ -404,5 +404,30 @@ final class StudentService
         $this->entityManager->flush();
     }
 
+      public function updateAddress(Students $student, Request $request): void
+    {
+        $address = $student->getAddress();
+        if (!$address) {
+            $address = new Address();
+        }
+        $line1 = $request->request->get('address1');
+        $line2 = $request->request->get('address2', null);
+        $line3 = $request->request->get('address3', null);
+        $city = $request->request->get('city');
+        $county = $request->request->get('county', null);
+        $postCode = $request->request->get('postalCode');
+
+        $address->setAddress1($line1);
+        $address->setAddress2($line2);
+        $address->setAddress3($line3);
+        $address->setCity($city);
+        $address->setCounty($county);
+        $address->setPostCode($postCode);
+
+        $student->setAddress($address);
+        $this->entityManager->persist($address);
+
+        $this->entityManager->flush();
+    }
     
 }

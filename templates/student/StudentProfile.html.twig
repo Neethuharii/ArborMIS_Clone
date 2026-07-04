@@ -139,28 +139,55 @@
     </div>
 
     <div class="section-card">
-        <div class="section-header">
-            <h2>Student Contact Details</h2>
-            <div id="contactAdd" class="section-add" style="cursor: pointer;">
-                <span class="add-icon">+</span> Add
+            <div class="section-header">
+                <h2>Student Contact Details</h2>
+                    <div id="contactAdd" class="section-add" style="cursor: pointer;">
+                            <span class="add-icon">+</span> Add
+                    </div>
             </div>
 
+            <table class="details-table">
+                <tbody>
+                    <tr class="clickable-row" 
+                            data-title="Email" 
+                            data-type="email"
+                            data-email="{{ student.address.emailAddress }}">
+                            <th>Work Email</th>
+                            <td>{{ student.address.emailAddress }}</td>
+                            <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row"
+                        data-title="Student Home Number"
+                        data-type="phoneNumber"
+                        data-phone-number= "{{ student.address ? student.address.phoneNumber : 'Not recorded' }}">
+                            <th>Student Home Number</th>
+                            <td>{{ student.address ? student.address.phoneNumber : 'Not recorded' }}</td>
+                            <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row"
+                        data-title="Address"
+                        data-type="address"
+                        data-address1= "{{ student.address ? student.address.address1 : 'Not recorded' }}"
+                        data-address2= "{{ student.address ? student.address.address2 : 'Not recorded' }}"
+                        data-address3= "{{ student.address ? student.address.address3 : 'Not recorded' }}"
+                        data-city= "{{ student.address ? student.address.city : 'Not recorded' }}"
+                        data-county= "{{ student.address ? student.address.county : 'Not recorded' }}"
+                        data-post-code= "{{ student.address ? student.address.postCode : 'Not recorded' }}">
+                        <th>Postal Address</th>
+                        <td>{{ student.address ?student.address.address1 : 'Not recorded' }} 
+                            {{ student.address ?student.address.address2 : 'Not recorded' }} 
+                            {{ student.address ?student.address.address3 : 'Not recorded' }}
+                            {{ student.address ?student.address.city : 'Not recorded' }}
+                            {{ student.address ?student.address.county : 'Not recorded' }}
+                            {{ student.address ?student.address.postCode : 'Not recorded' }}
+                        </td>
+                        <td class="arrow">▶</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <table class="details-table">
-            <tbody>
-            <tr>
-                <th>Work Email</th>
-                <td>{{ student.address.emailAddress }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            <tr>
-                <th>Student Home Number</th>
-                <td>{{ student.address.phoneNumber }}</td>
-                <td class="arrow">▶</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
   <div class="section-card">
     <div class="section-header">
         <h2>Family, Guardians and Contacts</h2>
@@ -606,6 +633,29 @@
     } %}
 </template>
 
+ <template id="postalAddressTemplate">
+            {% include 'Slideover/postalAddress.html.twig' %}
+        </template>
+
+ <template id="emailEditTemplate">
+            <div class="edit-form-wrapper">
+                <h2>Email</h2>
+                <form id="editEmailForm">
+                    
+                    <input type="hidden" name="studentId" value="{{ student.studentId }}">
+
+                    <div class="form-row">
+                        <label>Email</label>
+                        <input type="email" name="email" value="{{ student.address ? student.address.emailAddress : '' }}">
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="cancel-btn" id="cancelEdit"> Cancel </button>
+                        <button type="submit" class="save-btn"> Save Changes </button>
+                    </div>
+                </form>
+            </div>
+        </template>
 
 {% endblock %}
 

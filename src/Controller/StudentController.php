@@ -101,6 +101,7 @@ final class StudentController extends AbstractController
             'student' => $student,
             'entity'            => $student,
             'entityId'          => $student->getStudentId(),
+            'entityType'        => 'student',
             'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
             'genders' => $gendersRepository->findAll(),
             'countries' => $countriesRepository->findAll(),
@@ -286,5 +287,23 @@ final class StudentController extends AbstractController
         ]);
     }
 
-    
+     #[Route('/student/{id}/address', name: 'student_address', methods: ['POST'])]
+    public function updateAddress(int $id, Request $request, StudentsRepository $studentsRepository, StudentService $studentService): Response
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Student ID provided.'], 400);
+        }
+        $student = $studentsRepository->find($id);
+
+        if (!$student) {
+            return new JsonResponse(['success' => false, 'message' => 'Student member not found'], 400);
+        }
+        try{
+            $studentService->updateAddress($student,$request);
+            return $this->json(['success' =>true]);
+        }catch(Exception $e){
+            return $this->json(['success' => false, 'message' => 'Unable to upload student address']);
+        }
+    }
+
 }
