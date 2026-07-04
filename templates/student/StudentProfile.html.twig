@@ -231,6 +231,33 @@
 
     </div>
 </div>
+ <div class="section-card">
+        <div class="section-header">
+            <h2>Student Funding </h2>
+            <div id="funding"
+     class="section-add open-slideover"
+     data-type="funding"
+     style="cursor: pointer;">
+    <span class="add-icon">+</span> Add
+</div>
+
+        </div>
+        <table class="details-table">
+         <tbody>
+{% for funding in fundings %}
+    <tr class="clickable-row" data-type="funding">
+        <th>{{ funding.fundingType.fundingTypeName }}</th>
+        <td>{{ funding.startDate|date('d/m/Y') }}</td>
+        <td class="arrow">▶</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="3">No funding found.</td>
+    </tr>
+{% endfor %}
+</tbody>
+        </table>
+    </div>
     <div id="slideoverContainer" class="slideover-container">
         <div id="slideoverOverlay" class="slideover-overlay"></div>
             <div class="slideover-drawer">
@@ -572,6 +599,19 @@
     } %}
 
 </template>
+
+<template id="fundingCardTemplate">
+    {% include 'student/AddFunding.html.twig' with {
+        student: student
+    } %}
+</template>
+
+<template id="fundingEditTemplate">
+    {% include 'student/Edo.html.twig' with {
+        student: student
+    } %}
+</template>
+
 {% endblock %}
 
 {% block javascripts %}

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Fundings;
 use App\Entity\Students;
 use App\Repository\CardsRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
+use App\Repository\FundingsRepository;
+use App\Repository\FundingTypesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\RelationshipTypesRepository;
@@ -80,7 +83,9 @@ final class StudentController extends AbstractController
         StudentGuardianRelationRepository $studentGuardianRelationRepository,
         CardsRepository $cardsRepository,
         DocumentTypesRepository $documentTypesRepository,
-        TitlesRepository $titlesRepository
+        TitlesRepository $titlesRepository,
+        FundingTypesRepository $fundingTypesRepository,
+        FundingsRepository $fundingsRepository
     ): Response {
 
         $student = $studentService->getStudentById($studentId);
@@ -88,7 +93,10 @@ final class StudentController extends AbstractController
         if (!$student) {
             throw $this->createNotFoundException('Student not found');
         }
-
+        $fundings = $fundingsRepository->findBy(
+            ['student' => $student],
+            ['startDate' => 'DESC']
+        );
         return $this->render('student/StudentProfile.html.twig', [
             'student' => $student,
             'entity'            => $student,
@@ -102,7 +110,9 @@ final class StudentController extends AbstractController
             'relationships' => $relationshipTypesRepository->findAll(),
             'card' => $cardsRepository->findAll(),
             'documentTypes' => $documentTypesRepository->findAll(),
-            'titles' => $titlesRepository->findAll()
+            'titles' => $titlesRepository->findAll(),
+            'fundingTypes' => $fundingTypesRepository->findAll(),
+            'fundings' => $fundings,
         ]);
     }
 
@@ -202,25 +212,25 @@ final class StudentController extends AbstractController
         name: 'student_delete_upn',
         methods: ['POST']
     )]
- #[Route('/student/{id}/upn/delete', name: 'student_delete_upn', methods: ['POST'])]
-public function deleteUpn(
-    int $id,
-    StudentService $studentService
-): RedirectResponse {
-    $student = $studentService->getStudentById($id);
+    #[Route('/student/{id}/upn/delete', name: 'student_delete_upn', methods: ['POST'])]
+    public function deleteUpn(
+        int $id,
+        StudentService $studentService
+    ): RedirectResponse {
+        $student = $studentService->getStudentById($id);
 
-    if (!$student) {
-        throw $this->createNotFoundException('Student not found.');
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found.');
+        }
+
+        $studentService->deleteUpn($student);
+
+        $this->addFlash('success', 'UPN deleted successfully.');
+
+        return $this->redirectToRoute('studentProfile', [
+            'studentId' => $student->getStudentId(),
+        ]);
     }
-
-    $studentService->deleteUpn($student);
-
-    $this->addFlash('success', 'UPN deleted successfully.');
-
-    return $this->redirectToRoute('studentProfile', [
-        'studentId' => $student->getStudentId(),
-    ]);
-}
 
     #[Route('/student/{id}/assign-upn', name: 'student_assign_upn', methods: ['POST'])]
     public function assignUpn(
@@ -257,4 +267,24 @@ public function deleteUpn(
             'message' => 'UPN assigned successfully.'
         ]);
     }
+
+    #[Route('/student/{id}/add-funding', name: 'add_funding', methods: ['POST'])]
+    public function createFunding(
+        int $id,
+        Request $request,
+        StudentsRepository $studentsRepository,
+        StudentService $studentService
+    ): Response {
+        $student = $studentsRepository->find($id);
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found.');
+        }
+        $studentService->addFunding($student, $request);
+        return $this->redirectToRoute('studentProfile', [
+            'studentId' => $student->getStudentId(),
+            'id' => $id
+        ]);
+    }
+
+    
 }
