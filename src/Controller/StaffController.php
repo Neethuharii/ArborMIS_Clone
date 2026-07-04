@@ -48,7 +48,8 @@ class StaffController extends AbstractController
     }
 
     #[Route('/Staff/profile/{id}', name: 'staffProfile')]
-    public function profile(int $id, StaffService $staffService, GendersRepository $gendersRepository, EthnicitiesRepository $ethnicitiesRepository, ReligionsRepository $religionsRepository,  DocumentTypesRepository $documentTypesRepository,  CountriesRepository $countriesRepository, NationalityRepository $nationalityRepository): Response {
+    public function profile(int $id, StaffService $staffService, GendersRepository $gendersRepository, EthnicitiesRepository $ethnicitiesRepository, ReligionsRepository $religionsRepository,  DocumentTypesRepository $documentTypesRepository,  CountriesRepository $countriesRepository, NationalityRepository $nationalityRepository): Response
+    {
         $staff = $staffService->getStaffById($id);
         if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
@@ -56,9 +57,9 @@ class StaffController extends AbstractController
 
         return $this->render('Staff/profile.html.twig', [
             'staff' => $staff,
-            'entity'            => $staff,                    
-            'entityId'          => $staff->getStaffId(),      
-            'entityType'        => 'staff',                   
+            'entity'            => $staff,
+            'entityId'          => $staff->getStaffId(),
+            'entityType'        => 'staff',
             'all_genders'       => $gendersRepository->findAll(),
             'all_ethnicities'   => $ethnicitiesRepository->findAll(),
             'all_religions'     => $religionsRepository->findAll(),
@@ -110,9 +111,9 @@ class StaffController extends AbstractController
         }
     }
 
-    #[Route('/Staff/{id}/idcard',name:'staff_idcard', methods:['POST'])]
-    public function uploadIdCard(int $id,Request $request,StaffService $staffService,StaffsRepository $staffRepository):Response
-    {    
+    #[Route('/Staff/{id}/idcard', name: 'staff_idcard', methods: ['POST'])]
+    public function uploadIdCard(int $id, Request $request, StaffService $staffService, StaffsRepository $staffRepository): Response
+    {
         if ($id === 0) {
             return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
         }
@@ -123,10 +124,29 @@ class StaffController extends AbstractController
         }
 
         try {
-            $staffService->updateStaffCard($staff,$request);
+            $staffService->updateStaffCard($staff, $request);
             return $this->json(['success' => true]);
         } catch (\Exception $e) {
             return $this->json(['success' => false, 'message' => 'Unable to upload Id card']);
+        }
+    }
+
+    #[Route('/Staff/{id}/address', name: 'staff_address', methods: ['POST'])]
+    public function updateAddress(int $id, Request $request, StaffsRepository $staffRepository, StaffService $staffService): Response
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        }
+        $staff = $staffRepository->find($id);
+
+        if (!$staff) {
+            return new JsonResponse(['success' => false, 'message' => 'Staff member not found'], 400);
+        }
+        try{
+            $staffService->updateAddress($staff,$request);
+            return $this->json(['success' =>true]);
+        }catch(\Exception $e){
+            return $this->json(['success' => false, 'message' => 'Unable to upload staff address']);
         }
     }
 }

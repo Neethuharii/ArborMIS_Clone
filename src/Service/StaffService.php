@@ -70,7 +70,7 @@ class StaffService
     {
         return $this->nationalityRepository->findAll();
     }
-            
+
     public function getStaffById(int $id): ?Staffs
     {
         return $this->staffsRepository->find($id);
@@ -182,8 +182,6 @@ class StaffService
         $roleHistory->setCreatedAt(new \DateTimeImmutable());
         $roleHistory->setModifiedAt(new \DateTimeImmutable());
         $this->entityManager->persist($roleHistory);
-
-        $this->entityManager->flush();
 
         $staff->setCurrentRole($roleHistory);
         $this->entityManager->flush();
@@ -328,6 +326,31 @@ class StaffService
             $staff->setIdCard($card);
         }
         $staff->setModifiedAt(new \DateTimeImmutable());
+        $this->entityManager->flush();
+    }
+    public function updateAddress(Staffs $staff, Request $request): void
+    {
+        $address = $staff->getAddress();
+        if (!$address) {
+            $address = new Address();
+        }
+        $line1 = $request->request->get('address1');
+        $line2 = $request->request->get('address2', null);
+        $line3 = $request->request->get('address3', null);
+        $city = $request->request->get('city');
+        $county = $request->request->get('county', null);
+        $postCode = $request->request->get('postalCode');
+
+        $address->setAddress1($line1);
+        $address->setAddress2($line2);
+        $address->setAddress3($line3);
+        $address->setCity($city);
+        $address->setCounty($county);
+        $address->setPostCode($postCode);
+
+        $staff->setAddress($address);
+        $this->entityManager->persist($address);
+
         $this->entityManager->flush();
     }
 }

@@ -145,21 +145,41 @@
 
             <table class="details-table">
                 <tbody>
-                <tr class="clickable-row" 
-                        data-title="Email" 
-                        data-type="email"
-                        data-email="{{ staff.address.emailAddress }}">
-                        <th>Work Email</th>
-                        <td>{{ staff.address.emailAddress }}</td>
-                        <td class="arrow">▶</td>
-                </tr>
+                    <tr class="clickable-row" 
+                            data-title="Email" 
+                            data-type="email"
+                            data-email="{{ staff.address.emailAddress }}">
+                            <th>Work Email</th>
+                            <td>{{ staff.address.emailAddress }}</td>
+                            <td class="arrow">▶</td>
+                    </tr>
 
-                <tr class="clickable-row"
-                    data-title="Staff Home Number"
-                    data-type="phoneNumber"
-                    data-phone-number= "{{ staff.address ? staff.address.phoneNumber : 'Not recorded' }}">
-                        <th>Staff Home Number</th>
-                        <td>{{ staff.address ? staff.address.phoneNumber : 'Not recorded' }}</td>
+                    <tr class="clickable-row"
+                        data-title="Staff Home Number"
+                        data-type="phoneNumber"
+                        data-phone-number= "{{ staff.address ? staff.address.phoneNumber : 'Not recorded' }}">
+                            <th>Staff Home Number</th>
+                            <td>{{ staff.address ? staff.address.phoneNumber : 'Not recorded' }}</td>
+                            <td class="arrow">▶</td>
+                    </tr>
+
+                    <tr class="clickable-row"
+                        data-title="Address"
+                        data-type="address"
+                        data-address1= "{{ staff.address ? staff.address.address1 : 'Not recorded' }}"
+                        data-address2= "{{ staff.address ? staff.address.address2 : 'Not recorded' }}"
+                        data-address3= "{{ staff.address ? staff.address.address3 : 'Not recorded' }}"
+                        data-city= "{{ staff.address ? staff.address.city : 'Not recorded' }}"
+                        data-county= "{{ staff.address ? staff.address.county : 'Not recorded' }}"
+                        data-post-code= "{{ staff.address ? staff.address.postCode : 'Not recorded' }}">
+                        <th>Postal Address</th>
+                        <td>{{ staff.address ?staff.address.address1 : 'Not recorded' }} 
+                            {{ staff.address ?staff.address.address2 : 'Not recorded' }} 
+                            {{ staff.address ?staff.address.address3 : 'Not recorded' }}
+                            {{ staff.address ?staff.address.city : 'Not recorded' }}
+                            {{ staff.address ?staff.address.county : 'Not recorded' }}
+                            {{ staff.address ?staff.address.postCode : 'Not recorded' }}
+                        </td>
                         <td class="arrow">▶</td>
                     </tr>
                 </tbody>
@@ -443,6 +463,10 @@
         
         <template id="studentCardTemplate">
             {% include 'Slideover/studentIdCard.html.twig'%}
+        </template>
+
+         <template id="postalAddressTemplate">
+            {% include 'Slideover/postalAddress.html.twig' %}
         </template>
 
        <template id="emailEditTemplate">

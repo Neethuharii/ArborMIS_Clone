@@ -1,0 +1,46 @@
+{% block body %}
+
+{% set address_route = (entityType|lower == 'staff') ? 'staff_address' : 'student_address' %}
+
+<div class="address-wrapper">
+
+    <form id="postalAddressForm" class="postaladdress-form" action="{{ path(address_route, {'id': entityId}) }}" method="POST">
+    
+        <input type="hidden" name="entityId" value="{{ entityId }}">
+        <input type="hidden" name="entityType" value="{{ entityType }}">
+
+        <div class="form-container">
+            <div class="form-row">                
+                <label>Address 1<span class="required">*</span></label>
+                <input type="text" name="address1">
+            </div>
+            <div class="form-row">
+                <label>Address 2</label>
+                <input type="text" name="address2">
+            </div>
+            <div class="form-row">
+                <label>Address 3</label>
+                <input type="text" name="address3">
+            </div>
+            <div class="form-row">
+                <label>City/town<span class="required">*</span></label>
+                <input type="text" name="city">
+            </div>
+            <div class="form-row">
+                <label>County</label>
+                <input type="text" name="county">
+            </div>
+            <div class="form-row">
+                <label>Post Code <span class="required">*</span></label>
+                <input type="text" name="postalCode">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="button" class="cancel-btn"> Cancel </button>
+            <button type="submit" class="save-btn"> Add Postal Address </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
