@@ -6,8 +6,11 @@ namespace App\Repository;
 
 use App\Entity\Attendances;
 use App\Entity\StudentEnrollments;
+use App\Entity\Classrooms;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DateTimeInterface;
+use DateTime;
 
 class AttendancesRepository extends ServiceEntityRepository
 {
@@ -22,7 +25,7 @@ class AttendancesRepository extends ServiceEntityRepository
 
     public function findAttendance(
         StudentEnrollments $enrollment,
-        \DateTime $date,
+        DateTime $date,
         string $session
     ): ?Attendances {
         return $this->createQueryBuilder('a')
@@ -36,20 +39,21 @@ class AttendancesRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findByDateAndSession(
-        \DateTime $date,
+    public function countMarkedForClassroomDateSession(
+        Classrooms $classroom,
+        DateTimeInterface $date,
         string $session
-    ): array {
-        return $this->createQueryBuilder('a')
-            ->leftJoin('a.studentEnrollment', 'se')
-            ->leftJoin('se.student', 's')
-            ->addSelect('se')
-            ->addSelect('s')
-            ->where('a.attendance_date = :date')
+    ): int {
+        return (int) $this->createQueryBuilder('a')
+            ->select('COUNT(a.attendance_id)')
+            ->join('a.studentEnrollment', 'e')
+            ->andWhere('e.classroom = :classroom')
+            ->andWhere('a.attendance_date = :date')
             ->andWhere('a.session = :session')
+            ->setParameter('classroom', $classroom)
             ->setParameter('date', $date->format('Y-m-d'))
             ->setParameter('session', $session)
             ->getQuery()
-            ->getResult();
+            ->getSingleScalarResult();
     }
 }

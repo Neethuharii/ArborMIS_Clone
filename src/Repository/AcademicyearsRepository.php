@@ -23,4 +23,14 @@ class AcademicyearsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findAcademicYearByDate(DateTimeImmutable $selectedDate): ?Academicyears
+    {
+        return $this->createQueryBuilder('a')
+            ->Where('a.start_date <= :date')
+            ->andWhere('a.end_date >= :date')
+            ->setParameter('date',$selectedDate)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

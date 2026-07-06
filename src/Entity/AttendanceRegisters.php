@@ -15,7 +15,7 @@ class AttendanceRegisters
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'attendanceRegisters')]
-    #[ORM\JoinColumn(name:'classroom_id',referencedColumnName: 'classroom_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'classroom_id', referencedColumnName: 'classroom_id', nullable: false)]
     private ?Classrooms $classroom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -28,7 +28,7 @@ class AttendanceRegisters
     private ?\DateTimeImmutable $openedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'attendanceRegisters')]
-    #[ORM\JoinColumn(name: 'staff_id',referencedColumnName: 'staff_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'staff_id', referencedColumnName: 'staff_id', nullable: false)]
     private ?Staffs $staff = null;
 
     #[ORM\Column(name: 'completed_at', nullable: true)]
@@ -109,5 +109,15 @@ class AttendanceRegisters
         $this->completedAt = $completedAt;
 
         return $this;
+    }
+
+    public function isOpened(): bool
+    {
+        return $this->openedAt !== null;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->completedAt !== null;
     }
 }

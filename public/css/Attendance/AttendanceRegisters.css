@@ -4,6 +4,37 @@ body {
     background-color: #ffffff;
 }
 
+#page-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.loader-box {
+    text-align: center;
+}
+
+.rotating-logo {
+    width: 80px;
+    height: auto;
+    animation: rotateLogo 1.5s linear infinite;
+    display: block;
+    margin: 0 auto;
+}
+
+@keyframes rotateLogo {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .page-title-container h1 {
     font-size: 28px;
     font-weight: 600;
@@ -91,6 +122,11 @@ body {
     color: #444444;
 }
 
+.arbor-table-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
 .arbor-table-row {
     display: grid;
     grid-template-columns: 1.5fr 1fr 2fr 1fr 1.5fr 1fr;
@@ -126,4 +162,76 @@ body {
     color: #777777;
     font-style: italic;
     background-color: #ffffff;
+}
+
+.register-slide-over {
+    position: fixed;
+    top: 0;
+    right: -500px;
+    width: 500px;
+    height: 100%;
+    background: white;
+    transition: right .3s ease;
+    box-shadow: -3px 0 8px rgba(0,0,0,.2);
+    z-index: 9999;
+    padding: 20px;
+}
+
+.register-slide-over.open {
+    right: 0;
+}
+
+#closeSlideOver {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    float: right;
+}
+
+.register-slide-over p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+
+#openRegisterBtn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 16px;
+    background-color: #5cb85c;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+#page-loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.loader-box {
+    text-align: center;
+}
+
+.rotating-logo {
+    width: 80px;
+    height: auto;
+    animation: rotateLogo 1.5s linear infinite;
+    display: block;
+    margin: 0 auto;
+}
+
+@keyframes rotateLogo {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }

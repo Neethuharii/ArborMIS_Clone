@@ -7,23 +7,35 @@
 
 {% block attendance_content %}
 
+<div id="page-loader" style="display: none;">
+    <div class="loader-box">
+        <img src="{{ asset('images/arborlogo.png') }}" class="rotating-logo">
+        <p>Loading...</p>
+    </div>
+</div>
+
 <div class="page-title-container">
     <h1>Registers By Date</h1>
 </div>
 
-<form class="date-selector">
+<form method="GET" action="" class="date-selector">
     <div class="date-input-wrapper">
-        <input type="date" id="registerDateSelector">
+        <input
+            type="date"
+            id="registerDateSelector"
+            name="date"
+            value="{{ selectedDate|default('now'|date('Y-m-d')) }}"
+        >
         <span class="calendar-icon">📅</span>
     </div>
 
-    <button type="button" class="change-date-btn">
+    <button type="submit" class="change-date-btn">
         Change Date
     </button>
 </form>
 
 <div class="date-heading-banner">
-    <h2></h2>
+    <h2>{{ selectedDate|date('D, d M Y') }}</h2>
 </div>
 
 <div class="arbor-table-container">
@@ -38,9 +50,89 @@
     </div>
 
     <div class="arbor-table-body">
+        {% for register in registers|default([]) %}
 
+            <div class="arbor-table-row">
+
+                <div class="clickable-cell">
+                    <a
+                        href="#"
+                        class="register-link"
+                        data-classroom-id="{{ register.classroom.classroomId }}"
+                        data-classname="{{ register.classroom.className }}"
+                        data-session="{{ register.session }}"
+                        data-date="{{ selectedDate }}"
+                        data-staff="{{ register.staff ? register.staff.firstName : '' }}"
+                        data-status="{{ register.status }}"
+                    >
+                        {{ register.classroom.className }}
+                    </a>
+                </div>
+
+                <div>{{ register.session }}</div>
+
+                <div>
+                    {{ register.staff ? register.staff.firstName : '' }}
+                </div>
+
+                <div>
+                    {{ register.opened ? register.opened|date('d M Y H:i') :'-'}}
+                </div>
+
+                <div>
+                    {{ register.completedValid ? '✓' : '—' }}
+                </div>
+
+                <div>
+                    {{ register.marks|default('') }}
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <div class="arbor-table-empty">
+                No registers found for this date.
+            </div>
+
+        {% endfor %}
     </div>
 
 </div>
+
+<div id="registerSlideOver" class="register-slide-over">
+    <button id="closeSlideOver">×</button>
+    <h2 id="slideClassName"></h2>
+
+    <p>
+        <strong>Date:</strong>
+        <span id="slideDate"></span>
+    </p>
+
+    <p>
+        <strong>Session:</strong>
+        <span id="slideSession"></span>
+    </p>
+    
+    <p>
+        <strong>Staff:</strong>
+        <span id="slideStaff"></span>
+    </p>
+
+    <p>
+        <strong>Status:</strong>
+        <span id="slideStatus"></span>
+    </p>
+
+
+    <a id="openRegisterBtn" href="#">
+        Open Register
+    </a>
+
+    
+    
+</div>
+
+<script src="{{ asset('js/AttendanceRegisters.js') }}"></script>
 
 {% endblock %}
