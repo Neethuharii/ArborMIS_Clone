@@ -208,11 +208,7 @@ final class StudentController extends AbstractController
             'studentId' => $studentId
         ]);
     }
-    #[Route(
-        '/student/{id}/upn/delete',
-        name: 'student_delete_upn',
-        methods: ['POST']
-    )]
+
     #[Route('/student/{id}/upn/delete', name: 'student_delete_upn', methods: ['POST'])]
     public function deleteUpn(
         int $id,

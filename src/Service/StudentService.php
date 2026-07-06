@@ -332,7 +332,6 @@ final class StudentService
 
         $isPrimary = isset($data['primaryGuardian']);
 
-        $isPrimary = isset($data['primaryGuardian']);
 
         if ($isPrimary) {
 
