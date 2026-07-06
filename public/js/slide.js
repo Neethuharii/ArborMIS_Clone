@@ -189,6 +189,50 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
+
+             else if (type === 'funding') {
+
+    const fund = (row.dataset.fund || '').trim();
+
+    container.classList.add('is-open');
+
+    if (fund === '') {
+
+        slideTitle.textContent = "Add Student Funding";
+
+        const tpl = document.getElementById("fundingCardTemplate");
+        if (!tpl) {
+            console.error("fundingCardTemplate not found");
+            return;
+        }
+
+        dynamicContent.innerHTML = tpl.innerHTML;
+
+        initialiseSaveForm("fundingCardForm", container);
+        
+        setSlideoverButtons({
+            showEdit: false,
+            showBack: true
+        });
+        return;
+    }
+
+     slideTitle.textContent = "Edit Student Funding";
+
+        const tpl = document.getElementById("fundingEditTemplate");
+        if (!tpl) {
+            console.error("fundingEditTemplate not found");
+            return;
+        }
+
+
+    setSlideoverButtons({
+        showEdit: true,
+        showBack: true
+    });
+
+    return;
+}
             else if (type === 'address') {
                 const startDate = row.dataset.startDate;
                 dynamicContent.innerHTML = `
@@ -283,9 +327,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     slideTitle.textContent = 'Delete Current UPN';
                     templateId = 'deleteUpnTemplate';
                     formId = 'deleteUpnForm';
-    }
+                }
 
-    break;
+                case "funding":
+                    slideTitle.textContent = "Add Student Funding";
+                    const tpl = document.getElementById("fundingCardTemplate");
+                    if (!tpl) {
+                        console.error("fundingCardTemplate not found");
+                        return;
+                    }
+                    dynamicContent.innerHTML = tpl.innerHTML;
+
+                    initialiseSaveForm("fundingCardForm", container);
+
+                    setSlideoverButtons({
+                        showEdit: false,
+                        showBack: true
+                    });
+
+                    container.classList.add("is-open");
+                    return;
+
+                    break;
 
                 default:
                     console.warn("Unknown type:", type);
@@ -376,6 +439,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 slideTitle.textContent = 'Email';
                 templateId = 'emailEditTemplate';
                 formId = 'editEmailForm';
+                break;
+            
+            case 'funding':
+                templateId = 'fundingEditTemplate';
+                formId = 'editFundingForm';
                 break;
     
             default:

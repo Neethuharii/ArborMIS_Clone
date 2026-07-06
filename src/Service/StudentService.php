@@ -7,17 +7,20 @@ namespace App\Service;
 use App\Entity\Address;
 use App\Entity\Cards;
 use App\Entity\Documents;
+use App\Entity\Fundings;
 use App\Entity\Guardian;
 use App\Entity\StudentGuardianRelation;
 use App\Entity\Students;
 use App\Repository\CountriesRepository;
 use App\Repository\DocumentTypesRepository;
 use App\Repository\EthnicitiesRepository;
+use App\Repository\FundingTypesRepository;
 use App\Repository\GendersRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\RelationshipTypesRepository;
 use App\Repository\ReligionsRepository;
 use App\Repository\StudentsRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -35,7 +38,8 @@ final class StudentService
         private readonly ReligionsRepository $religionsRepository,
         private readonly DocumentTypesRepository $documentTypesRepository,
         private readonly RelationshipTypesRepository $relationshipTypesRepository,
-        private readonly StudentsRepository $studentsRepository
+        private readonly StudentsRepository $studentsRepository,
+        private readonly FundingTypesRepository $fundingTypesRepository
     ) {}
 
     public function createStudent(Request $request): array
@@ -97,18 +101,18 @@ final class StudentService
         $address = new Address();
         $address->setEmailAddress($email);
         $address->setPhoneNumber($phoneNumber);
-        $address->setCreatedAt(new \DateTimeImmutable());
-        $address->setModifiedAt(new \DateTimeImmutable());
+        $address->setCreatedAt(new DateTimeImmutable());
+        $address->setModifiedAt(new DateTimeImmutable());
         $this->entityManager->persist($address);
         $student = new Students();
         $student->setFirstName($firstName);
         $student->setMiddleName($middleName);
         $student->setLastName($lastName);
         $student->setGender($gender);
-        $student->setDob(new \DateTimeImmutable($dob));
+        $student->setDob(new DateTimeImmutable($dob));
         $student->setAddress($address);
-        $student->setCreatedAt(new \DateTimeImmutable());
-        $student->setModifiedAt(new \DateTimeImmutable());
+        $student->setCreatedAt(new DateTimeImmutable());
+        $student->setModifiedAt(new DateTimeImmutable());
 
         $this->entityManager->persist($student);
         $this->entityManager->flush();
@@ -215,7 +219,7 @@ final class StudentService
         $this->entityManager->flush();
     }
 
-     public function updateStudentDocuments(Students $student, Request $request): void
+    public function updateStudentDocuments(Students $student, Request $request): void
     {
         $documentTypeId = $request->request->get('documentType');
         $documentNumber = $request->request->get('documentNumber');
@@ -328,7 +332,6 @@ final class StudentService
 
         $isPrimary = isset($data['primaryGuardian']);
 
-        $isPrimary = isset($data['primaryGuardian']);
 
         if ($isPrimary) {
 
@@ -371,6 +374,59 @@ final class StudentService
             ]);
         } while ($exists);
         return $upn;
+    }
+
+    public function addFunding(Students $student, Request $request): void
+    {
+        $fundingTypeId = $request->request->get('fundingType');
+        $description = $request->request->get('description');
+
+        $fundingType = $this->fundingTypesRepository->find($fundingTypeId);
+
+        if (!$fundingType) {
+            throw new Exception('Funding type not found.');
+        }
+
+        $funding = new Fundings();
+
+        $funding->setStudent($student);
+        $funding->setFundingType($fundingType);
+        $funding->setDescription($description);
+
+        $funding->setStartDate(new DateTime());
+        $funding->setEndDate(null);
+
+        $funding->setCreatedAt(new DateTimeImmutable());
+        $funding->setModifiedAt(new DateTimeImmutable());
+
+        $this->entityManager->persist($funding);
+        $this->entityManager->flush();
+    }
+
+      public function updateAddress(Students $student, Request $request): void
+    {
+        $address = $student->getAddress();
+        if (!$address) {
+            $address = new Address();
+        }
+        $line1 = $request->request->get('address1');
+        $line2 = $request->request->get('address2', null);
+        $line3 = $request->request->get('address3', null);
+        $city = $request->request->get('city');
+        $county = $request->request->get('county', null);
+        $postCode = $request->request->get('postalCode');
+
+        $address->setAddress1($line1);
+        $address->setAddress2($line2);
+        $address->setAddress3($line3);
+        $address->setCity($city);
+        $address->setCounty($county);
+        $address->setPostCode($postCode);
+
+        $student->setAddress($address);
+        $this->entityManager->persist($address);
+
+        $this->entityManager->flush();
     }
     
 }
