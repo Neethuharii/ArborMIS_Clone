@@ -42,11 +42,13 @@
                             <div class="student-card">
 
                                 <div class="avatar">
-                                    <img src="{% if student.profileImage %}
-                                                {{ asset('uploads/students/' ~ student.profileImage) }}
-                                              {% else %}
-                                                {{ asset('images/defaultProfile.png') }}
-                                              {% endif %}">
+                                  <img
+                  src="{{ student.profileImage 
+                  ? asset('uploads/profile/' ~ student.profileImage) 
+                  : asset('images/defaultProfile.png') }}"
+                  alt="Profile Image"
+                  style="cursor:pointer;"
+                >
                                 </div>
 
                                 <div class="info">
