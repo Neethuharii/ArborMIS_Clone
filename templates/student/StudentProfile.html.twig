@@ -11,24 +11,45 @@
 {% block body %}
 {{ include('_modalbase.html.twig') }}
 <div class="profile-container">
+    <form method="post" action="{{ path('student_upload_image', {id: student.studentId}) }}" enctype="multipart/form-data">
     <div class="profile-header">
         <div class="profile-image">
-            <img src="{{asset('images/defaultProfile.png')}}">
+            <label for="profileImageInput">
+               <img
+                  src="{{ student.profileImage 
+                  ? asset('uploads/profile/' ~ student.profileImage) 
+                  : asset('images/defaultProfile.png') }}"
+                  alt="Profile Image"
+                  style="cursor:pointer;"
+                >
+            </label>
+
+            <input
+                type="file"
+                id="profileImageInput"
+                name="profileImage"
+                accept="image/*"
+                style="display:none;"
+                onchange="this.form.submit();"
+            >
         </div>
+
         <div class="profile-info">
             <h1>{{ student.firstName }} {{ student.lastName }}</h1>
+
             <table class="summary-table">
-                 <tr>
+                <tr>
                     <td class="label">Date of Birth</td>
-                    <td><strong>{{student.dob|date('d F Y')}}</strong></td>
+                    <td><strong>{{ student.dob|date('d F Y') }}</strong></td>
                 </tr>
                 <tr>
                     <td class="label">Joined</td>
-                    <td><strong>{{student.createdAt|date('d F')}}</strong></td>
+                    <td><strong>{{ student.createdAt|date('d F') }}</strong></td>
                 </tr>
             </table>
         </div>
     </div>
+</form>
 
     <div class="section-card">
         <div class="section-header">

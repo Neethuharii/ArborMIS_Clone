@@ -25,7 +25,9 @@ use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -42,7 +44,8 @@ final class StudentService
         private readonly RelationshipTypesRepository $relationshipTypesRepository,
         private readonly StudentsRepository $studentsRepository,
         private readonly FundingTypesRepository $fundingTypesRepository,
-        private readonly CacheInterface $lookupCache
+        private readonly CacheInterface $lookupCache,
+        private readonly string $profileImageDirectory
     ) {}
 
     public function createStudent(Request $request): array
@@ -455,4 +458,19 @@ final class StudentService
     {
         $this->lookupCache->delete('student_lookup_data');
     }
+
+   public function uploadProfileImage(Students $student, UploadedFile $file): void
+{
+    $fileName = uniqid() . '.' . $file->guessExtension();
+
+    $file->move(
+        $this->profileImageDirectory,
+        $fileName
+    );
+
+    $student->setProfileImage($fileName);
+
+    $this->entityManager->flush();
+}
+
 }

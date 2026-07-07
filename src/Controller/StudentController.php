@@ -287,4 +287,22 @@ public function studentProfile(
         }
     }
 
+    #[Route('/student/{id}/upload-image', name: 'student_upload_image', methods: ['POST'])]
+public function uploadImage(
+    Students $student,
+    Request $request,
+    StudentService $studentService
+): Response {
+    $file = $request->files->get('profileImage');
+
+    if ($file) {
+        $studentService->uploadProfileImage($student, $file);
+    }
+
+    return $this->redirectToRoute('studentProfile', [
+        'studentId' => $student->getStudentId()
+         
+    ]);
+}
+
 }
