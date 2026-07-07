@@ -70,53 +70,38 @@ final class StudentController extends AbstractController
             'search' => $search,
         ]);
     }
-    #[Route('/student/{studentId}', name: 'studentProfile')]
-    public function studentProfile(
-        int $studentId,
-        StudentService $studentService,
-        GendersRepository $gendersRepository,
-        CountriesRepository $countriesRepository,
-        EthnicitiesRepository $ethnicitiesRepository,
-        NationalityRepository $nationalityRepository,
-        ReligionsRepository $religionsRepository,
-        RelationshipTypesRepository $relationshipTypesRepository,
-        StudentGuardianRelationRepository $studentGuardianRelationRepository,
-        CardsRepository $cardsRepository,
-        DocumentTypesRepository $documentTypesRepository,
-        TitlesRepository $titlesRepository,
-        FundingTypesRepository $fundingTypesRepository,
-        FundingsRepository $fundingsRepository
-    ): Response {
+   #[Route('/student/{studentId}', name: 'studentProfile')]
+public function studentProfile(
+    int $studentId,
+    StudentService $studentService,
+    StudentGuardianRelationRepository $studentGuardianRelationRepository,
+    CardsRepository $cardsRepository,
+    TitlesRepository $titlesRepository,
+    FundingsRepository $fundingsRepository
+): Response {
 
-        $student = $studentService->getStudentById($studentId);
+    $student = $studentService->getStudentById($studentId);
 
-        if (!$student) {
-            throw $this->createNotFoundException('Student not found');
-        }
-        $fundings = $fundingsRepository->findBy(
-            ['student' => $student],
-            ['startDate' => 'DESC']
-        );
-        return $this->render('student/StudentProfile.html.twig', [
-            'student' => $student,
-            'entity'            => $student,
-            'entityId'          => $student->getStudentId(),
-            'entityType'        => 'student',
-            'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
-            'genders' => $gendersRepository->findAll(),
-            'countries' => $countriesRepository->findAll(),
-            'ethnicities' => $ethnicitiesRepository->findAll(),
-            'nationalities' => $nationalityRepository->findAll(),
-            'religions' => $religionsRepository->findAll(),
-            'relationships' => $relationshipTypesRepository->findAll(),
-            'card' => $cardsRepository->findAll(),
-            'documentTypes' => $documentTypesRepository->findAll(),
-            'titles' => $titlesRepository->findAll(),
-            'fundingTypes' => $fundingTypesRepository->findAll(),
-            'fundings' => $fundings,
-        ]);
+    if (!$student) {
+        throw $this->createNotFoundException('Student not found');
     }
 
+    $fundings = $fundingsRepository->findBy(
+        ['student' => $student],
+        ['startDate' => 'DESC']
+    );
+
+    return $this->render('student/StudentProfile.html.twig', array_merge([
+        'student'           => $student,
+        'entity'            => $student,
+        'entityId'          => $student->getStudentId(),
+        'entityType'        => 'student',
+        'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
+        'card'              => $cardsRepository->findAll(),
+        'titles'            => $titlesRepository->findAll(),
+        'fundings'          => $fundings,
+    ], $studentService->getLookupData()));
+}
     #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
     public function update(
         int $id,
@@ -301,5 +286,23 @@ final class StudentController extends AbstractController
             return $this->json(['success' => false, 'message' => 'Unable to upload student address']);
         }
     }
+
+    #[Route('/student/{id}/upload-image', name: 'student_upload_image', methods: ['POST'])]
+public function uploadImage(
+    Students $student,
+    Request $request,
+    StudentService $studentService
+): Response {
+    $file = $request->files->get('profileImage');
+
+    if ($file) {
+        $studentService->uploadProfileImage($student, $file);
+    }
+
+    return $this->redirectToRoute('studentProfile', [
+        'studentId' => $student->getStudentId()
+         
+    ]);
+}
 
 }
