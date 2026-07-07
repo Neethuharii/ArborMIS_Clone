@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+{% block title %}Suspension Statistics{% endblock %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/Suspension/suspension_statistics.css') }}">
+
+<div class="page-wrapper">
+
+    {{ include('behaviour_base.html.twig') }}
+
+    <div class="main-content">
+
+        <div class="page-header">
+            <h3>Suspension Statistics</h3>
+        </div>
+
+        <div class="statistics-table-container">
+            <table class="statistics-table">
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Total Suspensions</th>
+                        <th>Total Days Lost</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% if stats is not empty %}
+                        {% for stat in stats %}
+                            <tr>
+                              <td>{{ stat.firstName }} {{ stat.lastName }}</td>
+                              <td>{{ stat.totalSuspensions }}</td>
+                              <td>{{ stat.totalDaysLost }}</td>  
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="empty-row">
+                                No Records Found
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
