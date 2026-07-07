@@ -266,41 +266,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll(".open-slideover").forEach(item => {
         item.addEventListener("click", () => {
-
             const type = item.dataset.type;
 
             let templateId = "";
             let formId = "";
+
             if (type === "guardian") {
-
                 slideTitle.textContent = "Add Guardian";
-
-                setSlideoverButtons({
-                    showEdit: false,
-                    showBack: false
-                });
+                setSlideoverButtons({ showEdit: false, showBack: false });
 
                 const tpl = document.getElementById("studentGuardianTemplate");
-
                 if (!tpl) {
                     console.error("studentGuardianTemplate not found");
                     return;
                 }
 
                 const clone = tpl.content.cloneNode(true);
-
                 dynamicContent.innerHTML = "";
                 dynamicContent.appendChild(clone);
 
                 container.classList.add("is-open");
-
                 initialiseSaveForm("guardianForm", container);
-
                 return; 
             }
 
             switch (type) {
-
                 case "identification":
                     slideTitle.textContent = "Identification Document";
                     templateId = "identificationTemplate";
@@ -318,36 +308,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     templateId = "postalAddressTemplate";
                     formId = "postalAddressForm";
                     break;
+                
                 case 'upn':
                     if ((currentRow.dataset.upn || '').trim() === '') {
-                    slideTitle.textContent = 'Assign UPN';
-                    templateId = 'assignUpnTemplate';
-                    formId = 'assignUpnForm';
-                } else {
-                    slideTitle.textContent = 'Delete Current UPN';
-                    templateId = 'deleteUpnTemplate';
-                    formId = 'deleteUpnForm';
-                }
+                        slideTitle.textContent = 'Assign UPN';
+                        templateId = 'assignUpnTemplate';
+                        formId = 'assignUpnForm';
+                    } else {
+                        slideTitle.textContent = 'Delete Current UPN';
+                        templateId = 'deleteUpnTemplate';
+                        formId = 'deleteUpnForm';
+                    }
+                    break; 
 
                 case "funding":
                     slideTitle.textContent = "Add Student Funding";
-                    const tpl = document.getElementById("fundingCardTemplate");
-                    if (!tpl) {
-                        console.error("fundingCardTemplate not found");
-                        return;
-                    }
-                    dynamicContent.innerHTML = tpl.innerHTML;
+                    templateId = "fundingCardTemplate";
+                    formId = "fundingCardForm";
+                    break; 
 
-                    initialiseSaveForm("fundingCardForm", container);
-
-                    setSlideoverButtons({
-                        showEdit: false,
-                        showBack: true
-                    });
-
-                    container.classList.add("is-open");
-                    return;
-
+                case "role":
+                    slideTitle.textContent = 'Assign Business Role';
+                    templateId = 'roleAddTemplate';
+                    formId = 'businessRole';
                     break;
 
                 default:
@@ -356,21 +339,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const tpl = document.getElementById(templateId);
-
             if (!tpl) {
                 console.error("Template not found:", templateId);
                 return;
             }
 
             setSlideoverButtons({
-                showEdit: true,
+                showEdit: false, 
                 showBack: true
             });
 
             dynamicContent.innerHTML = tpl.innerHTML;
-
             initialiseSaveForm(formId, container);
-
             container.classList.add("is-open");
         });
     });
@@ -446,6 +426,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 formId = 'editFundingForm';
                 break;
     
+            case 'role':
+                slideTitle.textContent = 'Assign Business Role';
+                templateId = 'roleAddTemplate';
+                formId = 'businessRole';
+                break;
+
             default:
                 return;
         }

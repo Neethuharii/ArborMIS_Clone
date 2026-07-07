@@ -1,0 +1,48 @@
+{% block body %}
+
+<div class="role-wrapper">
+
+<form id="businessRole" class="businessRole-form" action="{{ path('business_role', {'id': entity.staffId}) }}" method="POST">
+        
+        <input type="hidden" name="entityId" value="{{ entity.staffId }}">
+        <input type="hidden" name="entityType" value="staff">
+
+        <div class="form-container">
+
+            <div class="form-row">                
+                <label>Staff</label>
+                <p> {{ entity.firstName }} {{ entity.lastName }} </p>
+            </div>
+
+            <div class="form-row">                
+                <label>Business Role</label>
+                <select name="role" required>
+                    <option value=""> Select Role </option>
+                    {% if all_businessRoles is defined %}
+                        {% for role in all_businessRoles %}
+                            <option value="{{ role.roleId }}">{{ role.nameOfRole }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+           
+            <div class="form-row">                
+                <label>Start Date</label>
+                <input type="date" name="startDate" value="{{ "now"|date("Y-m-d") }}" required>
+            </div>
+
+            <div class="form-row">                
+                <label>End Date</label>
+                <input type="date" name="endDate" value="{{ "now"|date("Y-m-d") }}">
+            </div>
+
+        </div>
+
+        <div class="button-group">
+            <button type="button" class="cancel-btn"> Cancel </button>
+            <button type="submit" class="save-btn"> Save Business Role </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

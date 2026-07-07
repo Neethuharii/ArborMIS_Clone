@@ -30,7 +30,12 @@
 
                         <div class="staff-role">
                         <hr>
-                            Roles: {{staff.currentRole.businessRole.nameOfRole}}
+                            Roles: 
+                            {% if staff.currentRole and staff.currentRole.businessRole %}
+                                {{ staff.currentRole.businessRole.nameOfRole }}
+                            {% else %}
+                                <span class="text-muted">No Role Assigned</span>
+                            {% endif %}                        
                         <hr>
                         </div>
                         

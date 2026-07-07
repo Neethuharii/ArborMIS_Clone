@@ -24,9 +24,16 @@
                 <table class="summary-table">
                     <tr>
                         <td class="label">Role</td>
-                        <td><strong>{{staff.currentRole.businessRole.nameOfRole}}</strong></td>
+                        <td>
+                            <strong>
+                                {% if staff.currentRole and staff.currentRole.businessRole %}
+                                    {{ staff.currentRole.businessRole.nameOfRole }}
+                                {% else %}
+                                    No Active Role
+                                {% endif %}
+                            </strong>
+                        </td>                    
                     </tr>
-                    <tr>
                         <td class="label">Joined</td>
                         <td><strong>{{staff.createdAt|date('d F')}}</strong></td>
                     </tr>
@@ -108,7 +115,7 @@
                         data-type="staffNumber"
                         data-staffNumber="{{ staff.staffNumber|default('Not recorded') }} ">
                         <th>Staff Number</th>
-                        <td>{{ staff.staffNumber|default('Not recorded') }}</td>
+                        <td>{{ staff.staffId|default('Not recorded') }}</td>
                         <td class="arrow">▶</td>
                     </tr>
 
@@ -189,23 +196,32 @@
         <div class="section-card">
             <div class="section-header">
                 <h2>Current Business Roles</h2>
-                    <div id="businessAdd" style="cursor: pointer;">
+                    <div id="businessAdd" class="open-slideover" data-type="role" style="cursor: pointer;">
                         <p>✚ Add</p>
                     </div>
             </div>
 
             <table class="details-table">
-                <tbody>
-                    <tr class="clickable-row"
-                        data-type="currentRole"
-                        data-title="Current Business Roles"
-                        data-current-role="{{ staff.currentRole.businessRole.nameOfRole }}"
-                        data-start-date="{{ staff.currentRole.startDate|date('d M Y') }}">
-                        <th>{{ staff.currentRole.businessRole.nameOfRole }}</th>
-                        <td>{{ staff.currentRole.startDate|date('d M Y') }} - Ongoing </td>
-                        <td class="arrow">▶</td>
-                    </tr>
-                </tbody>
+               <tbody>
+                    {% for role in allRoles %}
+                        <tr class="clickable-row"
+                            data-type="currentRole"
+                            data-title="Current Business Roles"
+                            data-current-role="{{ role.businessRole.nameOfRole }}"
+                            data-start-date="{{ role.startDate|date('d M Y') }}">
+                            <th>{{ role.businessRole.nameOfRole }}</th>
+                            <td>
+                                {{ role.startDate|date('d M Y') }} - 
+                                {{ role.endDate ? role.endDate|date('d M Y') : 'Ongoing' }}
+                            </td>
+                            <td class="arrow">▶</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">No historical roles found for this staff member.</td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
             </table>
         </div>
 
@@ -465,7 +481,7 @@
             {% include 'Slideover/studentIdCard.html.twig'%}
         </template>
 
-         <template id="postalAddressTemplate">
+        <template id="postalAddressTemplate">
             {% include 'Slideover/postalAddress.html.twig' %}
         </template>
 
@@ -489,6 +505,11 @@
             </div>
         </template>
 
+        <template id="roleAddTemplate">
+            {% include 'Slideover/businessRole.html.twig' %}
+        </template>
+
+        
 {% block javascripts %}
     <script src="{{ asset('js/formHandler.js') }}"></script>
     <script src="{{ asset('js/slide.js') }}"></script>

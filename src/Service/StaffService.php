@@ -18,6 +18,7 @@ use App\Repository\DocumentTypesRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\StaffsRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -191,6 +192,7 @@ class StaffService
             'errors' => [],
         ];
     }
+
     public function updateStaff(Staffs $staff, Request $request): void
     {
         $firstName = $request->request->get('firstName');
@@ -264,6 +266,7 @@ class StaffService
 
         $this->entityManager->flush();
     }
+
     public function updateStaffDocuments(Staffs $staff, Request $request): void
     {
         $documentTypeId = $request->request->get('documentType');
@@ -299,6 +302,7 @@ class StaffService
             $this->entityManager->flush();
         }
     }
+
     public function updateStaffCard(Staffs $staff, Request $request): void
     {
         $cardno = $request->request->get('cardNumber');
@@ -328,6 +332,7 @@ class StaffService
         $staff->setModifiedAt(new \DateTimeImmutable());
         $this->entityManager->flush();
     }
+
     public function updateAddress(Staffs $staff, Request $request): void
     {
         $address = $staff->getAddress();
@@ -351,6 +356,48 @@ class StaffService
         $staff->setAddress($address);
         $this->entityManager->persist($address);
 
+        $this->entityManager->flush();
+    }
+
+    public function addBusinessRole(Staffs $staff, Request $request): void
+    {
+        $roleId = (int) $request->request->get('role', 0);
+        $startDateStr = $request->request->get('startDate');
+        $endDateStr = $request->request->get('endDate');
+
+        if ($roleId === 0) {
+            throw new \InvalidArgumentException("A valid business role must be selected.");
+        }
+
+        $businessRole = $this->businessRolesRepository->find($roleId);
+        if (!$businessRole) {
+            throw new \InvalidArgumentException("The selected business role does not exist.");
+        }
+
+        $role = new CurrentRoles();
+        $role->setCreatedAt(new \DateTimeImmutable());
+        $role->setModifiedAt(new \DateTimeImmutable());
+        $role->setBusinessRole($businessRole);
+
+       
+        $role->setStaff($staff);
+        $staff->setCurrentRole($role);
+        
+        if (!empty($startDateStr)) {
+            $role->setStartDate(new \DateTimeImmutable($startDateStr));
+        } else {
+            $role->setStartDate(new \DateTimeImmutable());
+        }
+
+        if (!empty($endDateStr)) {
+            $role->setEndDate(new \DateTimeImmutable($endDateStr));
+        } else {
+            $role->setEndDate(null);
+        }
+
+        $staff->setModifiedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($role);
         $this->entityManager->flush();
     }
 }
