@@ -1,68 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block title %} Recent Points {% endblock %}
-
 {% block body %}
 
-<link rel="stylesheet" href="{{ asset('css/Points/recent-points.css') }}">
-
 <div class="page-wrapper">
-
     {{ include('behaviour_base.html.twig') }}
-
-    <div class="main-content">
-
-        <div class="page-header">
-            <h3>Recent Points</h3>
-        </div>
-
-        <div class="point-table-container">
-            <table class="point-table">
-                <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>Awarded On</th>
-                        <th>Category</th>
-                        <th>Points</th>
-                        <th>Narrative</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% if incidents is not empty %}
-                        {% for incident in incidents %}
-                            {% for student in incident.studentInvolved %}
-                                <tr>
-                                    <td>
-                                        {{ student.firstName }} {{student.lastName}}  
-                                    </td>
-                                    <td>
-                                        {{ incident.incidentDate|date("Y-m-d") }}
-                                    </td>
-                                    <td>
-                                        {{ incident.behaviour.category.categoryName}}
-                                    </td>
-                                    <td>
-                                        {{ incident.behaviour.category.categoryPoints}}
-                                    </td>
-                                    <td>
-                                        {{ incident.behaviour.behaviourName}}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="empty-row">
-                                No Records Found
-                            </td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
 </div>
 
 {% endblock %}

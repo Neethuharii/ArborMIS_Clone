@@ -9,15 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Repository\StudentPointsRepository;
-use App\Repository\BehaviourIncidentsRepository;
 
 class PointsController extends AbstractController{
     #[Route('/points/recent', name:'app_points_recent')]
-    public function recent(StudentPointsRepository $studentPointRepo, BehaviourIncidentsRepository $behaviourIncidentsRepo):Response
+    public function recent():Response
     {
-        return $this->render('Point-awards/recent-points.html.twig',[
-            'incidents'=>$behaviourIncidentsRepo->findAll()
-        ]);
+        return $this->render('Point-awards/recent-points.html.twig');
     }
 
     #[Route('/points/total' , name:'app_points_total')]
