@@ -19,7 +19,7 @@ final class SuspensionController extends AbstractController
             $result= $suspensionService->createSuspension($request);
             if($result['success']){
                 $this->addFlash('success','created suspension record successfully');
-                return $this->redirectToRoute('app_suspension');
+                return $this->redirectToRoute('app_suspension_reporting');
             }
 
             return $this->render('Suspension/suspension_reporting.html.twig',[
@@ -34,6 +34,14 @@ final class SuspensionController extends AbstractController
             'suspensionReasons' => $suspensionReasonRepository->findAll(),
             'students' => $studentsRepository->findAll(),
             'suspensions' => $suspensionService->getSuspensionDetails()
+        ]);
+    }
+
+    #[Route('/suspension-statistics', name:'app_suspension_statistics')]
+    public function statistics(SuspensionService $suspensionService):Response
+    {
+        return $this->render('Suspension/suspension_statistics.html.twig',[
+            'stats' => $suspensionService->getSuspensionStats()
         ]);
     }
 }
