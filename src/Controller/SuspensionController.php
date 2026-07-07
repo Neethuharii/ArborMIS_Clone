@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class SuspensionController extends AbstractController
 {
-    #[Route('/suspension', name: 'app_suspension')]
+    #[Route('/suspension-reporting', name: 'app_suspension_reporting')]
     public function index(SuspensionReasonRepository $suspensionReasonRepository, StudentsRepository $studentsRepository, Request $request, SuspensionService $suspensionService): Response
     {  
         if($request->isMethod('POST')){

@@ -14,9 +14,23 @@
                 </li>
 
                 <li>
-                    <a href="{{ path('app_suspension') }}" class="nav-links">
+                    <a href="javascript:void(0)" class="nav-links" id="suspension-toggle">
                         ▶ Suspensions
                     </a>
+
+                    <ul class="sub-links" id="suspension-menu">
+                        <li>
+                            <a href="{{ path('app_suspension_reporting') }}" class="sub-link">
+                                Reporting
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="" class="sub-link">
+                                Statistics
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li>
@@ -45,11 +59,21 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    const toggle = document.getElementById("point-award-toggle");
-    const menu = document.getElementById("point-award-menu");
 
-    toggle.addEventListener("click", function () {
-        menu.classList.toggle("show");
-    });
+    function setupToggle(toggleId, menuId) {
+        const toggle = document.getElementById(toggleId);
+        const menu = document.getElementById(menuId);
+
+        if (toggle && menu) {
+            toggle.addEventListener("click", function (e) {
+                e.preventDefault();
+                menu.classList.toggle("show");
+            });
+        }
+    }
+
+    setupToggle("suspension-toggle", "suspension-menu");
+    setupToggle("point-award-toggle", "point-award-menu");
+
 });
 </script>
