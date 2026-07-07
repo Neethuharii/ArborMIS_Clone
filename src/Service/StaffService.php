@@ -21,6 +21,8 @@ use App\Repository\StaffsRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use InvalidArgumentException; 
+use Exception;                
 
 class StaffService
 {
@@ -152,16 +154,25 @@ class StaffService
         $staff->setTitle($title);
         $staff->setGender($gender);
         $staff->setAbbreviation($abbreviation ?: null);
-        $staff->setDateOfBirth(new \DateTimeImmutable($dateofBirth));
+        
+        try {
+            $staff->setDateOfBirth(new DateTimeImmutable($dateofBirth));
+        } catch (Exception) {
+            return [
+                'success' => false,
+                'errors' => ['dateofBirth' => 'Invalid date format.'],
+            ];
+        }
+
         $staff->setAddress($address);
-        $staff->setCreatedAt(new \DateTimeImmutable());
-        $staff->setModifiedAt(new \DateTimeImmutable());
+        $staff->setCreatedAt(new DateTimeImmutable());
+        $staff->setModifiedAt(new DateTimeImmutable());
         $this->entityManager->persist($staff);
 
         $address->setEmailAddress($email);
         $address->setPhoneNumber($phoneNumber);
-        $address->setCreatedAt(new \DateTimeImmutable());
-        $address->setModifiedAt(new \DateTimeImmutable());
+        $address->setCreatedAt(new DateTimeImmutable());
+        $address->setModifiedAt(new DateTimeImmutable());
 
         $this->entityManager->persist($address);
 
@@ -179,9 +190,9 @@ class StaffService
         $roleHistory = new CurrentRoles();
         $roleHistory->setStaff($staff);
         $roleHistory->setBusinessRole($businessRole);
-        $roleHistory->setStartDate(new \DateTimeImmutable());
-        $roleHistory->setCreatedAt(new \DateTimeImmutable());
-        $roleHistory->setModifiedAt(new \DateTimeImmutable());
+        $roleHistory->setStartDate(new DateTimeImmutable());
+        $roleHistory->setCreatedAt(new DateTimeImmutable());
+        $roleHistory->setModifiedAt(new DateTimeImmutable());
         $this->entityManager->persist($roleHistory);
 
         $staff->setCurrentRole($roleHistory);
@@ -218,7 +229,7 @@ class StaffService
 
         $dob = $request->request->get('dob');
         if ($dob !== null) {
-            $staff->setDateOfBirth(new \DateTimeImmutable($dob));
+            $staff->setDateOfBirth(new DateTimeImmutable($dob));
         }
 
         $ethnicityId = $request->request->get('ethnicity');
@@ -257,12 +268,12 @@ class StaffService
                 $address = new Address();
             }
             $address->setEmailAddress($email);
-            $address->setModifiedAt(new \DateTimeImmutable());
+            $address->setModifiedAt(new DateTimeImmutable());
             $this->entityManager->persist($address);
 
             $staff->setAddress($address);
         }
-        $staff->setModifiedAt(new \DateTimeImmutable());
+        $staff->setModifiedAt(new DateTimeImmutable());
 
         $this->entityManager->flush();
     }
@@ -274,28 +285,25 @@ class StaffService
         $issueDateStr = $request->request->get('issueDate');
         $expiryDateStr = $request->request->get('expiryDate');
 
-
         if ($documentTypeId && $documentNumber) {
             $documentType = $this->documentTypesRepository->find($documentTypeId);
 
             if (!$documentType) {
-                throw new \InvalidArgumentException("Invalid document type selected.");
+                throw new InvalidArgumentException("Invalid document type selected.");
             }
 
             $document = new Documents();
             $document->setDocumentNumber($documentNumber);
             $document->setDocumentType($documentType);
-            $issueDate = new \DateTimeImmutable($issueDateStr);
-            $document->setIssueDate($issueDate);
 
             if (!empty($issueDateStr)) {
-                $document->setIssueDate(new \DateTimeImmutable($issueDateStr));
+                $document->setIssueDate(new DateTimeImmutable($issueDateStr));
             }
             if (!empty($expiryDateStr)) {
-                $document->setExpiryDate(new \DateTimeImmutable($expiryDateStr));
+                $document->setExpiryDate(new DateTimeImmutable($expiryDateStr));
             }
 
-            $document->setModifiedAt(new \DateTimeImmutable());
+            $document->setModifiedAt(new DateTimeImmutable());
             $this->entityManager->persist($document);
 
             $staff->setIdentityDocument($document);
@@ -320,16 +328,16 @@ class StaffService
             $issuedate = $request->request->get('issuedDate');
             if ($issuedate && $issuetime) {
                 $card->setIssuedAt(
-                    new \DateTimeImmutable($issuedate . ' ' . $issuetime)
+                    new DateTimeImmutable($issuedate . ' ' . $issuetime)
                 );
             }
 
-            $card->setModifiedAt(new \DateTimeImmutable());
+            $card->setModifiedAt(new DateTimeImmutable());
             $this->entityManager->persist($card);
 
             $staff->setIdCard($card);
         }
-        $staff->setModifiedAt(new \DateTimeImmutable());
+        $staff->setModifiedAt(new DateTimeImmutable());
         $this->entityManager->flush();
     }
 
@@ -349,6 +357,7 @@ class StaffService
         $address->setAddress1($line1);
         $address->setAddress2($line2);
         $address->setAddress3($line3);
+        $city = $request->request->get('city');
         $address->setCity($city);
         $address->setCounty($county);
         $address->setPostCode($postCode);
@@ -366,36 +375,35 @@ class StaffService
         $endDateStr = $request->request->get('endDate');
 
         if ($roleId === 0) {
-            throw new \InvalidArgumentException("A valid business role must be selected.");
+            throw new InvalidArgumentException("A valid business role must be selected.");
         }
 
         $businessRole = $this->businessRolesRepository->find($roleId);
         if (!$businessRole) {
-            throw new \InvalidArgumentException("The selected business role does not exist.");
+            throw new InvalidArgumentException("The selected business role does not exist.");
         }
 
         $role = new CurrentRoles();
-        $role->setCreatedAt(new \DateTimeImmutable());
-        $role->setModifiedAt(new \DateTimeImmutable());
+        $role->setCreatedAt(new DateTimeImmutable());
+        $role->setModifiedAt(new DateTimeImmutable());
         $role->setBusinessRole($businessRole);
 
-       
         $role->setStaff($staff);
         $staff->setCurrentRole($role);
         
         if (!empty($startDateStr)) {
-            $role->setStartDate(new \DateTimeImmutable($startDateStr));
+            $role->setStartDate(new DateTimeImmutable($startDateStr));
         } else {
-            $role->setStartDate(new \DateTimeImmutable());
+            $role->setStartDate(new DateTimeImmutable());
         }
 
         if (!empty($endDateStr)) {
-            $role->setEndDate(new \DateTimeImmutable($endDateStr));
+            $role->setEndDate(new DateTimeImmutable($endDateStr));
         } else {
             $role->setEndDate(null);
         }
 
-        $staff->setModifiedAt(new \DateTimeImmutable());
+        $staff->setModifiedAt(new DateTimeImmutable());
 
         $this->entityManager->persist($role);
         $this->entityManager->flush();
