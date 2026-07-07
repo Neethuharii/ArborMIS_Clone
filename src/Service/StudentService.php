@@ -26,6 +26,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 final class StudentService
 {
@@ -39,7 +41,8 @@ final class StudentService
         private readonly DocumentTypesRepository $documentTypesRepository,
         private readonly RelationshipTypesRepository $relationshipTypesRepository,
         private readonly StudentsRepository $studentsRepository,
-        private readonly FundingTypesRepository $fundingTypesRepository
+        private readonly FundingTypesRepository $fundingTypesRepository,
+        private readonly CacheInterface $lookupCache
     ) {}
 
     public function createStudent(Request $request): array
@@ -401,9 +404,10 @@ final class StudentService
 
         $this->entityManager->persist($funding);
         $this->entityManager->flush();
+        $this->clearLookupCache();
     }
 
-      public function updateAddress(Students $student, Request $request): void
+    public function updateAddress(Students $student, Request $request): void
     {
         $address = $student->getAddress();
         if (!$address) {
@@ -427,6 +431,28 @@ final class StudentService
         $this->entityManager->persist($address);
 
         $this->entityManager->flush();
+        $this->clearLookupCache();
     }
-    
+
+    public function getLookupData(): array
+    {
+        return $this->lookupCache->get('student_lookup_data', function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+
+            return [
+                'genders'       => $this->gendersRepository->findAll(),
+                'countries'     => $this->countriesRepository->findAll(),
+                'ethnicities'   => $this->ethnicitiesRepository->findAll(),
+                'nationalities' => $this->nationalityRepository->findAll(),
+                'religions'     => $this->religionsRepository->findAll(),
+                'relationships' => $this->relationshipTypesRepository->findAll(),
+                'documentTypes' => $this->documentTypesRepository->findAll(),
+                'fundingTypes'  => $this->fundingTypesRepository->findAll(),
+            ];
+        });
+    }
+    public function clearLookupCache(): void
+    {
+        $this->lookupCache->delete('student_lookup_data');
+    }
 }
