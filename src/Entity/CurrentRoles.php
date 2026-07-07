@@ -74,7 +74,7 @@ class CurrentRoles
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeImmutable $endDate): static
+    public function setEndDate(?\DateTimeImmutable $endDate): static
     {
         $this->endDate = $endDate;
 
