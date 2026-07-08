@@ -40,4 +40,21 @@ class StudentPointsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function searchTotalPoints(string $search): array
+    {
+        return $this->createQueryBuilder('sp')
+            ->select(
+                's.firstName AS firstName',
+                's.lastName AS lastName',
+                'sp.totalPoints AS totalPoints'
+            )
+            ->join('sp.student', 's')
+            ->where('LOWER(s.firstName) LIKE LOWER(:search)
+                OR LOWER(s.lastName) LIKE LOWER(:search)')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('s.firstName', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

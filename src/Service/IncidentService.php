@@ -14,6 +14,8 @@ use App\Repository\StudentsRepository;
 use App\Repository\StaffsRepository;
 use App\Repository\BehavioursRepository;
 use App\Repository\InterventionRepository;
+use App\Repository\BehaviourIncidentsRepository;
+use App\Repository\StudentPointsRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,7 +26,9 @@ class IncidentService
         private readonly StudentsRepository $studentRepo,
         private readonly StaffsRepository $staffsRepo,
         private readonly BehavioursRepository $behaviourRepo,
-        private readonly InterventionRepository $interventionRepo
+        private readonly InterventionRepository $interventionRepo,
+        private readonly BehaviourIncidentsRepository $incidentRepo,
+         private readonly StudentPointsRepository $studentPointsRepo
     ) {
     }
 
@@ -233,5 +237,14 @@ class IncidentService
                 )
             ]
         ];
+    }
+    public function searchRecentPoints(string $search): array
+    {
+        return $this->incidentRepo->searchRecentPoints($search);
+    }
+
+    public function searchTotalPoints(string $search): array
+    {
+        return $this->studentPointsRepo->searchTotalPoints($search);
     }
 }

@@ -14,7 +14,10 @@
         <div class="page-header">
             <h3>Recent Points</h3>
         </div>
-
+        {{ include('search_bar.html.twig', {
+            inputId: 'recent-search',
+            placeholder: 'Search student...'
+        }) }}
         <div class="point-table-container">
             <table class="point-table">
                 <thead>
@@ -64,5 +67,7 @@
     </div>
 
 </div>
+
+<script src="{{ asset('js/search.js') }}"></script>
 
 {% endblock %}
