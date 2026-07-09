@@ -440,8 +440,7 @@ if (type === 'funding') {
     if (input) {
         input.value = fundingId;
     }
-
-    // Optional: fill existing values
+    
     const fundingType = dynamicContent.querySelector('[name="fundingType"]');
     if (fundingType) {
         fundingType.value = currentRow.dataset.fundingType;
