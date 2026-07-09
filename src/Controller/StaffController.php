@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Staffs;
 use App\Repository\CurrentRolesRepository;
 use App\Repository\StaffsRepository;
 use App\Service\StaffService;
@@ -62,6 +63,8 @@ class StaffController extends AbstractController
             'entityId'          => $staff->getStaffId(),
             'entityType'        => 'staff',
             'allRoles'          => $allRoles,
+            'qualification_types' => $staffService->getAllQualificationTypes(),
+            'all_staffs' => $staffService->getAllStaffs(),
             'all_genders'       => $staffService->getAllGenders(),
             'all_ethnicities'   => $staffService->getAllEthnicities(),
             'all_religions'     => $staffService->getAllReligions(),
@@ -69,6 +72,7 @@ class StaffController extends AbstractController
             'countries'         => $staffService->getAllCountries(),
             'all_businessRoles' => $staffService->getAllBusinessRoles(),
             'all_nationalities' => $staffService->getAllNationalities(),
+            'allQualifications'=> $staffService->getAllQualificationChecks() 
         ]);
     }
 
@@ -152,12 +156,12 @@ class StaffController extends AbstractController
             return $this->json(['success' => false, 'message' => 'Unable to upload staff address']);
         }
     }
-    
+
     #[Route('/Staff/{id}/role', name: 'business_role', methods: ['POST', 'GET'])]
-    public function addBusinessRole(int $id, Request $request, StaffsRepository $staffRepository, StaffService $staffService): Response 
+    public function addBusinessRole(int $id, Request $request, StaffsRepository $staffRepository, StaffService $staffService): Response
     {
         if ($id === 0) {
-        return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
         }
 
         $staff = $staffRepository->find($id);
@@ -177,6 +181,46 @@ class StaffController extends AbstractController
         return $this->render('Slideover/businessRole.html.twig', [
             'staff' => $staff,
             'all_businessRoles' => $staffService->getAllBusinessRoles()
+        ]);
+    }
+
+    #[Route('/Staff/{id}/profile-photo', name: 'profile_picture', methods: ['POST'])]
+    public function addProfilePhoto(Staffs $staff, Request $request, StaffService $staffService): Response
+    {
+        $photo = $request->files->get('profile');
+        if ($photo) {
+            $staffService->uploadProfilePicture($staff, $photo);
+        }
+        return $this->redirectToRoute('staffProfile', [
+            'id' => $staff->getStaffId()
+        ]);
+    }
+
+    #[Route('Staff/{id}/qualification', name: 'qualification_check', methods: ['POST'])]
+    public function addQualificationCheck(int $id, Staffs $staff, StaffService $staffService, Request $request, StaffsRepository $staffRepository)
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        }
+
+
+        $staff = $staffRepository->find($id);
+        if (!$staff) {
+            return new JsonResponse(['success' => false, 'message' => 'Staff member not found.'], 400);
+        }
+
+        if ($request->isMethod('POST')) {
+            try {
+                $staffService->addQualificationCheck($staff, $request);
+                return $this->json(['success' => true]);
+            } catch (Exception $e) {
+                return new JsonResponse(['success' => false, 'message' => 'Unable to add role: ' . $e->getMessage()], 400);
+            }
+        }
+
+        return $this->render('Slideover/qualificationChecks.html.twig', [
+            'staff' => $staff,
+            'all_staffs' => $staffService->getAllStaffs()
         ]);
     }
 }

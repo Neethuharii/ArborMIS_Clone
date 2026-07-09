@@ -26,5 +26,9 @@ services:
         arguments:
             $lookupCache: '@lookup.cache'
             $profileImageDirectory: '%profile_image_directory%'
+    
+    App\Service\StaffService:
+        arguments:
+            $profileImageDirectory: '%profile_image_directory%'
             
 

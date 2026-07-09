@@ -17,8 +17,13 @@
                 <div class="staff-card">
 
                     <div class="staff-photo">
-                        <img src="{{ asset('images/defaultProfile.png') }}"
-                            alt="Profile Photo">
+                          <img
+                  src="{{ staff.profilePhoto 
+                  ? asset('uploads/profile/' ~ staff.profilePhoto) 
+                  : asset('images/defaultProfile.png') }}"
+                  alt="Profile Image"
+                  style="cursor:pointer;"
+                >
                     </div>
 
                     <div class="staff-info">

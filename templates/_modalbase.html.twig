@@ -68,11 +68,16 @@
             <div class="section-title-box">
                 <h3>Add Item in: Qualifications & Checks </h3>
             </div>
-            <ul class="item-list">
-                <li>Check: Academic Qualifications ▶</li>
-                <li>Check: Address Check ▶</li>
-                <li>Check: Character References ▶</li>
-            </ul>
+           <ul class="item-list">
+                {% if qualification_types is defined and qualification_types is not empty %}
+                    {% for type in qualification_types %}
+                        <li class="open-slideover" data-type="qualification"  data-id="{{ type.qualificationId }}" data-name="{{ type.qualificationName }}">{{ type.qualificationName }} ▶
+                        </li>
+                    {% endfor %}
+                {% else %}
+            <li>No qualifications available</li>
+    {% endif %}
+</ul>
         </div>
 
         <div class="modal-footer">

@@ -29,8 +29,16 @@ class QualificationChecks
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $returned_date = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $authenticated_date = null;
+
+    #[ORM\ManyToOne(targetEntity: Staffs::class)]
+    #[ORM\JoinColumn(name: 'staff_id', referencedColumnName: 'staff_id', nullable: false)]
+    private ?Staffs $staff = null;
+
+    #[ORM\ManyToOne(targetEntity: Staffs::class)]
+    #[ORM\JoinColumn(name: 'authenticated_by_staff_id', referencedColumnName: 'staff_id', nullable: true)]
+    private ?Staffs $authenticatedBy = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $comment = null;
@@ -68,7 +76,6 @@ class QualificationChecks
     public function setClearanceLevel(string $clearance_level): static
     {
         $this->clearance_level = $clearance_level;
-
         return $this;
     }
 
@@ -80,7 +87,6 @@ class QualificationChecks
     public function setRequestedDate(\DateTime $requested_date): static
     {
         $this->requested_date = $requested_date;
-
         return $this;
     }
 
@@ -92,7 +98,6 @@ class QualificationChecks
     public function setReturnedDate(\DateTime $returned_date): static
     {
         $this->returned_date = $returned_date;
-
         return $this;
     }
 
@@ -101,12 +106,34 @@ class QualificationChecks
         return $this->authenticated_date;
     }
 
-    public function setAuthenticatedDate(\DateTime $authenticated_date): static
+    public function setAuthenticatedDate(?\DateTime $authenticated_date): static
     {
         $this->authenticated_date = $authenticated_date;
-
         return $this;
     }
+
+    public function getStaff(): ?Staffs
+    {
+        return $this->staff;
+    }
+
+    public function setStaff(?Staffs $staff): static
+    {
+        $this->staff = $staff;
+        return $this;
+    }
+
+    public function getAuthenticatedBy(): ?Staffs
+    {
+        return $this->authenticatedBy;
+    }
+
+    public function setAuthenticatedBy(?Staffs $authenticatedBy): static
+    {
+        $this->authenticatedBy = $authenticatedBy;
+        return $this;
+    }
+
     public function getComment(): ?string
     {
         return $this->comment;
@@ -115,7 +142,6 @@ class QualificationChecks
     public function setComment(?string $comment): static
     {
         $this->comment = $comment;
-
         return $this;
     }
 
@@ -127,7 +153,6 @@ class QualificationChecks
     public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -139,7 +164,6 @@ class QualificationChecks
     public function setModifiedAt(\DateTimeImmutable $modified_at): static
     {
         $this->modified_at = $modified_at;
-
         return $this;
     }
 
@@ -151,7 +175,6 @@ class QualificationChecks
     public function setDeletedAt(?\DateTimeImmutable $deleted_at): static
     {
         $this->deleted_at = $deleted_at;
-
         return $this;
     }
 }
