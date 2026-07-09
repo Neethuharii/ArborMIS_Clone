@@ -62,5 +62,23 @@ class BehaviourIncidentsRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    
+    public function incidentsSearch(string $search): array
+    {
+        return $this->createQueryBuilder('i')
+            ->join('i.studentInvolved', 'st')
+            ->addSelect('st')
+            ->join('i.behaviour', 'b')
+            ->addSelect('b')
+            ->join('b.category', 'c')
+            ->addSelect('c')
+            ->where(
+                'LOWER(st.firstName) LIKE LOWER(:search)
+                OR LOWER(st.lastName) LIKE LOWER(:search)'
+            )
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('i.incidentDate', 'DESC')
+            ->addOrderBy('i.incidentTime', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -20,7 +20,7 @@ class SuspensionService
         private readonly SuspensionReasonRepository $suspensionReasonRepository,
         private readonly StudentsRepository $studentsRepository,
         private readonly SluggerInterface $slugger,
-        private readonly SuspensionDetailsRepository $suspensionDetailRepo
+        private readonly SuspensionDetailsRepository $suspensionDetailRepo,
     ) {}
 
     public function createSuspension(Request $request): array
@@ -153,4 +153,15 @@ class SuspensionService
     {
         return $this->suspensionDetailRepo->getSuspensionStatistics();
     }
+
+    public function searchStatistics(string $search): array
+    {
+        return $this->suspensionDetailRepo->searchStatistics($search);
+    }
+
+    public function searchSuspensions(string $search): array
+    {
+        return $this->suspensionDetailRepo->searchSuspensions($search);
+    }
+
 }

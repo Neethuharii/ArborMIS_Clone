@@ -42,4 +42,14 @@ final class IncidentController extends AbstractController
             'incidents' => $incidentRepo->findAll()
         ]);
     }
+
+    #[Route('/incidents/search', name:'app_incidents_search')]
+    public function incidentsSearch(Request $request, IncidentService $incidentService): Response
+    {
+        $search = $request->query->get('search','');
+
+        return $this->json(
+            $incidentService->incidentsSearch($search)
+        );
+    }
 }

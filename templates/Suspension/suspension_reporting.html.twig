@@ -39,7 +39,12 @@
                 </button>
             </div>
         </div>
-
+        <div class="search-row">
+            {{ include('search_bar.html.twig', {
+                inputId: 'suspension-search',
+                placeholder: 'Search student...'
+            }) }}
+        </div>
         <div class="suspension-table-container">
             <table class="suspension-table">
                 <thead>
@@ -74,7 +79,7 @@
 
             <form method="POST"
                 class="suspension-form"
-                id="incidentForm"
+                id="suspensionForm"
                 enctype="multipart/form-data"
                 action="{{ path('app_suspension_reporting') }} " onsubmit="showLoader()">
 
@@ -163,5 +168,6 @@
 </div>
 
 <script src="{{ asset('js/suspension-reporting.js') }}"></script>
+<script src="{{ asset('js/search.js') }}"></script>
 
 {% endblock %}
