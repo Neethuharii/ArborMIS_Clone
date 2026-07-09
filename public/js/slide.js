@@ -173,27 +173,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
             else if (type === 'funding') {
-                const fund = (row.dataset.fund || '').trim();
+                slideTitle.textContent = "Student Funding";
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Funding Type</th>
+                            <td>${row.cells[0].innerText}</td>
+                        </tr>
+                        <tr>
+                            <th>Funding Period</th>
+                            <td>${row.cells[1].innerText}</td>
+                        </tr>
+                    </table>
+                `;
+
+                setSlideoverButtons({
+                    showEdit: true,
+                    showBack: true
+                });
                 container.classList.add('is-open');
-                if (fund === '') {
-                    slideTitle.textContent = "Add Student Funding";
-                    const tpl = document.getElementById("fundingCardTemplate");
-                    if (!tpl) {
-                        console.error("fundingCardTemplate not found");
-                        return;
-                    }
-                    dynamicContent.innerHTML = tpl.innerHTML;
-                    initialiseSaveForm("fundingCardForm", container);
-                    setSlideoverButtons({ showEdit: false, showBack: true });
-                    return;
-                }
-                slideTitle.textContent = "Edit Student Funding";
-                const tpl = document.getElementById("fundingEditTemplate");
-                if (!tpl) {
-                    console.error("fundingEditTemplate not found");
-                    return;
-                }
-                setSlideoverButtons({ showEdit: true, showBack: true });
                 return;
             }
             else if (type === 'address') {
@@ -430,6 +428,12 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'funding':
                 templateId = 'fundingEditTemplate';
                 formId = 'editFundingForm';
+                break;
+
+            case 'role':
+                slideTitle.textContent = 'Assign Business Role';
+                templateId = 'roleAddTemplate';
+                formId = 'businessRole';
                 break;
 
             default:
