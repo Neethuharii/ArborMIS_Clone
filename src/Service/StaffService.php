@@ -50,7 +50,7 @@ class StaffService
         private CacheInterface $cache,
         private readonly string $profileImageDirectory
     ) {}
-
+    
     public function getAllGenders(): array
     {
         return $this->cache->get(CacheKeys::GENDERS, function (ItemInterface $item) {

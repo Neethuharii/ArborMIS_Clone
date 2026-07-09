@@ -447,6 +447,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         dynamicContent.innerHTML = tpl.innerHTML;
+        if (type === 'funding') 
+        {
+            const fundingId = currentRow.dataset.fundingId;
+            const input = dynamicContent.querySelector('[name="fundingId"]');
+            if (input) {
+                input.value = fundingId;
+            }
+        
+            const fundingType = dynamicContent.querySelector('[name="fundingType"]');
+            if (fundingType) {
+                fundingType.value = currentRow.dataset.fundingType;
+            }
+
+            const startDate = dynamicContent.querySelector('[name="startDate"]');
+            if (startDate) {
+                startDate.value = currentRow.dataset.startDate;
+            }
+
+            const endDate = dynamicContent.querySelector('[name="endDate"]');
+            if (endDate) {
+                endDate.value = currentRow.dataset.endDate;
+            }
+
+            const description = dynamicContent.querySelector('[name="description"]');
+            if (description) {
+                description.value = currentRow.dataset.description;
+            }
+        }   
         initialiseSaveForm(formId, container);
     });
 
