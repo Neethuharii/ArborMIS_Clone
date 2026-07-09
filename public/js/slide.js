@@ -457,4 +457,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('slideoverOverlay')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
+    
 });
