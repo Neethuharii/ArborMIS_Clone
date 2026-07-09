@@ -83,8 +83,38 @@
 
                         <li>
                             <a href="{{ path('app_suspension_reporting') }}">
-                                Suspensions
+                                Suspensions ▶ 
                             </a>
+                                <ul class="sub-submenu">
+                                    <li>
+                                        <a href="{{ path('app_suspension_reporting') }}">
+                                            Reporting
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_suspension_statistics') }}">
+                                            Statistics
+                                        </a>
+                                    </li>
+                                </ul>
+                        </li>
+
+                        <li>
+                            <a href="{{ path('app_points_recent') }}">
+                                Point Awards ▶
+                            </a>
+                            <ul class="sub-submenu">
+                                <li>
+                                    <a href="{{ path('app_points_recent') }}">
+                                        Recent
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_points_total') }}">
+                                        Total
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
 
                     </ul>

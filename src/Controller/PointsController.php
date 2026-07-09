@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class PointsController extends AbstractController{
     #[Route('/points/recent', name:'app_points_recent')]
-    public function recent(StudentPointsRepository $studentPointRepo, BehaviourIncidentsRepository $behaviourIncidentsRepo):Response
+    public function recent(BehaviourIncidentsRepository $behaviourIncidentsRepo):Response
     {
         return $this->render('Point-awards/recent-points.html.twig',[
             'incidents'=>$behaviourIncidentsRepo->findAll()

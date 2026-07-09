@@ -38,11 +38,6 @@
     color: green;
 }
 
-.nav-links.active {
-    background-color: #cfcfcf;
-    color: black;
-}
-
 .sub-links {
     display: none;
     padding-left: 20px;
