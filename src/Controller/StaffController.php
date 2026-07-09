@@ -4,14 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\BusinessRolesRepository;
-use App\Repository\CountriesRepository;
+use App\Entity\Staffs;
 use App\Repository\CurrentRolesRepository;
-use App\Repository\GendersRepository;
-use App\Repository\EthnicitiesRepository;
-use App\Repository\ReligionsRepository;
-use App\Repository\DocumentTypesRepository;
-use App\Repository\NationalityRepository;
 use App\Repository\StaffsRepository;
 use App\Service\StaffService;
 use Exception;
@@ -51,29 +45,34 @@ class StaffController extends AbstractController
     }
 
     #[Route('/Staff/profile/{id}', name: 'staffProfile')]
-    public function profile(int $id, StaffService $staffService, GendersRepository $gendersRepository, EthnicitiesRepository $ethnicitiesRepository, ReligionsRepository $religionsRepository,  DocumentTypesRepository $documentTypesRepository,  CountriesRepository $countriesRepository, NationalityRepository $nationalityRepository, BusinessRolesRepository $businessRolesRepository,CurrentRolesRepository $currentRolesRepository): Response
+    public function profile(int $id, StaffService $staffService, CurrentRolesRepository $currentRolesRepository): Response
     {
         $staff = $staffService->getStaffById($id);
         if (!$staff) {
             throw $this->createNotFoundException('Staff not found');
         }
+
         $allRoles = $currentRolesRepository->findBy(
-        ['staff' => $staff],
-        ['startDate' => 'DESC']
-    );
+            ['staff' => $staff],
+            ['startDate' => 'DESC']
+        );
+
         return $this->render('Staff/profile.html.twig', [
-            'staff' => $staff,
+            'staff'             => $staff,
             'entity'            => $staff,
             'entityId'          => $staff->getStaffId(),
             'entityType'        => 'staff',
-            'allRoles' => $allRoles,
-            'all_genders'       => $gendersRepository->findAll(),
-            'all_ethnicities'   => $ethnicitiesRepository->findAll(),
-            'all_religions'     => $religionsRepository->findAll(),
-            'documentTypes'     => $documentTypesRepository->findAll(),
-            'countries'         => $countriesRepository->findAll(),
-            'all_businessRoles' => $businessRolesRepository->findAll(),
-            'all_nationalities' => $nationalityRepository->findAll()
+            'allRoles'          => $allRoles,
+            'qualification_types' => $staffService->getAllQualificationTypes(),
+            'all_staffs' => $staffService->getAllStaffs(),
+            'all_genders'       => $staffService->getAllGenders(),
+            'all_ethnicities'   => $staffService->getAllEthnicities(),
+            'all_religions'     => $staffService->getAllReligions(),
+            'documentTypes'     => $staffService->getAllDocumentTypes(),
+            'countries'         => $staffService->getAllCountries(),
+            'all_businessRoles' => $staffService->getAllBusinessRoles(),
+            'all_nationalities' => $staffService->getAllNationalities(),
+            'allQualifications'=> $staffService->getAllQualificationChecks() 
         ]);
     }
 
@@ -157,12 +156,12 @@ class StaffController extends AbstractController
             return $this->json(['success' => false, 'message' => 'Unable to upload staff address']);
         }
     }
-    
+
     #[Route('/Staff/{id}/role', name: 'business_role', methods: ['POST', 'GET'])]
-    public function addBusinessRole(int $id, Request $request, StaffsRepository $staffRepository, StaffService $staffService, BusinessRolesRepository $businessRolesRepository): Response 
+    public function addBusinessRole(int $id, Request $request, StaffsRepository $staffRepository, StaffService $staffService): Response
     {
         if ($id === 0) {
-        return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
         }
 
         $staff = $staffRepository->find($id);
@@ -181,7 +180,47 @@ class StaffController extends AbstractController
 
         return $this->render('Slideover/businessRole.html.twig', [
             'staff' => $staff,
-            'all_businessRoles' => $businessRolesRepository->findAll()
+            'all_businessRoles' => $staffService->getAllBusinessRoles()
+        ]);
+    }
+
+    #[Route('/Staff/{id}/profile-photo', name: 'profile_picture', methods: ['POST'])]
+    public function addProfilePhoto(Staffs $staff, Request $request, StaffService $staffService): Response
+    {
+        $photo = $request->files->get('profile');
+        if ($photo) {
+            $staffService->uploadProfilePicture($staff, $photo);
+        }
+        return $this->redirectToRoute('staffProfile', [
+            'id' => $staff->getStaffId()
+        ]);
+    }
+
+    #[Route('Staff/{id}/qualification', name: 'qualification_check', methods: ['POST'])]
+    public function addQualificationCheck(int $id, Staffs $staff, StaffService $staffService, Request $request, StaffsRepository $staffRepository)
+    {
+        if ($id === 0) {
+            return new JsonResponse(['success' => false, 'message' => 'Invalid Staff ID provided.'], 400);
+        }
+
+
+        $staff = $staffRepository->find($id);
+        if (!$staff) {
+            return new JsonResponse(['success' => false, 'message' => 'Staff member not found.'], 400);
+        }
+
+        if ($request->isMethod('POST')) {
+            try {
+                $staffService->addQualificationCheck($staff, $request);
+                return $this->json(['success' => true]);
+            } catch (Exception $e) {
+                return new JsonResponse(['success' => false, 'message' => 'Unable to add role: ' . $e->getMessage()], 400);
+            }
+        }
+
+        return $this->render('Slideover/qualificationChecks.html.twig', [
+            'staff' => $staff,
+            'all_staffs' => $staffService->getAllStaffs()
         ]);
     }
 }

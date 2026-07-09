@@ -110,50 +110,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
             else if (type === 'upn') {
+                const upn = (row.dataset.upn || '').trim();
+                container.classList.add('is-open');
 
-    const upn = (row.dataset.upn || '').trim();
+                if (upn === '') {
+                    slideTitle.textContent = "Assign UPN";
+                    const tpl = document.getElementById("assignUpnTemplate");
+                    if (!tpl) {
+                        console.error("assignUpnTemplate not found");
+                        return;
+                    }
+                    dynamicContent.innerHTML = tpl.innerHTML;
+                    initialiseSaveForm("assignUpnForm", container);
+                    setSlideoverButtons({ showEdit: false, showBack: true });
+                    return;
+                }
 
-    container.classList.add('is-open');
-
-    if (upn === '') {
-
-        slideTitle.textContent = "Assign UPN";
-
-        const tpl = document.getElementById("assignUpnTemplate");
-        if (!tpl) {
-            console.error("assignUpnTemplate not found");
-            return;
-        }
-
-        dynamicContent.innerHTML = tpl.innerHTML;
-
-        initialiseSaveForm("assignUpnForm", container);
-        
-        setSlideoverButtons({
-            showEdit: false,
-            showBack: true
-        });
-        return;
-    }
-
-    slideTitle.textContent = "UPN";
-
-    dynamicContent.innerHTML = `
-        <table class="details-table">
-            <tr>
-                <th>UPN</th>
-                <td>${upn}</td>
-            </tr>
-        </table>
-    `;
-
-    setSlideoverButtons({
-        showEdit: true,
-        showBack: true
-    });
-
-    return;
-}
+                slideTitle.textContent = "UPN";
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>UPN</th>
+                            <td>${upn}</td>
+                        </tr>
+                    </table>
+                `;
+                setSlideoverButtons({ showEdit: true, showBack: true });
+                return;
+            }
             else if (type === 'email') {
                 dynamicContent.innerHTML = `
                     <table class="details-table">
@@ -175,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
             else if (type === 'currentRole') {
-                const startDate = row.dataset.startDate;
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
@@ -189,36 +172,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     </table>
                 `;
             }
-
             else if (type === 'funding') {
+                slideTitle.textContent = "Student Funding";
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Funding Type</th>
+                            <td>${row.cells[0].innerText}</td>
+                        </tr>
+                        <tr>
+                            <th>Funding Period</th>
+                            <td>${row.cells[1].innerText}</td>
+                        </tr>
+                    </table>
+                `;
 
-    slideTitle.textContent = "Student Funding";
-
-    dynamicContent.innerHTML = `
-        <table class="details-table">
-            <tr>
-                <th>Funding Type</th>
-                <td>${row.cells[0].innerText}</td>
-            </tr>
-
-            <tr>
-                <th>Funding Period</th>
-                <td>${row.cells[1].innerText}</td>
-            </tr>
-        </table>
-    `;
-
-    setSlideoverButtons({
-        showEdit:true,
-        showBack:true
-    });
-
-    container.classList.add('is-open');
-
-    return;
-}
+                setSlideoverButtons({
+                    showEdit: true,
+                    showBack: true
+                });
+                container.classList.add('is-open');
+                return;
+            }
             else if (type === 'address') {
-                const startDate = row.dataset.startDate;
                 dynamicContent.innerHTML = `
                     <table class="details-table">
                         <tr>
@@ -236,6 +212,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         <tr>
                             <th>Post Code</th>
                             <td>${row.dataset.postCode || ''}</td>
+                        </tr>
+                    </table>
+                `;
+            }
+            else if (type === 'check') {
+                dynamicContent.innerHTML = `
+                    <table class="details-table">
+                        <tr>
+                            <th>Check Type</th>
+                            <td>${row.dataset.qualificationName || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Clearance Level</th>
+                            <td>${row.dataset.clearanceLevel || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Requested Date</th>
+                            <td>${row.dataset.requestedDate || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Returned / Issued Date</th>
+                            <td>${row.dataset.returnedDate || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Authenticated Date</th>
+                            <td>${row.dataset.authenticatedDate || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Authenticated by staff</th>
+                            <td>${row.dataset.authenticatedBy || ''}</td>
+                        </tr>
+                        <tr>
+                            <th>Comment</th>
+                            <td>${row.dataset.comment || ''}</td>
                         </tr>
                     </table>
                 `;
@@ -294,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 
                 case 'upn':
-                    if ((currentRow.dataset.upn || '').trim() === '') {
+                    if (!currentRow || (currentRow.dataset.upn || '').trim() === '') {
                         slideTitle.textContent = 'Assign UPN';
                         templateId = 'assignUpnTemplate';
                         formId = 'assignUpnForm';
@@ -317,6 +327,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     formId = 'businessRole';
                     break;
 
+                case 'qualification':
+                    slideTitle.textContent = 'Add Check';
+                    templateId = 'qualificationCheckTemplate';
+                    formId = 'qualificationCheck';
+                    break;
+
                 default:
                     console.warn("Unknown type:", type);
                     return;
@@ -328,28 +344,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            setSlideoverButtons({
-                showEdit: false, 
-                showBack: true
-            });
-
+            setSlideoverButtons({ showEdit: false, showBack: true });
             dynamicContent.innerHTML = tpl.innerHTML;
+
+            if (type === 'qualification') {
+                const qualificationId = item.dataset.id || '';
+                const qualificationName = item.dataset.name || '';
+                
+                const idInput = dynamicContent.querySelector('#qualificationTypeId');
+                const nameLabel = dynamicContent.querySelector('#selectedCheckTypeLabel');
+                
+                if (idInput) idInput.value = qualificationId;
+                if (nameLabel) nameLabel.innerText = qualificationName;
+            }
+
             initialiseSaveForm(formId, container);
             container.classList.add("is-open");
         });
     });
 
     editBtn.addEventListener('click', () => {
-
         if (!currentRow) return;
 
         const type = currentRow.dataset.type;
-
         let templateId = '';
         let formId = '';
 
         switch (type) {
-
             case 'identity':
                 slideTitle.textContent = 'Name';
                 templateId = 'nameEditTemplate';
@@ -398,7 +419,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 formId = 'editUpnForm';
                 break;
 
-
             case 'email':
                 slideTitle.textContent = 'Email';
                 templateId = 'emailEditTemplate';
@@ -409,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 templateId = 'fundingEditTemplate';
                 formId = 'editFundingForm';
                 break;
-    
+
             case 'role':
                 slideTitle.textContent = 'Assign Business Role';
                 templateId = 'roleAddTemplate';
@@ -420,50 +440,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
         }
 
-      const tpl = document.getElementById(templateId);
+        const tpl = document.getElementById(templateId);
+        if (!tpl) {
+            console.error("Edit template not found:", templateId);
+            return;
+        }
 
-if (!tpl) {
-    console.error("Edit template not found:", templateId);
-    return;
-}
+        dynamicContent.innerHTML = tpl.innerHTML;
+        if (type === 'funding') 
+        {
+            const fundingId = currentRow.dataset.fundingId;
+            const input = dynamicContent.querySelector('[name="fundingId"]');
+            if (input) {
+                input.value = fundingId;
+            }
+        
+            const fundingType = dynamicContent.querySelector('[name="fundingType"]');
+            if (fundingType) {
+                fundingType.value = currentRow.dataset.fundingType;
+            }
 
-dynamicContent.innerHTML = tpl.innerHTML;
+            const startDate = dynamicContent.querySelector('[name="startDate"]');
+            if (startDate) {
+                startDate.value = currentRow.dataset.startDate;
+            }
 
+            const endDate = dynamicContent.querySelector('[name="endDate"]');
+            if (endDate) {
+                endDate.value = currentRow.dataset.endDate;
+            }
 
-
-if (type === 'funding') {
-
-    const fundingId = currentRow.dataset.fundingId;
-
-    const input = dynamicContent.querySelector('[name="fundingId"]');
-
-    if (input) {
-        input.value = fundingId;
-    }
-    
-    const fundingType = dynamicContent.querySelector('[name="fundingType"]');
-    if (fundingType) {
-        fundingType.value = currentRow.dataset.fundingType;
-    }
-
-    const startDate = dynamicContent.querySelector('[name="startDate"]');
-    if (startDate) {
-        startDate.value = currentRow.dataset.startDate;
-    }
-
-    const endDate = dynamicContent.querySelector('[name="endDate"]');
-    if (endDate) {
-        endDate.value = currentRow.dataset.endDate;
-    }
-
-    const description = dynamicContent.querySelector('[name="description"]');
-    if (description) {
-        description.value = currentRow.dataset.description;
-    }
-}
-
-
-initialiseSaveForm(formId, container);
+            const description = dynamicContent.querySelector('[name="description"]');
+            if (description) {
+                description.value = currentRow.dataset.description;
+            }
+        }   
+        initialiseSaveForm(formId, container);
     });
 
     document.getElementById('closeBtn')?.addEventListener('click', () => {
@@ -473,4 +485,5 @@ initialiseSaveForm(formId, container);
     document.getElementById('slideoverOverlay')?.addEventListener('click', () => {
         container.classList.remove('is-open');
     });
+    
 });

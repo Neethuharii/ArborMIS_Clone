@@ -1,0 +1,72 @@
+{% block body %}
+<div class="role-wrapper">
+
+    <form id="qualificationCheck" class="qualificationCheck-form" action="{{ path('qualification_check', {'id': entity.staffId}) }}" method="POST">
+        
+        <input type="hidden" name="entityId" value="{{ entity.staffId }}">
+        <input type="hidden" name="entityType" value="staff">
+
+        <input type="hidden" id="qualificationTypeId" name="qualificationTypeId">
+
+        <div class="form-container">
+
+            <div class="form-row">                
+                <label><b>Person</b></label>
+                <p>{{ entity.firstName }} {{ entity.lastName }} </p>
+            </div>
+
+            <div class="form-row">
+                <label>Check Type</label>
+                <p id="selectedCheckTypeLabel"> Please select a check...</p>
+            </div>
+
+            <div class="form-row">
+                <label>Clearance Level</label>
+                <select name="clearance">
+                    <option value="Not required">Not applied / Not required</option>
+                    <option value="Not satisfactory">Not Satisfactory</option>
+                    <option value="Satisfactory">Satisfactory</option>
+                </select>
+            </div>
+
+            <div class="form-row">                
+                <label>Requested Date</label>
+                <input type="date" name="reqDate" value="{{ "now"|date("Y-m-d") }}" required>
+            </div>
+
+            <div class="form-row">                
+                <label>Returned / Issued Date</label>
+                <input type="date" name="issuedDate" value="{{ "now"|date("Y-m-d") }}">
+            </div>
+
+            <div class="form-row">                
+                <label>Authenticated Date</label>
+                <input type="date" name="authDate" value="{{ "now"|date("Y-m-d") }}">
+            </div>
+
+            <div class="form-row">                
+                <label>Authenticated by staff</label>
+                <select name="staff" required>
+                    <option value=""> Select Staff </option>
+                    {% if all_staffs is defined %}
+                        {% for staff in all_staffs %}
+                            <option value="{{ staff.staffId }}">{{ staff.firstname }} {{ staff.lastName }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label>Comment</label>
+                <input type="text" name="comment">    
+            </div>
+        
+        </div>
+
+        <div class="button-group">
+            <button type="button" class="cancel-btn"> Cancel </button>
+            <button type="submit" class="save-btn"> Add Check </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -9,13 +9,18 @@
 {% endblock %}
 
 {% block body %}
-    {{ include('_modalbase.html.twig') }}
-
+    {{ include('_modalbase.html.twig', {
+        'qualification_types': qualification_types,'entity': entity,'all_staffs': all_staffs|default([])}) 
+    }}
+    
     <div class="profile-container">
-
+    <form method="post" action="{{ path('profile_picture', {id: staff.staffId}) }}" enctype="multipart/form-data">    
         <div class="profile-header">
             <div class="profile-image">
-                <img src="{{asset('images/defaultProfile.png')}}">
+            <label for="profileImage">
+               <img src="{{ staff.profilePhoto ? asset('uploads/profile/' ~ staff.profilePhoto) : asset('images/defaultProfile.png') }}" alt="Profile Image" style="cursor:pointer;">
+            </label>
+            <input type="file" id="profileImage" name="profile" accept="image/*" style="display:none;" onchange="this.form.submit();">
             </div>
 
             <div class="profile-info">
@@ -40,7 +45,7 @@
                 </table>
             </div>
         </div>
-
+    </form>
         <div class="section-card">
             <div class="section-header">
                 <h2>Identity</h2>
@@ -228,18 +233,30 @@
         <div class="section-card">
                 <div class="section-header">
                     <h2>Qualifications & Checks </h2>
-                    <div id="qualificationAdd" style="cursor: pointer;">
+                    <div id="qualificationAdd" data-type="qualification" style="cursor: pointer;">
                         <p>✚ Add</p>
                     </div>
                 </div>
 
                 <table class="details-table">
                     <tbody>
-                        <tr>
-                            <th>Academic Qualifications</th>
-                            <td>No clearance level set</td>
+                        {% for checks in allQualifications %}
+                        <tr class="clickable-row"
+                            data-type="check"
+                            data-title="Check"
+                            data-qualification-name="{{ checks.qualificationType.qualificationName }}"
+                            data-clearance-level = "{{ checks.clearanceLevel }}"
+                            data-requested-date = "{{ checks.requestedDate|date('d M Y') }}"
+                            data-returned-date = "{{ checks.returnedDate|date('d M Y') }}"
+                            data-authenticated-date = "{{ checks.authenticatedDate|date('d M Y') }}"
+                            data-authenticated-by = "{% if checks.authenticatedBy is not null %}{{checks.authenticatedBy.firstName}}{{checks.authenticatedBy.lastName}}{% else %}N/A{% endif %}""
+                            data-comment = "{{ checks.comment }}"
+                            >
+                            <th>{{ checks.qualificationType.qualificationName }}</th>
+                            <td>{{ checks.clearanceLevel }} </td>
                             <td class="arrow">▶</td>
                         </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
         </div>
@@ -485,7 +502,7 @@
             {% include 'Slideover/postalAddress.html.twig' %}
         </template>
 
-       <template id="emailEditTemplate">
+        <template id="emailEditTemplate">
             <div class="edit-form-wrapper">
                 <h2>Email</h2>
                 <form id="editEmailForm">
@@ -509,11 +526,13 @@
             {% include 'Slideover/businessRole.html.twig' %}
         </template>
 
+        <template id="qualificationCheckTemplate">
+            {% include 'Slideover/qualificationChecks.html.twig' %}  
+        </template>
         
-{% block javascripts %}
-    <script src="{{ asset('js/formHandler.js') }}"></script>
-    <script src="{{ asset('js/slide.js') }}"></script>
-    <script src="{{ asset('js/modal.js') }}"></script>
-{% endblock %}
-
+        {% block javascripts %}
+            <script src="{{ asset('js/formHandler.js') }}"></script>
+            <script src="{{ asset('js/slide.js') }}"></script>
+            <script src="{{ asset('js/modal.js') }}"></script>
+        {% endblock %}
 {% endblock %}

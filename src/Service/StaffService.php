@@ -9,6 +9,8 @@ use App\Entity\Staffs;
 use App\Entity\CurrentRoles;
 use App\Entity\Documents;
 use App\Entity\Cards;
+use App\Entity\QualificationChecks;
+use App\Service\CacheKeys;
 use App\Repository\GendersRepository;
 use App\Repository\TitlesRepository;
 use App\Repository\BusinessRolesRepository;
@@ -18,11 +20,17 @@ use App\Repository\DocumentTypesRepository;
 use App\Repository\NationalityRepository;
 use App\Repository\CountriesRepository;
 use App\Repository\StaffsRepository;
+use App\Repository\QualificationChecksRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use InvalidArgumentException; 
-use Exception;                
+use InvalidArgumentException;
+use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
+use App\Repository\QualificationTypeRepository;
 
 class StaffService
 {
@@ -36,22 +44,35 @@ class StaffService
         private ReligionsRepository $religionsRepository,
         private DocumentTypesRepository $documentTypesRepository,
         private NationalityRepository $nationalityRepository,
-        private CountriesRepository $countriesRepository
+        private CountriesRepository $countriesRepository,
+        private QualificationTypeRepository $typeRepository,
+        private QualificationChecksRepository $checkRepository,
+        private CacheInterface $cache,
+        private readonly string $profileImageDirectory
     ) {}
-
+    
     public function getAllGenders(): array
     {
-        return $this->gendersRepository->findAll();
+        return $this->cache->get(CacheKeys::GENDERS, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->gendersRepository->findAll();
+        });
     }
 
     public function getAllTitles(): array
     {
-        return $this->titlesRepository->findAll();
+        return $this->cache->get(CacheKeys::TITLES, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->titlesRepository->findAll();
+        });
     }
 
     public function getAllBusinessRoles(): array
     {
-        return $this->businessRolesRepository->findAll();
+        return $this->cache->get(CacheKeys::BUSINESS_ROLES, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->businessRolesRepository->findAll();
+        });
     }
 
     public function getAllStaffs(): array
@@ -59,19 +80,55 @@ class StaffService
         return $this->staffsRepository->findAll();
     }
 
+    public function getAllQualificationTypes(): array
+    {
+        return $this->typeRepository->findAll();
+    }
+
+    public function getAllQualificationChecks(): array
+    {
+        return $this->checkRepository->findAll();
+    }
+
+
     public function getAllEthnicities(): array
     {
-        return $this->ethnicitiesRepository->findAll();
+        return $this->cache->get(CacheKeys::ETHNICITIES, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->ethnicitiesRepository->findAll();
+        });
     }
 
     public function getAllReligions(): array
     {
-        return $this->religionsRepository->findAll();
+        return $this->cache->get(CacheKeys::RELIGIONS, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->religionsRepository->findAll();
+        });
     }
 
     public function getAllNationalities(): array
     {
-        return $this->nationalityRepository->findAll();
+        return $this->cache->get(CacheKeys::NATIONALITIES, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->nationalityRepository->findAll();
+        });
+    }
+
+    public function getAllDocumentTypes(): array
+    {
+        return $this->cache->get(CacheKeys::DOCUMENT_TYPES, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->documentTypesRepository->findAll();
+        });
+    }
+
+    public function getAllCountries(): array
+    {
+        return $this->cache->get(CacheKeys::COUNTRIES, function (ItemInterface $item) {
+            $item->expiresAfter(3600);
+            return $this->countriesRepository->findAll();
+        });
     }
 
     public function getStaffById(int $id): ?Staffs
@@ -154,7 +211,7 @@ class StaffService
         $staff->setTitle($title);
         $staff->setGender($gender);
         $staff->setAbbreviation($abbreviation ?: null);
-        
+
         try {
             $staff->setDateOfBirth(new DateTimeImmutable($dateofBirth));
         } catch (Exception) {
@@ -390,15 +447,27 @@ class StaffService
 
         $role->setStaff($staff);
         $staff->setCurrentRole($role);
-        
+
         if (!empty($startDateStr)) {
-            $role->setStartDate(new DateTimeImmutable($startDateStr));
+            $startDate = \DateTimeImmutable::createFromFormat('Y-m-d', $startDateStr);
+
+            if (!$startDate) {
+                $startDate = \DateTimeImmutable::createFromFormat('d M Y', $startDateStr);
+            }
+
+            $role->setStartDate($startDate ?: new \DateTimeImmutable());
         } else {
-            $role->setStartDate(new DateTimeImmutable());
+            $role->setStartDate(new \DateTimeImmutable());
         }
 
         if (!empty($endDateStr)) {
-            $role->setEndDate(new DateTimeImmutable($endDateStr));
+            $endDate = \DateTimeImmutable::createFromFormat('Y-m-d', $endDateStr);
+
+            if (!$endDate) {
+                $endDate = \DateTimeImmutable::createFromFormat('d M Y', $endDateStr);
+            }
+
+            $role->setEndDate($endDate ?: null);
         } else {
             $role->setEndDate(null);
         }
@@ -406,6 +475,74 @@ class StaffService
         $staff->setModifiedAt(new DateTimeImmutable());
 
         $this->entityManager->persist($role);
+        $this->entityManager->flush();
+    }
+
+    public function uploadProfilePicture(Staffs $staff, UploadedFile $photo): void
+    {
+        $filename = uniqid() . '.' . $photo->guessExtension();
+
+        $photo->move($this->profileImageDirectory, $filename);
+
+        $staff->setProfilePhoto($filename);
+
+        $this->entityManager->flush();
+    }
+
+    public function addQualificationCheck(Staffs $staff, Request $request): void
+    {
+        $qualificationTypeId = $request->request->get('qualificationTypeId');
+
+        if (!$qualificationTypeId) {
+            throw new \InvalidArgumentException('Please select a qualification check type.');
+        }
+
+        $qualificationType = $this->typeRepository->find($qualificationTypeId);
+
+        if (!$qualificationType) {
+            throw new \InvalidArgumentException('Invalid Qualification Type selection.');
+        }
+
+        $clearanceLevel = $request->request->get('clearance');
+        $requestedDate = $request->request->get('reqDate');
+        $issuedDate = $request->request->get('issuedDate');
+        $authenticatedDate = $request->request->get('authDate');
+        $comment = $request->request->get('comment');
+
+
+        $authenticatorId = $request->request->get('staff');
+
+        $authenticator = null;
+
+        if ($authenticatorId) {
+            $authenticator = $this->staffsRepository->find($authenticatorId);
+        }
+
+        $qualification = new QualificationChecks();
+
+        $qualification->setStaff($staff);
+        $qualification->setQualificationType($qualificationType);
+        $qualification->setAuthenticatedBy($authenticator);
+
+        $qualification->setClearanceLevel($clearanceLevel);
+        $qualification->setComment($comment);
+
+        if ($requestedDate) {
+            $qualification->setRequestedDate(new \DateTime($requestedDate));
+        }
+
+        if ($issuedDate) {
+            $qualification->setReturnedDate(new \DateTime($issuedDate));
+        }
+
+        if ($authenticatedDate) {
+            $qualification->setAuthenticatedDate(new \DateTime($authenticatedDate));
+        }
+
+        $qualification->setCreatedAt(new \DateTimeImmutable());
+        $qualification->setModifiedAt(new \DateTimeImmutable());
+
+        $this->entityManager->persist($qualification);
         $this->entityManager->flush();
     }
 }
