@@ -70,3 +70,10 @@
 .sub-link:hover {
     color: green;
 }
+
+.active {
+    background-color: #d4edda;
+    color: #155724;
+    font-weight: 600;
+    border-radius: 5px;
+}

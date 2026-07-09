@@ -247,4 +247,30 @@ class IncidentService
     {
         return $this->studentPointsRepo->searchTotalPoints($search);
     }
+    
+    public function incidentsSearch(string $search): array
+    {
+        $incidents = $this->incidentRepo->incidentsSearch($search);
+
+        $result = [];
+
+        foreach ($incidents as $incident) {
+
+            $students = [];
+
+            foreach ($incident->getStudentInvolved() as $student) {
+                $students[] = $student->getFirstName() . ' ' . $student->getLastName();
+            }
+
+            $result[] = [
+                'incidentDate' => $incident->getIncidentDate()->format('Y-m-d'),
+                'incidentTime' => $incident->getIncidentTime()->format('H:i'),
+                'categoryName' => $incident->getBehaviour()->getCategory()->getCategoryName(),
+                'behaviourName' => $incident->getBehaviour()->getBehaviourName(),
+                'students' => implode(' and ', $students),
+            ];
+        }
+
+        return $result;
+    }
 }

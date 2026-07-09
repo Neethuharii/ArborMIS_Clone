@@ -44,4 +44,24 @@ final class SuspensionController extends AbstractController
             'stats' => $suspensionService->getSuspensionStats()
         ]);
     }
+
+    #[Route('/suspension-statistics/search', name:'app_suspension_statistics_search')]
+    public function suspensionStatisticsSearch(SuspensionService $suspensionService, Request $request):Response
+    {
+        $search = $request->query->get('search','');
+
+        return $this->json(
+            $suspensionService->searchStatistics($search)
+        );
+    }
+
+    #[Route('/suspensions/search', name:'app_suspensions_search')]
+    public function suspensionsSearch(SuspensionService $suspensionService, Request $request):Response
+    {
+        $search = $request->query->get('search','');
+
+        return $this->json(
+            $suspensionService->searchSuspensions($search)
+        );
+    }
 }

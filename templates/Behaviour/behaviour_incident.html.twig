@@ -38,6 +38,14 @@
                 </button>
             </div>
         </div>
+
+        <div class="search-row">
+            {{ include('search_bar.html.twig', {
+                inputId: 'incident-search',
+                placeholder: 'Search student...'
+            }) }}
+        </div>
+
         <div class="incident-table-container">
             <table class="incident-table">
                 <thead>
@@ -217,6 +225,8 @@
         {% endfor %}
     ];
 </script>
+
 <script src="{{ asset('js/incident-reporting.js') }}"></script>
+<script src="{{ asset('js/search.js') }}"></script>
 
 {% endblock %}
