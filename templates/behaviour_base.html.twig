@@ -1,3 +1,5 @@
+{% set route = app.request.attributes.get('_route') %}
+
 <link rel="stylesheet" href="{{ asset('css/behaviour_base.css') }}">
 <div class="sidebar">
     <div class="nav-container">
@@ -8,7 +10,7 @@
         <div class="nav-items">
             <ul>
                 <li>
-                    <a href="{{ path('app_incident') }}" class="nav-links">
+                    <a href="{{ path('app_incident') }}" class="nav-links {{ route == 'app_incident' ? 'active' : '' }}">
                         ▶ Incidents
                     </a>
                 </li>
@@ -20,13 +22,13 @@
 
                     <ul class="sub-links" id="suspension-menu">
                         <li>
-                            <a href="{{ path('app_suspension_reporting') }}" class="sub-link">
+                            <a href="{{ path('app_suspension_reporting') }}" class="sub-link {{ route == 'app_suspension_reporting'? 'active' : '' }}">
                                 Reporting
                             </a>
                         </li>
 
                         <li>
-                            <a href="{{ path('app_suspension_statistics') }} " class="sub-link">
+                            <a href="{{ path('app_suspension_statistics') }} " class="sub-link {{ route == 'app_suspension_statistics'? 'active' : '' }}">
                                 Statistics
                             </a>
                         </li>
@@ -40,13 +42,13 @@
 
                     <ul class="sub-links" id="point-award-menu">
                         <li>
-                            <a href="{{ path('app_points_total') }}" class="sub-link">
+                            <a href="{{ path('app_points_total') }}" class="sub-link {{ route == 'app_points_total' ? 'active' : '' }}">
                                 Total Points
                             </a>
                         </li>
 
                         <li>
-                            <a href="{{ path('app_points_recent') }}" class="sub-link">
+                            <a href="{{ path('app_points_recent') }}" class="sub-link {{ route == 'app_points_recent' ? 'active' : '' }}">
                                 Recent Points
                             </a>
                         </li>

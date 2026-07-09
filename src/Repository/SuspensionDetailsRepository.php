@@ -51,4 +51,47 @@ class SuspensionDetailsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function searchStatistics(string $search): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select(
+                'st.firstName AS firstName',
+                'st.lastName AS lastName'
+            )
+            ->addSelect('COUNT(s.suspensionDetailId) AS totalSuspensions')
+            ->addSelect('SUM(s.daysLost) AS totalDaysLost')
+            ->join('s.student', 'st')
+            ->where('LOWER(st.firstName) LIKE LOWER(:search)
+                OR LOWER(st.lastName) LIKE LOWER(:search)')
+            ->setParameter('search', '%' . $search . '%')
+            ->groupBy('st.studentId')
+            ->orderBy('st.firstName', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function searchSuspensions(string $search): array
+    {
+         return $this->createQueryBuilder('s')
+            ->select(
+                'st.firstName AS firstName',
+                'st.lastName AS lastName',
+                'sr.suspensionReason AS suspensionReason',
+                's.suspendedFrom AS suspendedFrom',
+                's.suspendedUntil AS suspendedUntil',
+                's.daysLost AS daysLost',
+                's.suspensionNotes AS notes'
+            )
+            ->join('s.student', 'st')
+            ->join('s.suspensionReason', 'sr')
+            ->where(
+                'LOWER(st.firstName) LIKE LOWER(:search)
+                OR LOWER(st.lastName) LIKE LOWER(:search)'
+            )
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('s.suspendedFrom', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

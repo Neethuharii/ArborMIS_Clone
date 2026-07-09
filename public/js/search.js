@@ -71,4 +71,50 @@ document.addEventListener("DOMContentLoaded", function () {
         `
     });
 
+    setupSearch({
+        inputId: "statistics-search",
+        tableBody: ".statistics-table tbody",
+        url: "/suspension-statistics/search",
+        colspan: 3,
+        render: (student) => `
+            <tr>
+                <td>${student.firstName} ${student.lastName}</td>
+                <td>${student.totalSuspensions}</td>
+                <td>${student.totalDaysLost}</td>
+            </tr>
+        `
+    });
+
+    setupSearch({
+        inputId: "suspension-search",
+        tableBody: ".suspension-table tbody",
+        url: "/suspensions/search",
+        colspan: 6,
+        render: (suspension) => `
+            <tr>
+                <td>${suspension.firstName} ${suspension.lastName}</td>
+                <td>${suspension.suspensionReason}</td>
+                <td>${suspension.suspendedFrom.split("T")[0]}</td>
+                <td>${suspension.suspendedUntil.split("T")[0]}</td>
+                <td>${suspension.daysLost}</td>
+                <td>${suspension.notes ?? ""}</td>
+            </tr>
+        `
+    });
+
+    setupSearch({
+        inputId: "incident-search",
+        tableBody: ".incident-table tbody",
+        url: "/incidents/search",
+        colspan: 4,
+        render: (incident) => `
+            <tr>
+                <td>${incident.incidentDate} ${incident.incidentTime}</td>
+                <td>${incident.categoryName}</td>
+                <td>${incident.behaviourName}</td>
+                <td>${incident.students}</td>
+            </tr>
+        `
+    });
+    
 });
