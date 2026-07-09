@@ -70,38 +70,38 @@ final class StudentController extends AbstractController
             'search' => $search,
         ]);
     }
-   #[Route('/student/{studentId}', name: 'studentProfile')]
-public function studentProfile(
-    int $studentId,
-    StudentService $studentService,
-    StudentGuardianRelationRepository $studentGuardianRelationRepository,
-    CardsRepository $cardsRepository,
-    TitlesRepository $titlesRepository,
-    FundingsRepository $fundingsRepository
-): Response {
+    #[Route('/student/{studentId}', name: 'studentProfile')]
+    public function studentProfile(
+        int $studentId,
+        StudentService $studentService,
+        StudentGuardianRelationRepository $studentGuardianRelationRepository,
+        CardsRepository $cardsRepository,
+        TitlesRepository $titlesRepository,
+        FundingsRepository $fundingsRepository
+    ): Response {
 
-    $student = $studentService->getStudentById($studentId);
+        $student = $studentService->getStudentById($studentId);
 
-    if (!$student) {
-        throw $this->createNotFoundException('Student not found');
+        if (!$student) {
+            throw $this->createNotFoundException('Student not found');
+        }
+
+        $fundings = $fundingsRepository->findBy(
+            ['student' => $student],
+            ['startDate' => 'DESC']
+        );
+
+        return $this->render('student/StudentProfile.html.twig', array_merge([
+            'student'           => $student,
+            'entity'            => $student,
+            'entityId'          => $student->getStudentId(),
+            'entityType'        => 'student',
+            'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
+            'card'              => $cardsRepository->findAll(),
+            'titles'            => $titlesRepository->findAll(),
+            'fundings'          => $fundings,
+        ], $studentService->getLookupData()));
     }
-
-    $fundings = $fundingsRepository->findBy(
-        ['student' => $student],
-        ['startDate' => 'DESC']
-    );
-
-    return $this->render('student/StudentProfile.html.twig', array_merge([
-        'student'           => $student,
-        'entity'            => $student,
-        'entityId'          => $student->getStudentId(),
-        'entityType'        => 'student',
-        'guardianRelations' => $studentGuardianRelationRepository->findBy(['student' => $student]),
-        'card'              => $cardsRepository->findAll(),
-        'titles'            => $titlesRepository->findAll(),
-        'fundings'          => $fundings,
-    ], $studentService->getLookupData()));
-}
     #[Route('/student/{id}/update', name: 'student_update', methods: ['POST'])]
     public function update(
         int $id,
@@ -268,7 +268,7 @@ public function studentProfile(
         ]);
     }
 
-     #[Route('/student/{id}/address', name: 'student_address', methods: ['POST'])]
+    #[Route('/student/{id}/address', name: 'student_address', methods: ['POST'])]
     public function updateAddress(int $id, Request $request, StudentsRepository $studentsRepository, StudentService $studentService): Response
     {
         if ($id === 0) {
@@ -279,30 +279,52 @@ public function studentProfile(
         if (!$student) {
             return new JsonResponse(['success' => false, 'message' => 'Student member not found'], 400);
         }
-        try{
-            $studentService->updateAddress($student,$request);
-            return $this->json(['success' =>true]);
-        }catch(Exception $e){
+        try {
+            $studentService->updateAddress($student, $request);
+            return $this->json(['success' => true]);
+        } catch (Exception $e) {
             return $this->json(['success' => false, 'message' => 'Unable to upload student address']);
         }
     }
 
     #[Route('/student/{id}/upload-image', name: 'student_upload_image', methods: ['POST'])]
-public function uploadImage(
-    Students $student,
-    Request $request,
-    StudentService $studentService
-): Response {
-    $file = $request->files->get('profileImage');
+    public function uploadImage(
+        Students $student,
+        Request $request,
+        StudentService $studentService
+    ): Response {
+        $file = $request->files->get('profileImage');
 
-    if ($file) {
-        $studentService->uploadProfileImage($student, $file);
+        if ($file) {
+            $studentService->uploadProfileImage($student, $file);
+        }
+
+        return $this->redirectToRoute('studentProfile', [
+            'studentId' => $student->getStudentId()
+
+        ]);
     }
 
-    return $this->redirectToRoute('studentProfile', [
-        'studentId' => $student->getStudentId()
-         
-    ]);
-}
+    #[Route('/student/{student}/funding/update', name: 'student_funding_update', methods: ['POST'])]
+    public function updateFunding(
+        Students $student,
+        Request $request,
+        FundingsRepository $fundingsRepository,
+        StudentService $studentService
+    ): JsonResponse {
 
+        $fundingId = $request->request->get('fundingId');
+
+        $funding = $fundingsRepository->find($fundingId);
+
+        if (!$funding) {
+            throw $this->createNotFoundException('Funding not found.');
+        }
+
+        $studentService->updateFunding($funding, $request);
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Funding updated successfully.'
+        ]);
+    }
 }

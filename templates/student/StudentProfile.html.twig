@@ -294,15 +294,25 @@
         <table class="details-table">
          <tbody>
 {% for funding in fundings %}
-    <tr class="clickable-row" data-type="funding">
-        <th>{{ funding.fundingType.fundingTypeName }}</th>
-        <td>{{ funding.startDate|date('d/m/Y') }} - {{ funding.endDate? funding.endDate|date('d/m/Y') : 'Ongoing'}}</td>
-        <td class="arrow">▶</td>
-    </tr>
-{% else %}
-    <tr>
-        <td colspan="3">No funding found.</td>
-    </tr>
+<tr class="clickable-row"
+    data-type="funding"
+    data-title="Student Funding"
+    data-funding-id="{{ funding.fundingId }}"
+    data-funding-type="{{ funding.fundingType.fundingTypeId }}"
+    data-description="{{ funding.description }}"
+    data-start-date="{{ funding.startDate|date('Y-m-d') }}"
+    data-end-date="{{ funding.endDate ? funding.endDate|date('Y-m-d') : '' }}">
+
+    <th>{{ funding.fundingType.fundingTypeName }}</th>
+
+    <td>
+        {{ funding.startDate|date('d/m/Y') }}
+        -
+        {{ funding.endDate ? funding.endDate|date('d/m/Y') : 'Ongoing' }}
+    </td>
+
+    <td class="arrow">▶</td>
+</tr>
 {% endfor %}
 </tbody>
         </table>
@@ -678,6 +688,10 @@
                 </form>
             </div>
         </template>
+
+<template id="fundingEditTemplate">
+     {% include 'Slideover/EditFunding.html.twig' %}
+</template>
 
 {% endblock %}
 

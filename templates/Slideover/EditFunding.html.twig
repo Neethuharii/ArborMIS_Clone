@@ -1,0 +1,42 @@
+{% block body %}
+
+<div class="identification-wrapper">
+    <form id="editFundingForm"
+      action="{{ path('student_funding_update', {'student': student.studentId}) }}"
+      method="POST">
+      
+        <input type="hidden" name="fundingId" value="">
+
+        <div class="form-row">
+            <label>Funding Type</label>
+                <select name="fundingType">
+                    {% for type in fundingTypes %}
+                        <option value="{{ type.fundingTypeId }}">
+                            {{ type.fundingTypeName }}
+                        </option>
+                    {% endfor %}
+                </select>
+        </div>
+
+        <div class="form-row">
+            <label>Start Date</label>
+            <input type="date" name="startDate">
+        </div>
+
+        <div class="form-row">
+            <label>End Date</label>
+            <input type="date" name="endDate">
+        </div>
+
+        <div class="form-row">
+            <label>Description</label>
+            <textarea name="description"></textarea>
+        </div>
+
+        <button type="submit">
+            Update Funding
+        </button>
+    </form>
+</div>
+
+{% endblock %}
