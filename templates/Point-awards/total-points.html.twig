@@ -15,6 +15,11 @@
             <h3>Total Points</h3>
         </div>
 
+        {{ include('search_bar.html.twig', {
+            inputId: 'statistics-search',
+            placeholder: 'Search student...'
+        }) }}
+
         <div class="point-table-container">
             <table class="point-table">
                 <thead>
@@ -50,5 +55,7 @@
     </div>
 
 </div>
+
+<script src="{{ asset('js/search.js') }}"></script>
 
 {% endblock %}
