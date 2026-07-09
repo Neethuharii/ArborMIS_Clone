@@ -454,23 +454,58 @@ final class StudentService
             ];
         });
     }
+
     public function clearLookupCache(): void
     {
         $this->lookupCache->delete('student_lookup_data');
     }
 
-   public function uploadProfileImage(Students $student, UploadedFile $file): void
-{
-    $fileName = uniqid() . '.' . $file->guessExtension();
+    public function uploadProfileImage(Students $student, UploadedFile $file): void
+    {
+        $fileName = uniqid() . '.' . $file->guessExtension();
 
-    $file->move(
-        $this->profileImageDirectory,
-        $fileName
-    );
+        $file->move(
+            $this->profileImageDirectory,
+            $fileName
+        );
 
-    $student->setProfileImage($fileName);
+        $student->setProfileImage($fileName);
 
-    $this->entityManager->flush();
-}
+        $this->entityManager->flush();
+    }
 
+    public function updateFunding(Fundings $funding, Request $request): void
+    {
+        $fundingTypeId = $request->request->get('fundingType');
+
+        $fundingType = $this->fundingTypesRepository->find($fundingTypeId);
+
+        if (!$fundingType) {
+            throw new Exception('Funding type not found.');
+        }
+
+        $funding->setFundingType($fundingType);
+
+        $funding->setDescription(
+            $request->request->get('description')
+        );
+
+        $funding->setStartDate(
+            new DateTime($request->request->get('startDate'))
+        );
+
+        $endDate = $request->request->get('endDate');
+
+        if (!empty($endDate)) {
+            $funding->setEndDate(new DateTime($endDate));
+        } else {
+            $funding->setEndDate(null);
+        }
+
+        $funding->setModifiedAt(new DateTimeImmutable());
+
+        $this->entityManager->flush();
+
+        $this->clearLookupCache();
+    }
 }
