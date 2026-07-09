@@ -6,6 +6,7 @@ namespace App\Service;
 
 use DateTime;
 use App\Entity\SuspensionDetails;
+use App\Repository\SuspensionDetailsRepository;
 use App\Repository\SuspensionReasonRepository;
 use App\Repository\StudentsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,8 @@ class SuspensionService
         private readonly EntityManagerInterface $entityManager,
         private readonly SuspensionReasonRepository $suspensionReasonRepository,
         private readonly StudentsRepository $studentsRepository,
-        private readonly SluggerInterface $slugger
+        private readonly SluggerInterface $slugger,
+        private readonly SuspensionDetailsRepository $suspensionDetailRepo
     ) {}
 
     public function createSuspension(Request $request): array
@@ -145,5 +147,10 @@ class SuspensionService
         }
 
         return $result;
+    }
+
+    public function getSuspensionStats():array
+    {
+        return $this->suspensionDetailRepo->getSuspensionStatistics();
     }
 }

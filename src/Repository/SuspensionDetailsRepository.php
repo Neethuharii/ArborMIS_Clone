@@ -40,4 +40,15 @@ class SuspensionDetailsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function getSuspensionStatistics(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->select('st.firstName', 'st.lastName')
+            ->addSelect('COUNT(s.suspensionDetailId) AS totalSuspensions')
+            ->addSelect('SUM(s.daysLost) AS totalDaysLost')
+            ->join('s.student', 'st')
+            ->groupBy('st.studentId')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

@@ -40,4 +40,27 @@ class BehaviourIncidentsRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function searchRecentPoints(string $search): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select(
+                's.firstName AS firstName',
+                's.lastName AS lastName',
+                'i.incidentDate AS incidentDate',
+                'c.categoryName AS category',
+                'c.categoryPoints AS points',
+                'b.behaviourName AS narrative'
+            )
+            ->join('i.studentInvolved', 's')
+            ->join('i.behaviour', 'b')
+            ->join('b.category', 'c')
+            ->andWhere('LOWER(s.firstName) LIKE LOWER(:search)
+                    OR LOWER(s.lastName) LIKE LOWER(:search)')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('i.incidentDate', 'DESC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    
 }

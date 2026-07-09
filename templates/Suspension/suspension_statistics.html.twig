@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
-{% block title %} Total Points {% endblock %}
+{% block title %}Suspension Statistics{% endblock %}
 
 {% block body %}
 
-<link rel="stylesheet" href="{{ asset('css/Points/total-points.css') }}">
+<link rel="stylesheet" href="{{ asset('css/Suspension/suspension_statistics.css') }}">
 
 <div class="page-wrapper">
 
@@ -12,50 +12,45 @@
     <div class="main-content">
 
         <div class="page-header">
-            <h3>Total Points</h3>
+            <h3>Suspension Statistics</h3>
         </div>
-
         {{ include('search_bar.html.twig', {
             inputId: 'statistics-search',
             placeholder: 'Search student...'
         }) }}
-
-        <div class="point-table-container">
-            <table class="point-table">
+        <div class="statistics-table-container">
+            <table class="statistics-table">
                 <thead>
                     <tr>
                         <th>Student</th>
-                        <th>Total Points</th>
+                        <th>Total Suspensions</th>
+                        <th>Total Days Lost</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {% if totals is not empty %}
-                        {% for total in totals %}
+                    {% if stats is not empty %}
+                        {% for stat in stats %}
                             <tr>
-                                <td>
-                                    {{ total.student.firstName }} {{ total.student.lastName }}
-                                </td>
-                                <td>
-                                    {{ total.totalPoints}}
-                                </td>
+                              <td>{{ stat.firstName }} {{ stat.lastName }}</td>
+                              <td>{{ stat.totalSuspensions }}</td>
+                              <td>{{ stat.totalDaysLost }}</td>  
                             </tr>
                         {% endfor %}
                     {% else %}
                         <tr>
-                            <td>
+                            <td colspan="3" class="empty-row">
                                 No Records Found
                             </td>
                         </tr>
                     {% endif %}
                 </tbody>
+
             </table>
         </div>
 
     </div>
 
 </div>
-
-<script src="{{ asset('js/search.js') }}"></script>
 
 {% endblock %}
