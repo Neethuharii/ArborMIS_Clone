@@ -118,8 +118,6 @@
     visibility: visible;
 }
 
-/* Form */
-
 .form-group {
     display: flex;
     flex-direction: column;
