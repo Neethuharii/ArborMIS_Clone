@@ -190,46 +190,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
             }
 
-             else if (type === 'funding') {
+            else if (type === 'funding') {
 
-    const fund = (row.dataset.fund || '').trim();
+    slideTitle.textContent = "Student Funding";
 
-    container.classList.add('is-open');
+    dynamicContent.innerHTML = `
+        <table class="details-table">
+            <tr>
+                <th>Funding Type</th>
+                <td>${row.cells[0].innerText}</td>
+            </tr>
 
-    if (fund === '') {
-
-        slideTitle.textContent = "Add Student Funding";
-
-        const tpl = document.getElementById("fundingCardTemplate");
-        if (!tpl) {
-            console.error("fundingCardTemplate not found");
-            return;
-        }
-
-        dynamicContent.innerHTML = tpl.innerHTML;
-
-        initialiseSaveForm("fundingCardForm", container);
-        
-        setSlideoverButtons({
-            showEdit: false,
-            showBack: true
-        });
-        return;
-    }
-
-     slideTitle.textContent = "Edit Student Funding";
-
-        const tpl = document.getElementById("fundingEditTemplate");
-        if (!tpl) {
-            console.error("fundingEditTemplate not found");
-            return;
-        }
-
+            <tr>
+                <th>Funding Period</th>
+                <td>${row.cells[1].innerText}</td>
+            </tr>
+        </table>
+    `;
 
     setSlideoverButtons({
-        showEdit: true,
-        showBack: true
+        showEdit:true,
+        showBack:true
     });
+
+    container.classList.add('is-open');
 
     return;
 }
@@ -436,16 +420,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
         }
 
-        const tpl = document.getElementById(templateId);
+      const tpl = document.getElementById(templateId);
 
-        if (!tpl) {
-            console.error("Edit template not found:", templateId);
-            return;
-        }
+if (!tpl) {
+    console.error("Edit template not found:", templateId);
+    return;
+}
 
-        dynamicContent.innerHTML = tpl.innerHTML;
+dynamicContent.innerHTML = tpl.innerHTML;
 
-        initialiseSaveForm(formId, container);
+
+
+if (type === 'funding') {
+
+    const fundingId = currentRow.dataset.fundingId;
+
+    const input = dynamicContent.querySelector('[name="fundingId"]');
+
+    if (input) {
+        input.value = fundingId;
+    }
+
+    // Optional: fill existing values
+    const fundingType = dynamicContent.querySelector('[name="fundingType"]');
+    if (fundingType) {
+        fundingType.value = currentRow.dataset.fundingType;
+    }
+
+    const startDate = dynamicContent.querySelector('[name="startDate"]');
+    if (startDate) {
+        startDate.value = currentRow.dataset.startDate;
+    }
+
+    const endDate = dynamicContent.querySelector('[name="endDate"]');
+    if (endDate) {
+        endDate.value = currentRow.dataset.endDate;
+    }
+
+    const description = dynamicContent.querySelector('[name="description"]');
+    if (description) {
+        description.value = currentRow.dataset.description;
+    }
+}
+
+
+initialiseSaveForm(formId, container);
     });
 
     document.getElementById('closeBtn')?.addEventListener('click', () => {

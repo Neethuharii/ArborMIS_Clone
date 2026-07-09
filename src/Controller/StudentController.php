@@ -305,4 +305,26 @@ public function uploadImage(
     ]);
 }
 
+#[Route('/student/{student}/funding/update', name: 'student_funding_update', methods: ['POST'])]
+public function updateFunding(
+     Students $student,
+    Request $request,
+    FundingsRepository $fundingsRepository,
+    StudentService $studentService
+): RedirectResponse {
+
+    $fundingId = $request->request->get('fundingId');
+
+    $funding = $fundingsRepository->find($fundingId);
+
+    if (!$funding) {
+        throw $this->createNotFoundException('Funding not found.');
+    }
+
+    $studentService->updateFunding($funding, $request);
+return $this->redirectToRoute('studentProfile', [
+    'student' => $student->getStudentId()
+]);
+}
+
 }
